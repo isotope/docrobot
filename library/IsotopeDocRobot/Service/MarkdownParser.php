@@ -2,25 +2,30 @@
 
 namespace IsotopeDocRobot\Service;
 
+use IsotopeDocRobot\Markdown\ParserInterface;
+
 class MarkdownParser
 {
     private $data;
+    private $parsers = array();
 
     public function __construct($data)
     {
         $this->data = $data;
     }
 
-    public function parse()
+    public function addParser(ParserInterface $parser)
     {
-        $markdownParser = new \dflydev\markdown\MarkdownParser();
-        $this->parseNewInVersion();
-        return $markdownParser->transformMarkdown($this->data);
+        $this->parsers[] = $parser;
     }
 
-    private function parseNewInVersion()
+    public function parse()
     {
-        $replacement = '<div class="new_in_version">New in version $1: $2</div>';
-        $this->data = preg_replace('/\[new_in_version\:\:(.*)\](.*)/', $replacement, $this->data);
+        foreach ($this->parsers as $parser) {
+            $this->data = $parser->parse($this->data);
+        }
+
+        $markdownParser = new \dflydev\markdown\MarkdownParser();
+        return $markdownParser->transformMarkdown($this->data);
     }
 }

@@ -10,6 +10,8 @@
 namespace IsotopeDocRobot\Service;
 
 
+use IsotopeDocRobot\Markdown\Parsers\NewVersionParser;
+
 class GitHubConnector
 {
     const githubUri = 'https://raw.github.com/isotope/docs/{version}/{language}/{book}/';
@@ -79,6 +81,7 @@ class GitHubConnector
 
         // transform markdown to html
         $optimusPrime = new MarkdownParser($data);
+        $optimusPrime->addParser(new NewVersionParser());
         $data = $optimusPrime->parse();
 
         $this->cacheFile($route . '.html', $data);
