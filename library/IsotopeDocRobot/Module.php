@@ -146,10 +146,7 @@ class Module extends \Module
             $row['link'] = $routeConfig->title;
             $items[] = $row;
         }
-/*
-        if ($level == 2) {
-            var_dump($items);
-        }*/
+
         // Add classes first and last
         if (!empty($items))
         {
