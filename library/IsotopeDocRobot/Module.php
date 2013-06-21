@@ -21,7 +21,8 @@ class Module extends \Module
      */
     protected $strTemplate = 'mod_isotope_docrobot';
 
-    protected $version = '1.4';
+    protected $versions = array();
+    protected $currentVersion;
     protected $language = '';
     protected $book = '';
     protected $connector = null;
@@ -46,19 +47,29 @@ class Module extends \Module
             return $objTemplate->parse();
         }
 
+        $this->versions = trimsplit(',', $this->possible_versions);
+
+        // default version
+        $this->currentVersion = $this->versions[0];
+
+        // override default version
+        if (\Input::get('v')) {
+            $this->currentVersion = \Input::get('v');
+        }
+
+        // version change
+        if ($_POST['FORM_SUBMIT'] == 'version_change') {
+            $this->currentVersion = \Input::post('version');
+        }
+
         global $objPage;
         $this->language = $objPage->rootLanguage;
 
         // @todo make this configurable in module
         $this->book = 'manual';
 
-        // override default version
-        if (\Input::get('v')) {
-            $this->version = \Input::get('v');
-        }
-
         // load connector
-        $this->connector = new GitHubConnector($this->version, $this->language, $this->book);
+        $this->connector = new GitHubConnector($this->currentVersion, $this->language, $this->book);
 
         // load current route
         if (\Input::get('r')) {
@@ -86,29 +97,14 @@ class Module extends \Module
      */
     protected function compile()
     {
-
         $config = $this->connector->getConfig();
 
-        $this->Template->versionChoice = $this->generateVersionChoice();
+        $this->Template->currentVersion = $this->currentVersion;
+        $this->Template->versions = $this->versions;
+
         $this->Template->navigation = $this->generateNavigation($config);
         // content
-        $this->Template->content = file_get_contents(sprintf('system/cache/isotope/docrobot/%s/%s/%s/%s.html', $this->version, $this->language, $this->book, $this->currentRoute));
-    }
-
-    /**
-     * Generate version choice
-     *
-     * @return array
-     */
-    protected function generateVersionChoice()
-    {
-        $select = '<select>';
-
-        foreach (array('1.3', '1.4') as $version) {
-            $select .= sprintf('<option value="%s"%s>%s</option>', $version, ($this->version == $version) ? ' selected="selected"' : '', $version);
-        }
-
-        return $select . '</select>';
+        $this->Template->content = file_get_contents(sprintf('system/cache/isotope/docrobot/%s/%s/%s/%s.html', $this->currentVersion, $this->language, $this->book, $this->currentRoute));
     }
 
 
@@ -137,7 +133,7 @@ class Module extends \Module
                     $alias = ($routes[$routeConfig->targetRoute]->alias) ? $routes[$routeConfig->targetRoute]->alias : $routes[$routeConfig->targetRoute];
                     // DO NOT BREAK HERE
                 case 'regular':
-                    $href = \Controller::generateFrontendUrl($objPage->row(), '/v/' . $this->version . '/r/' . $alias);
+                    $href = \Controller::generateFrontendUrl($objPage->row(), '/v/' . $this->currentVersion . '/r/' . $alias);
                     break;
             }
 

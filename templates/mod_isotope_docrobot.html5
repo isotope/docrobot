@@ -1,7 +1,19 @@
 
 <div class="<?php echo $this->class; ?> block"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
 
-<div class="versionchoice"><?php echo $this->versionChoice; ?></div>
+<div class="versionchoice">
+    <form action="<?php echo $this->action; ?>" method="post" enctype="application/x-www-form-urlencoded">
+    <div class="formbody">
+        <input type="hidden" name="FORM_SUBMIT" value="version_change">
+        <input type="hidden" name="REQUEST_TOKEN" value="<?php echo REQUEST_TOKEN; ?>">
+        <select name="version" onchange="this.form.submit()">
+            <?php foreach($this->versions as $version): ?>
+            <option value="<?php echo $version; ?>"<?php if($this->currentVersion == $version): ?> selected="selected"<?php endif; ?>><?php echo $version; ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    </form>
+</div>
 <div class="breadcrumb"><?php echo $this->breadcrumb; ?></div>
 
 <?php echo $this->navigation; ?>
