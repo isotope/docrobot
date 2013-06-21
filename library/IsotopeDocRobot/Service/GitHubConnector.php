@@ -31,8 +31,6 @@ class GitHubConnector
         $this->book = $book;
 
         $this->createCacheDirsIfNotExist();
-        $this->loadConfig();
-        $this->generateRouteMap();
     }
 
     public function getConfig()
@@ -124,7 +122,7 @@ class GitHubConnector
     }
 
 
-    private function loadConfig()
+    public function loadConfig()
     {
         $file = new \File(sprintf('system/cache/isotope/docrobot/%s/%s/%s/config.json', $this->version, $this->language, $this->book));
         $content = $file->getContent();
@@ -133,7 +131,7 @@ class GitHubConnector
         $this->config = json_decode($content);
     }
 
-    private function generateRouteMap($config=false, $relativePath='')
+    public function generateRouteMap($config=false, $relativePath='')
     {
         $config = ($config) ? $config : $this->getConfig();
         foreach ($config as $route => $routeConfig) {

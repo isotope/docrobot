@@ -70,6 +70,8 @@ class Module extends \Module
 
         // load connector
         $this->connector = new GitHubConnector($this->currentVersion, $this->language, $this->book);
+        $this->connector->loadConfig();
+        $this->connector->generateRouteMap();
 
         // load current route
         if (\Input::get('r')) {
