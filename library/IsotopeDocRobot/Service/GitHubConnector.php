@@ -140,13 +140,15 @@ class GitHubConnector
                 $this->routeAliasMap[$route] = $routeConfig->alias;
             }
 
+            // route path
+            $routePath = (($relativePath) ? $relativePath . '/'  : '') . $route;
+
             // children
             if ($routeConfig->children) {
-                //log_message(var_export($route, true), 'yanick.log');
-                $this->generateRouteMap($routeConfig->children, $route);
+                $this->generateRouteMap($routeConfig->children, $routePath);
             }
 
-            $this->routeMap[$route] = (($relativePath) ? $relativePath . '/'  : '') . $route;
+            $this->routeMap[$route] = $routePath;
             $this->routes[$route] = $routeConfig;
         }
 
