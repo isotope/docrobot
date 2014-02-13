@@ -50,46 +50,49 @@ class Update implements \executable
         $objTemplate->action = ampersand(\Environment::get('request'));
         $objTemplate->headline = specialchars('Isotope DocRobot');
 
+        $arrOptions = array();
+        foreach ($GLOBALS['ISOTOPE_DOCROBOT_VERSIONS'] as $strVersion) {
+            $arrOptions[] = array(
+                'value' => $strVersion,
+                'label' => $strVersion
+            );
+        }
         $versionChoice = new \CheckBox();
         $versionChoice->label = 'Version';
         $versionChoice->name = 'version';
         $versionChoice->mandatory = true;
         $versionChoice->multiple = true;
-        $versionChoice->options = array(
-            array(
-                'value' => '1.4',
-                'label' => '1.4'
-            ),
-            array(
-                'value' => '2.0',
-                'label' => '2.0'
-            ),
-
-        );
+        $versionChoice->options = $arrOptions;
         $objTemplate->versionChoice = $versionChoice->parse();
 
+        $arrOptions = array();
+        foreach ($GLOBALS['ISOTOPE_DOCROBOT_LANGUAGES'] as $strLanguage) {
+            $arrOptions[] = array(
+                'value' => $strLanguage,
+                'label' => $strLanguage
+            );
+        }
         $langChoice = new \CheckBox();
         $langChoice->label = 'Sprache';
         $langChoice->name = 'lang';
         $langChoice->mandatory = true;
         $langChoice->multiple = true;
-        $langChoice->options = array(
-            array(
-                'value' => 'de',
-                'label' => 'de'
-            ));
+        $langChoice->options = $arrOptions;
         $objTemplate->langChoice = $langChoice->parse();
 
+        $arrOptions = array();
+        foreach ($GLOBALS['ISOTOPE_DOCROBOT_BOOKS'] as $strBook) {
+            $arrOptions[] = array(
+                'value' => $strBook,
+                'label' => $strBook
+            );
+        }
         $bookChoice = new \CheckBox();
         $bookChoice->label = 'Buch';
         $bookChoice->name = 'book';
         $bookChoice->mandatory = true;
         $bookChoice->multiple = true;
-        $bookChoice->options = array(
-            array(
-                'value' => 'manual',
-                'label' => 'manual'
-            ));
+        $bookChoice->options = $arrOptions;
         $objTemplate->bookChoice = $bookChoice->parse();
 
         return $objTemplate->parse();

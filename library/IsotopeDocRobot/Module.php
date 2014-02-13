@@ -47,7 +47,7 @@ class Module extends \Module
             return $objTemplate->parse();
         }
 
-        $this->versions = trimsplit(',', $this->possible_versions);
+        $this->versions = $GLOBALS['ISOTOPE_DOCROBOT_VERSIONS'];
 
         // default version
         $this->currentVersion = $this->versions[0];
@@ -65,8 +65,7 @@ class Module extends \Module
         global $objPage;
         $this->language = $objPage->rootLanguage;
 
-        // @todo make this configurable in module
-        $this->book = 'manual';
+        $this->book = $this->iso_docrobot_book;
 
         // load connector
         $this->connector = new GitHubConnector($this->currentVersion, $this->language, $this->book);

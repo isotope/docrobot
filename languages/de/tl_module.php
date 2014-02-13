@@ -1,3 +1,3 @@
 <?php
 
-$GLOBALS['TL_LANG']['tl_module']['possible_versions'] = array('Isotope Versionen', 'Geben Sie hier die Isotope-Versionen kommasepariert ein (sollte irgendwann automatisiert werden).');
+$GLOBALS['TL_LANG']['tl_module']['iso_docrobot_book'] = array('Isotope Buch', 'Wählen Sie hier das Buch aus.');
