@@ -57,21 +57,7 @@ class Module extends \Module
             $this->currentVersion = \Input::get('v');
         }
 
-        // version change
-        if ($_POST['FORM_SUBMIT'] == 'version_change') {
-
-            $strParams = '/v/' . \Input::post('version');
-
-            // if we're on a certain site, we try to find it in the other version too
-            if (\Input::get('r')) {
-                $strParams .= '/r/' . \Input::get('r');
-            }
-
-            \System::redirect($objPage->getFrontendUrl($strParams));
-        }
-
         $this->language = $objPage->rootLanguage;
-
         $this->book = $this->iso_docrobot_book;
 
         // load connector
@@ -105,11 +91,34 @@ class Module extends \Module
      */
     protected function compile()
     {
+        global $objPage;
+
+        // version change
+        $objForm = new \Haste\Form\Form('version_change', 'POST', function($objHaste) {
+            return \Input::post('FORM_SUBMIT') === $objHaste->getFormId();
+        });
+        $objForm->addFormField('version', array(
+                                               'label'         => 'Version:',
+                                               'inputType'     => 'select',
+                                               'options'       => $GLOBALS['ISOTOPE_DOCROBOT_VERSIONS'],
+                                               'default'       => $this->currentVersion
+                                          ));
+
+        if ($objForm->validate()) {
+
+            $strParams = '/v/' . $objForm->fetch('version');
+
+            // if we're on a certain site, we try to find it in the other version too
+            if (\Input::get('r')) {
+                $strParams .= '/r/' . \Input::get('r');
+            }
+
+            \System::redirect($objPage->getFrontendUrl($strParams));
+        }
+
+        $this->Template->form = $objForm;
+
         $config = $this->connector->getConfig();
-
-        $this->Template->currentVersion = $this->currentVersion;
-        $this->Template->versions = $this->versions;
-
         $this->Template->navigation = $this->generateNavigation($config);
         // content
         $this->Template->content = file_get_contents(sprintf('system/cache/isotope/docrobot/%s/%s/%s/%s.html', $this->currentVersion, $this->language, $this->book, $this->currentRoute));
