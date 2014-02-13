@@ -59,7 +59,13 @@ class Update implements \executable
             array(
                 'value' => '1.4',
                 'label' => '1.4'
-            ));
+            ),
+            array(
+                'value' => '2.0',
+                'label' => '2.0'
+            ),
+
+        );
         $objTemplate->versionChoice = $versionChoice->parse();
 
         $langChoice = new \CheckBox();
