@@ -46,7 +46,7 @@ class Module extends \Module
 
             return $objTemplate->parse();
         }
-
+        global $objPage;
         $this->versions = $GLOBALS['ISOTOPE_DOCROBOT_VERSIONS'];
 
         // default version
@@ -59,10 +59,17 @@ class Module extends \Module
 
         // version change
         if ($_POST['FORM_SUBMIT'] == 'version_change') {
-            $this->currentVersion = \Input::post('version');
+
+            $strParams = '/v/' . \Input::post('version');
+
+            // if we're on a certain site, we try to find it in the other version too
+            if (\Input::get('r')) {
+                $strParams .= '/r/' . \Input::get('r');
+            }
+
+            \System::redirect($objPage->getFrontendUrl($strParams));
         }
 
-        global $objPage;
         $this->language = $objPage->rootLanguage;
 
         $this->book = $this->iso_docrobot_book;
