@@ -143,13 +143,13 @@ class GitHubConnector
             // route path
             $routePath = (($relativePath) ? $relativePath . '/'  : '') . $route;
 
+            $this->routeMap[$route] = $routePath;
+            $this->routes[$route] = $routeConfig;
+
             // children
             if ($routeConfig->children) {
                 $this->generateRouteMap($routeConfig->children, $routePath);
             }
-
-            $this->routeMap[$route] = $routePath;
-            $this->routes[$route] = $routeConfig;
         }
 
         // include the root in the map
