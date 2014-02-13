@@ -57,12 +57,14 @@ class Update implements \executable
                 'label' => $strVersion
             );
         }
-        $versionChoice = new \CheckBox();
-        $versionChoice->label = 'Version';
-        $versionChoice->name = 'version';
-        $versionChoice->mandatory = true;
-        $versionChoice->multiple = true;
-        $versionChoice->options = $arrOptions;
+
+        $arrSettings['id'] = 'version';
+        $arrSettings['name'] = 'version';
+        $arrSettings['label'] = 'Version';
+        $arrSettings['mandatory'] = true;
+        $arrSettings['multiple'] = true;
+        $arrSettings['options'] = $arrOptions;
+        $versionChoice = new \CheckBox($arrSettings);
         $objTemplate->versionChoice = $versionChoice->parse();
 
         $arrOptions = array();
@@ -72,12 +74,14 @@ class Update implements \executable
                 'label' => $strLanguage
             );
         }
-        $langChoice = new \CheckBox();
-        $langChoice->label = 'Sprache';
-        $langChoice->name = 'lang';
-        $langChoice->mandatory = true;
-        $langChoice->multiple = true;
-        $langChoice->options = $arrOptions;
+
+        $arrSettings['id'] = 'lang';
+        $arrSettings['name'] = 'lang';
+        $arrSettings['label'] = 'Sprache';
+        $arrSettings['mandatory'] = true;
+        $arrSettings['multiple'] = true;
+        $arrSettings['options'] = $arrOptions;
+        $langChoice = new \CheckBox($arrSettings);
         $objTemplate->langChoice = $langChoice->parse();
 
         $arrOptions = array();
@@ -87,12 +91,14 @@ class Update implements \executable
                 'label' => $strBook
             );
         }
-        $bookChoice = new \CheckBox();
-        $bookChoice->label = 'Buch';
-        $bookChoice->name = 'book';
-        $bookChoice->mandatory = true;
-        $bookChoice->multiple = true;
-        $bookChoice->options = $arrOptions;
+
+        $arrSettings['id'] = 'book';
+        $arrSettings['name'] = 'book';
+        $arrSettings['label'] = 'Buch';
+        $arrSettings['mandatory'] = true;
+        $arrSettings['multiple'] = true;
+        $arrSettings['options'] = $arrOptions;
+        $bookChoice = new \CheckBox($arrSettings);
         $objTemplate->bookChoice = $bookChoice->parse();
 
         return $objTemplate->parse();
