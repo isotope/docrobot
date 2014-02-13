@@ -49,16 +49,18 @@ class Module extends \Module
         global $objPage;
         $this->versions = $GLOBALS['ISOTOPE_DOCROBOT_VERSIONS'];
 
-        // default version
+        // defaults
         $this->currentVersion = $this->versions[0];
+        $this->language = $objPage->rootLanguage;
+        $this->book = $this->iso_docrobot_book;
 
         // override default version
         if (\Input::get('v')) {
             $this->currentVersion = \Input::get('v');
         }
 
-        $this->language = $objPage->rootLanguage;
-        $this->book = $this->iso_docrobot_book;
+        // Set title
+        $objPage->title = ($objPage->pageTitle ?: $objPage->title) . ' (v ' . $this->currentVersion . ')';
 
         // load connector
         $this->connector = new GitHubConnector($this->currentVersion, $this->language, $this->book);
