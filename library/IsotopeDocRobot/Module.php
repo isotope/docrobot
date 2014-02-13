@@ -121,7 +121,21 @@ class Module extends \Module
         $config = $this->connector->getConfig();
         $this->Template->navigation = $this->generateNavigation($config);
         // content
-        $this->Template->content = file_get_contents(sprintf('system/cache/isotope/docrobot/%s/%s/%s/%s.html', $this->currentVersion, $this->language, $this->book, $this->currentRoute));
+
+        if ($strContent = file_get_contents(
+            sprintf('system/cache/isotope/docrobot/%s/%s/%s/%s.html',
+                $this->currentVersion,
+                $this->language,
+                $this->book,
+                $this->currentRoute)
+            )
+        ) {
+
+        } else {
+            $strContent = '<p>' . sprintf($GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['noContentMsg'], 'https://github.com/isotope/docs') . '</p>';
+        }
+
+        $this->Template->content = $strContent;
     }
 
 
