@@ -13,11 +13,16 @@
         </select>
     </div>
     </form>
+    <?php echo $this->versionChoice; ?>
 </div>
 <div class="breadcrumb"><?php echo $this->breadcrumb; ?></div>
 
+<div class="navigation">
 <?php echo $this->navigation; ?>
+</div>
 
+<div class="content">
 <?php echo $this->content; ?>
+</div>
 
 </div>
