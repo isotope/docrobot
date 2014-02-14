@@ -9,6 +9,10 @@
 
 namespace IsotopeDocRobot\Service;
 
+use IsotopeDocRobot\Markdown\Parsers\MessageParser;
+use IsotopeDocRobot\Markdown\Parsers\NewVersionParser;
+use IsotopeDocRobot\Markdown\Parsers\RootParser;
+
 class GitHubBookParser
 {
     private $version = '';
@@ -25,6 +29,7 @@ class GitHubBookParser
         $this->language = $language;
         $this->book = $book;
 
+        $this->createCacheDirIfNotExist();
         $this->loadConfig();
         $this->generateRouteMap();
     }
@@ -49,9 +54,43 @@ class GitHubBookParser
         return $this->routeAliasMap;
     }
 
+    public function updateFromMirror()
+    {
+        // delete the cache
+        $folder = new \Folder(sprintf('system/cache/isotope/docrobot/%s/%s/%s', $this->version, $this->language, $this->book));
+        $folder->delete();
+
+        foreach ($this->routeMap as $route => $path) {
+
+            // do not handle redirect pages
+            if ($this->routes[$route]->type != 'regular') {
+                continue;
+            }
+
+            // for now only supporting the "index.md" file
+            $path .= (($path !== '') ? '/' : '') . 'index.md';
+
+            $data = sprintf('%s/system/cache/isotope/docrobot-mirror/%s/%s/%s/%s',
+                TL_ROOT,
+                $this->version,
+                $this->language,
+                $this->book,
+                $path);
+
+            $data = file_get_contents($data);
+
+            // transform markdown to html
+            $optimusPrime = new MarkdownParser($data);
+            $optimusPrime->addParser(new NewVersionParser());
+            $optimusPrime->addParser(new MessageParser());
+            $optimusPrime->addParser(new RootParser($this->version));
+            $this->cacheFile($route . '.html', $optimusPrime->parse());
+        }
+    }
+
     private function loadConfig()
     {
-        $file = new \File(sprintf('system/cache/isotope/docrobot/%s/%s/%s/config.json', $this->version, $this->language, $this->book));
+        $file = new \File(sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/config.json', $this->version, $this->language, $this->book));
         $content = $file->getContent();
         $file->close();
 
@@ -80,6 +119,21 @@ class GitHubBookParser
         }
 
         // include the root in the map
+        $root = new \stdClass();
+        $root->type = 'regular';
         $this->routeMap['root'] = '';
+        $this->routes['root'] = $root;
+    }
+
+    private function createCacheDirIfNotExist()
+    {
+        new \Folder(sprintf('system/cache/isotope/docrobot/%s/%s/%s', $this->version, $this->language, $this->book));
+    }
+
+    private function cacheFile($relativePath, $data)
+    {
+        $file = new \File(sprintf('system/cache/isotope/docrobot/%s/%s/%s/', $this->version, $this->language, $this->book) . $relativePath);
+        $file->write($data);
+        $file->close();
     }
 }

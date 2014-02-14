@@ -120,17 +120,17 @@ class Module extends \Module
 
         $config = $this->bookParser->getConfig();
         $this->Template->navigation = $this->generateNavigation($config);
+
         // content
+        $path = sprintf('%s/system/cache/isotope/docrobot/%s/%s/%s/%s.html',
+            TL_ROOT,
+            $this->currentVersion,
+            $this->language,
+            $this->book,
+            $this->currentRoute);
 
-        if ($strContent = file_get_contents(
-            sprintf('system/cache/isotope/docrobot/%s/%s/%s/%s.html',
-                $this->currentVersion,
-                $this->language,
-                $this->book,
-                $this->currentRoute)
-            )
-        ) {
-
+        if (is_file($path)) {
+            $strContent = file_get_contents($path);
         } else {
             $strContent = '<p>' . sprintf($GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['noContentMsg'], 'https://github.com/isotope/docs') . '</p>';
         }

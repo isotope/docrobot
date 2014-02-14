@@ -6,6 +6,8 @@
  */
 NamespaceClassLoader::add('dflydev', 'system/modules/isotope-docrobot/library');
 NamespaceClassLoader::add('IsotopeDocRobot', 'system/modules/isotope-docrobot/library');
+NamespaceClassLoader::add('Whitelist', 'system/modules/isotope-docrobot/library');
+NamespaceClassLoader::add('IpUtils', 'system/modules/isotope-docrobot/library');
 
 /**
  * Register the templates
