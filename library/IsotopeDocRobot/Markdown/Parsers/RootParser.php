@@ -2,10 +2,10 @@
 
 namespace IsotopeDocRobot\Markdown\Parsers;
 
-use IsotopeDocRobot\Markdown\ParserInterface;
 
+use IsotopeDocRobot\Markdown\BeforeParserInterface;
 
-class RootParser implements ParserInterface
+class RootParser implements BeforeParserInterface
 {
     private $version = null;
 
@@ -17,8 +17,8 @@ class RootParser implements ParserInterface
     /**
      * {@inheritdoc}
      */
-    public function parse($data)
+    public function parseBefore($data)
     {
-        return str_replace('[docrobot_root]', 'system/cache/isotope/docrobot-mirror/' . $this->version, $data);
+        return str_replace('<docrobot_root>', 'system/cache/isotope/docrobot-mirror/' . $this->version, $data);
     }
 }

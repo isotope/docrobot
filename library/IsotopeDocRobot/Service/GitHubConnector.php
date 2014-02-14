@@ -10,6 +10,7 @@
 namespace IsotopeDocRobot\Service;
 
 
+use IsotopeDocRobot\Markdown\Parsers\MessageParser;
 use IsotopeDocRobot\Markdown\Parsers\NewVersionParser;
 use IsotopeDocRobot\Markdown\Parsers\RootParser;
 
@@ -81,6 +82,7 @@ class GitHubConnector
         // transform markdown to html
         $optimusPrime = new MarkdownParser($data);
         $optimusPrime->addParser(new NewVersionParser());
+        $optimusPrime->addParser(new MessageParser());
         $optimusPrime->addParser(new RootParser($this->version));
         $data = $optimusPrime->parse();
 

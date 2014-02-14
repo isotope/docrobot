@@ -2,17 +2,16 @@
 
 namespace IsotopeDocRobot\Markdown\Parsers;
 
-use IsotopeDocRobot\Markdown\ParserInterface;
+use IsotopeDocRobot\Markdown\BeforeParserInterface;
 
-
-class NewVersionParser implements ParserInterface
+class NewVersionParser implements BeforeParserInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function parse($data)
+    public function parseBefore($data)
     {
-        $replacement = '<div class="new_in_version">New in version $1: $2</div>';
-        return preg_replace('/\[new_in_version\:\:(.*)\](.*)/', $replacement, $data);
+        $replacement = sprintf('<docrobot_message type="info"><p><strong>%s</strong></p>$2</docrobot_message>', $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['newInVersion']);
+        return preg_replace('#<docrobot_new_in_version version="(.*)">(.*)</docrobot_new_in_version>#', $replacement, $data);
     }
 }
