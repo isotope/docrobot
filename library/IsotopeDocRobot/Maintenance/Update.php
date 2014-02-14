@@ -10,6 +10,9 @@
 namespace IsotopeDocRobot\Maintenance;
 
 
+use IsotopeDocRobot\Service\GitHubBookParser;
+use IsotopeDocRobot\Service\GitHubConnector;
+
 class Update implements \executable
 {
 
@@ -33,14 +36,13 @@ class Update implements \executable
             foreach (\Input::post('version') as $version) {
                 foreach (\Input::post('lang') as $lang) {
                     foreach (\Input::post('book') as $book) {
-                        // delete the cache
-                        $folder = new \Folder(sprintf('system/cache/isotope/docrobot/%s/%s/%s', $version, $lang, $book));
-                        $folder->delete();
 
-                        $updater = new \IsotopeDocRobot\Service\GitHubConnector($version, $lang, $book);
-                        // generate a fresh config
-                        $updater->refreshConfigurationFile();
-                        $updater->updateAll();
+                        $connector = new GitHubConnector($version, $lang, $book);
+                        $connector->purgeCache();
+                        $connector->updateAll();
+
+                        $parser = new GitHubBookParser($version, $lang, $book);
+                        $parser->updateFromMirror();
                     }
                 }
             }

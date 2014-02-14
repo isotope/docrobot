@@ -9,11 +9,6 @@
 
 namespace IsotopeDocRobot\Service;
 
-
-use IsotopeDocRobot\Markdown\Parsers\MessageParser;
-use IsotopeDocRobot\Markdown\Parsers\NewVersionParser;
-use IsotopeDocRobot\Markdown\Parsers\RootParser;
-
 class GitHubConnector
 {
     const githubUri = 'https://raw.github.com/isotope/docs/{version}/{language}/{book}/';
@@ -21,10 +16,7 @@ class GitHubConnector
     private $version = '';
     private $language = '';
     private $book = '';
-    private $config = array();
-    private $routeMap = array();
-    private $routeAliasMap = array();
-    private $routes = array();
+    private $github = null;
 
     public function __construct($version, $language, $book)
     {
@@ -32,65 +24,45 @@ class GitHubConnector
         $this->language = $language;
         $this->book = $book;
 
-        $this->createCacheDirsIfNotExist();
-    }
+        $helper = new \IsotopeGithubHelper();
+        $this->github = $helper->getClient();
 
-    public function getConfig()
-    {
-        return $this->config;
-    }
-
-    public function getRouteMap()
-    {
-        return $this->routeMap;
-    }
-
-    public function getRoutes()
-    {
-        return $this->routes;
-    }
-
-    public function getRouteAliasMap()
-    {
-        return $this->routeAliasMap;
-    }
-
-    public function refreshConfigurationFile()
-    {
-        $data = $this->makeRequest('config.json');
-        $this->cacheFile('config.json', $data);
-
-        // load the config file
-        $this->loadConfig();
-
-        // update route map
-        $this->generateRouteMap();
+        $this->createCacheDirIfNotExist();
     }
 
     public function updateAll()
     {
-        foreach (array_keys($this->routeMap) as $route) {
-            $this->updateRoute($route);
+        $branch = $this->github->getHttpClient()->get('repos/isotope/docs/branches/' . $this->version)->getContent();
+        $headRef = $branch['commit']['sha'];
+
+        $tree = $this->github->getHttpClient()->get('repos/isotope/docs/git/trees/' . $headRef . '?recursive=1')->getContent();
+
+        foreach ((array) $tree['tree'] as $treeEntry) {
+            if ($treeEntry['type'] == 'blob') {
+                $this->updateFile($treeEntry['path']);
+            }
         }
     }
 
-    public function updateRoute($route)
+    public function updateFile($path)
     {
-        $path = $this->routeMap[$route];
-        $data = $this->makeRequest($path . '/index.md');
+        $bookPath = $this->language . '/' . $this->book;
 
-        // transform markdown to html
-        $optimusPrime = new MarkdownParser($data);
-        $optimusPrime->addParser(new NewVersionParser());
-        $optimusPrime->addParser(new MessageParser());
-        $optimusPrime->addParser(new RootParser($this->version));
-        $data = $optimusPrime->parse();
-
-        $this->cacheFile($route . '.html', $data);
+        if (strpos($path, $bookPath) !== false) {
+            $path = str_replace($bookPath, '', $path);
+            $data = $this->getFile($path);
+            $this->cacheMirrorFile($path, $data);
+        }
     }
 
+    public function purgeCache()
+    {
+        // delete the cache
+        $folder = new \Folder(sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s', $this->version, $this->language, $this->book));
+        $folder->delete();
+    }
 
-    private function makeRequest($versionRelativeUri)
+    private function getFile($versionRelativeUri)
     {
         $url = str_replace(array (
             '{version}',
@@ -113,50 +85,15 @@ class GitHubConnector
         return false;
     }
 
-    private function cacheFile($relativePath, $data)
+    private function cacheMirrorFile($relativePath, $data)
     {
-        $file = new \File(sprintf('system/cache/isotope/docrobot/%s/%s/%s/', $this->version, $this->language, $this->book) . $relativePath);
+        $file = new \File(sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/', $this->version, $this->language, $this->book) . $relativePath);
         $file->write($data);
         $file->close();
     }
 
-    private function createCacheDirsIfNotExist()
+    private function createCacheDirIfNotExist()
     {
-        new \Folder(sprintf('system/cache/isotope/docrobot/%s/%s/%s', $this->version, $this->language, $this->book));
-    }
-
-
-    public function loadConfig()
-    {
-        $file = new \File(sprintf('system/cache/isotope/docrobot/%s/%s/%s/config.json', $this->version, $this->language, $this->book));
-        $content = $file->getContent();
-        $file->close();
-
-        $this->config = json_decode($content);
-    }
-
-    public function generateRouteMap($config=false, $relativePath='')
-    {
-        $config = ($config) ? $config : $this->getConfig();
-        foreach ($config as $route => $routeConfig) {
-            // alias handling
-            if ($routeConfig->alias) {
-                $this->routeAliasMap[$route] = $routeConfig->alias;
-            }
-
-            // route path
-            $routePath = (($relativePath) ? $relativePath . '/'  : '') . $route;
-
-            $this->routeMap[$route] = $routePath;
-            $this->routes[$route] = $routeConfig;
-
-            // children
-            if ($routeConfig->children) {
-                $this->generateRouteMap($routeConfig->children, $routePath);
-            }
-        }
-
-        // include the root in the map
-        $this->routeMap['root'] = '';
+        new \Folder(sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s', $this->version, $this->language, $this->book));
     }
 }
