@@ -10,7 +10,7 @@
 namespace IsotopeDocRobot;
 
 
-use IsotopeDocRobot\Service\GitHubConnector;
+use IsotopeDocRobot\Service\GitHubBookParser;
 
 class Module extends \Module
 {
@@ -25,7 +25,7 @@ class Module extends \Module
     protected $currentVersion;
     protected $language = '';
     protected $book = '';
-    protected $connector = null;
+    protected $bookParser = null;
     protected $currentRoute = 'root';
 
     /**
@@ -62,16 +62,14 @@ class Module extends \Module
         // Set title
         $objPage->title = ($objPage->pageTitle ?: $objPage->title) . ' (v ' . $this->currentVersion . ')';
 
-        // load connector
-        $this->connector = new GitHubConnector($this->currentVersion, $this->language, $this->book);
-        $this->connector->loadConfig();
-        $this->connector->generateRouteMap();
+        // load book parser
+        $this->bookParser = new GitHubBookParser($this->currentVersion, $this->language, $this->book);
 
         // load current route
         if (\Input::get('r')) {
             $input = \Input::get('r');
-            $routes = $this->connector->getRouteMap();
-            $aliases = $this->connector->getRouteAliasMap();
+            $routes = $this->bookParser->getRouteMap();
+            $aliases = $this->bookParser->getRouteAliasMap();
 
             if (in_array($input, array_keys($routes))) {
                 $this->currentRoute = $input;
@@ -120,7 +118,7 @@ class Module extends \Module
 
         $this->Template->form = $objForm;
 
-        $config = $this->connector->getConfig();
+        $config = $this->bookParser->getConfig();
         $this->Template->navigation = $this->generateNavigation($config);
         // content
 
@@ -162,7 +160,7 @@ class Module extends \Module
 
             switch ($routeConfig->type) {
                 case 'redirect':
-                    $routes = $this->connector->getRoutes();
+                    $routes = $this->bookParser->getRoutes();
                     $alias = ($routes[$routeConfig->targetRoute]->alias) ? $routes[$routeConfig->targetRoute]->alias : $routes[$routeConfig->targetRoute];
                     // DO NOT BREAK HERE
                 case 'regular':
