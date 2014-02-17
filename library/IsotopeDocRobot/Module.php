@@ -11,6 +11,7 @@ namespace IsotopeDocRobot;
 
 
 use IsotopeDocRobot\Markdown\Parsers\RouteParser;
+use IsotopeDocRobot\Markdown\Parsers\SitemapParser;
 use IsotopeDocRobot\Routing\Route;
 use IsotopeDocRobot\Routing\Routing;
 use IsotopeDocRobot\Service\GitHubBookParser;
@@ -78,11 +79,6 @@ class Module extends \Module
         // Load root route as default
         $this->currentRoute = $this->routing->getRootRoute();
 
-        $parserCollection = new ParserCollection();
-        $parserCollection->addParser(new RouteParser($this->routing, $objPage, $this->currentVersion));
-
-        $this->bookParser = new GitHubBookParser($this->currentVersion, $this->language, $this->book, $this->routing, $parserCollection);
-
         // load current route
         if (\Input::get('r')) {
             $input = \Input::get('r');
@@ -95,6 +91,14 @@ class Module extends \Module
                 $objError->generate($objPage->id);
             }
         }
+
+        $parserCollection = new ParserCollection();
+        $parserCollection->addParser(new RouteParser($this->routing, $objPage, $this->currentVersion));
+        $parserCollection->addParser(new SitemapParser($this->generateNavigation($this->routing->getRootRoute()->getChildren(), 1, true)));
+
+        $this->bookParser = new GitHubBookParser($this->currentVersion, $this->language, $this->book, $this->routing, $parserCollection);
+
+
 
         return parent::generate();
     }
@@ -144,7 +148,7 @@ class Module extends \Module
     }
 
 
-    protected function generateNavigation($routes, $level=1)
+    protected function generateNavigation($routes, $level=1, $blnIsSitemap=false)
     {
         global $objPage;
         $objTemplate = new \FrontendTemplate('nav_default');
@@ -157,14 +161,20 @@ class Module extends \Module
             $blnIsInTrail = in_array($route->getName(), $this->currentRoute->getTrail());
             $blnIsSibling = in_array($route->getName(), array_keys($this->currentRoute->getSiblings()));
 
-            if ($level != 1 && !$blnIsInTrail && !$blnIsSibling && $this->currentRoute !== $route) {
+            // Do not show the whole navigation unless it's a sitemap
+            if (!$blnIsSitemap
+                && $level != 1
+                && !$blnIsInTrail
+                && !$blnIsSibling
+                && $this->currentRoute !== $route
+            ) {
                 continue;
             }
 
             // children
             $subitems = '';
             if ($route->hasChildren()) {
-                $subitems = $this->generateNavigation($route->getChildren(), ($level + 1));
+                $subitems = $this->generateNavigation($route->getChildren(), ($level + 1), $blnIsSitemap);
             }
 
             $row = array();
