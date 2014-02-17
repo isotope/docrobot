@@ -158,8 +158,9 @@ class Module extends \Module
 
         foreach ($routes as $route) {
 
-            $blnIsInTrail = in_array($route->getName(), $this->currentRoute->getTrail());
-            $blnIsSibling = in_array($route->getName(), array_keys($this->currentRoute->getSiblings()));
+            $blnIsInTrail               = in_array($route->getName(), $this->currentRoute->getTrail());
+            $blnIsSibling               = in_array($route->getName(), array_keys($this->currentRoute->getSiblings()));
+            $blnIsChildOfCurrentRoute   = in_array($route->getName(), array_keys($this->currentRoute->getChildren()));
 
             // Do not show the whole navigation unless it's a sitemap
             if (!$blnIsSitemap
@@ -167,6 +168,7 @@ class Module extends \Module
                 && !$blnIsInTrail
                 && !$blnIsSibling
                 && $this->currentRoute !== $route
+                && !$blnIsChildOfCurrentRoute
             ) {
                 continue;
             }
