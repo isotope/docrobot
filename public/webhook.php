@@ -66,7 +66,12 @@ foreach ($booksToUpdate as $book) {
                 $book)
         );
 
-        $parser = new \IsotopeDocRobot\Service\GitHubBookParser($version, $lang, $book, $routing);
+        $parserCollection = new \IsotopeDocRobot\Service\ParserCollection();
+        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\NewVersionParser());
+        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\MessageParser());
+        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\RootParser($version));
+
+        $parser = new \IsotopeDocRobot\Service\GitHubBookParser($version, $lang, $book, $routing, $parserCollection);
         $parser->updateFromMirror();
     }
 }

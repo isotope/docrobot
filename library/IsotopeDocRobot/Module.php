@@ -10,9 +10,11 @@
 namespace IsotopeDocRobot;
 
 
+use IsotopeDocRobot\Markdown\Parsers\RouteParser;
 use IsotopeDocRobot\Routing\Route;
 use IsotopeDocRobot\Routing\Routing;
 use IsotopeDocRobot\Service\GitHubBookParser;
+use IsotopeDocRobot\Service\ParserCollection;
 
 class Module extends \Module
 {
@@ -29,7 +31,7 @@ class Module extends \Module
     protected $book = '';
     protected $bookParser = null;
     protected $routing = null;
-    protected $currentRoute = 'root';
+    protected $currentRoute = null;
 
     /**
      * Display back end wildcard
@@ -72,14 +74,21 @@ class Module extends \Module
                 $this->language,
                 $this->book)
         );
-        $this->bookParser = new GitHubBookParser($this->currentVersion, $this->language, $this->book, $this->routing);
+
+        // Load root route as default
+        $this->currentRoute = $this->routing->getRootRoute();
+
+        $parserCollection = new ParserCollection();
+        $parserCollection->addParser(new RouteParser($this->routing, $objPage, $this->currentVersion));
+
+        $this->bookParser = new GitHubBookParser($this->currentVersion, $this->language, $this->book, $this->routing, $parserCollection);
 
         // load current route
         if (\Input::get('r')) {
             $input = \Input::get('r');
 
             if ($route = $this->routing->getRouteForAlias($input)) {
-                $this->currentRoute = $route->getName();
+                $this->currentRoute = $route;
             } else {
                 // 404
                 $objError = new \PageError404();
@@ -125,16 +134,9 @@ class Module extends \Module
         $this->Template->navigation = $this->generateNavigation($this->routing->getRootRoute()->getChildren());
 
         // content
-        $path = sprintf('%s/system/cache/isotope/docrobot/%s/%s/%s/%s.html',
-            TL_ROOT,
-            $this->currentVersion,
-            $this->language,
-            $this->book,
-            $this->currentRoute);
+        $strContent = $this->bookParser->getContentForRoute($this->currentRoute);
 
-        if (is_file($path)) {
-            $strContent = file_get_contents($path);
-        } else {
+        if ($strContent === '') {
             $strContent = '<p>' . sprintf($GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['noContentMsg'], 'https://github.com/isotope/docs') . '</p>';
         }
 
@@ -159,9 +161,9 @@ class Module extends \Module
             }
 
             $row = array();
-            $row['isActive']    = ($this->currentRoute == $route->getName()) ? true : false;
+            $row['isActive']    = ($this->currentRoute->getName() == $route->getName()) ? true : false;
             $row['subitems']    = $subitems;
-            $row['href']        = $this->routing->getHrefForRoute($objPage, $this->currentVersion, $route);
+            $row['href']        = $this->routing->getHrefForRoute($route, $objPage, $this->currentVersion);
             $row['title']       = specialchars($route->getTitle(), true);
             $row['pageTitle']   = specialchars($route->getTitle(), true);
             $row['link']        = $route->getTitle();

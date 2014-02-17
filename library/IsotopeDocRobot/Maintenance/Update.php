@@ -13,6 +13,7 @@ namespace IsotopeDocRobot\Maintenance;
 use IsotopeDocRobot\Routing\Routing;
 use IsotopeDocRobot\Service\GitHubBookParser;
 use IsotopeDocRobot\Service\GitHubConnector;
+use IsotopeDocRobot\Service\ParserCollection;
 
 class Update implements \executable
 {
@@ -51,7 +52,12 @@ class Update implements \executable
                                 $book)
                         );
 
-                        $parser = new GitHubBookParser($version, $lang, $book, $routing);
+                        $parserCollection = new ParserCollection();
+                        $parserCollection->addParser(new NewVersionParser());
+                        $parserCollection->addParser(new MessageParser());
+                        $parserCollection->addParser(new RootParser($version));
+
+                        $parser = new GitHubBookParser($version, $lang, $book, $routing, $parserCollection);
                         $parser->updateFromMirror();
                     }
                 }

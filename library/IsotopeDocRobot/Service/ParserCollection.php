@@ -5,13 +5,13 @@ namespace IsotopeDocRobot\Service;
 use IsotopeDocRobot\Markdown\AfterParserInterface;
 use IsotopeDocRobot\Markdown\BeforeParserInterface;
 
-class MarkdownParser
+class ParserCollection
 {
     private $data;
     private $beforeParsers = array();
     private $afterParsers = array();
 
-    public function __construct($data)
+    public function setData($data)
     {
         $this->data = $data;
     }

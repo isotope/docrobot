@@ -13,6 +13,7 @@ use IsotopeDocRobot\Markdown\Parsers\MessageParser;
 use IsotopeDocRobot\Markdown\Parsers\NewVersionParser;
 use IsotopeDocRobot\Markdown\Parsers\RootParser;
 use IsotopeDocRobot\Markdown\Parsers\RouteParser;
+use IsotopeDocRobot\Routing\Route;
 
 class GitHubBookParser
 {
@@ -20,13 +21,15 @@ class GitHubBookParser
     private $language = '';
     private $book = '';
     private $routing = null;
+    private $parserCollection = null;
 
-    public function __construct($version, $language, $book, $routing)
+    public function __construct($version, $language, $book, $routing, $parserCollection)
     {
         $this->version = $version;
         $this->language = $language;
         $this->book = $book;
         $this->routing = $routing;
+        $this->parserCollection = $parserCollection;
 
         $this->createCacheDirIfNotExist();
     }
@@ -48,23 +51,35 @@ class GitHubBookParser
             $path = $route->getPath();
             $path .= (($path !== '') ? '/' : '') . 'index.md';
 
-            $data = sprintf('%s/system/cache/isotope/docrobot-mirror/%s/%s/%s/%s',
+            $path = sprintf('%s/system/cache/isotope/docrobot-mirror/%s/%s/%s/%s',
                 TL_ROOT,
                 $this->version,
                 $this->language,
                 $this->book,
                 $path);
 
-            $data = file_get_contents($data);
-
-            // transform markdown to html
-            $optimusPrime = new MarkdownParser($data);
-            $optimusPrime->addParser(new NewVersionParser());
-            $optimusPrime->addParser(new MessageParser());
-            $optimusPrime->addParser(new RootParser($this->version));
-            $optimusPrime->addParser(new RouteParser($this->routing));
-            $this->cacheFile($route->getName() . '.html', $optimusPrime->parse());
+            $this->parserCollection->setData(file_get_contents($path));
+            $this->cacheFile($route->getName() . '.html', $this->parserCollection->parse());
         }
+    }
+
+    public function getContentForRoute(Route $route)
+    {
+        $path = sprintf('%s/system/cache/isotope/docrobot/%s/%s/%s/%s.html',
+            TL_ROOT,
+            $this->version,
+            $this->language,
+            $this->book,
+            $route->getName());
+
+        if (is_file($path)) {
+            $strContent = file_get_contents($path);
+        } else {
+            return '';
+        }
+
+        $this->parserCollection->setData($strContent);
+        return $this->parserCollection->parse();
     }
 
     private function createCacheDirIfNotExist()

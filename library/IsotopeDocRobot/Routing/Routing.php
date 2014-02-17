@@ -14,7 +14,6 @@ class Routing
     private $routeAliasMap = array();
     private $routes = array();
     private $config = array();
-    private $rootRoute = null;
 
     public function __construct($configPath)
     {
@@ -44,7 +43,7 @@ class Routing
 
     public function getRootRoute()
     {
-        return $this->rootRoute;
+        return $this->getRoute('root');
     }
 
     public function getRouteForAlias($alias)
@@ -52,7 +51,7 @@ class Routing
         return $this->getRoute(array_search($alias, $this->routeAliasMap));
     }
 
-    public function getHrefForRoute($objPage, $currentVersion, Route $route)
+    public function getHrefForRoute(Route $route, \PageModel $page, $version)
     {
         // use the alias if there is one
         $alias = ($route->getConfig()->alias) ? $route->getConfig()->alias : $route->getName();
@@ -62,7 +61,7 @@ class Routing
                 $alias = ($this->getRoute($route->getConfig()->targetRoute)->getAlias()) ? $this->getRoute($route->getConfig()->targetRoute)->getAlias() : $this->getRoute($route->getConfig()->targetRoute)->getName();
             // DO NOT BREAK HERE
             case 'regular':
-                $href = \Controller::generateFrontendUrl($objPage->row(), '/v/' . $currentVersion . '/r/' . $alias);
+                $href = \Controller::generateFrontendUrl($page->row(), '/v/' . $version . '/r/' . $alias);
                 break;
         }
 
@@ -104,13 +103,13 @@ class Routing
         // include the root
         $rootRouteConfig = new \stdClass();
         $rootRouteConfig->type = 'regular';
-        $this->rootRoute = new Route('root', $rootRouteConfig, '');
+        $rootRoute = new Route('root', $rootRouteConfig, '');
 
         // add children of route
         foreach ($levelRoutes as $route) {
-            $this->rootRoute->addChild($this->routes[$route]);
+            $rootRoute->addChild($this->routes[$route]);
         }
 
-        $this->routes['root'] = $this->rootRoute;
+        $this->routes['root'] = $rootRoute;
     }
 } 
