@@ -149,15 +149,22 @@ class Module extends \Module
         global $objPage;
         $objTemplate = new \FrontendTemplate('nav_default');
         $objTemplate->type = get_class($this);
-        $objTemplate->level = 'level_' . $level++;
+        $objTemplate->level = 'level_' . $level;
         $items = array();
 
         foreach ($routes as $route) {
 
+            $blnIsInTrail = in_array($route->getName(), $this->currentRoute->getTrail());
+            $blnIsSibling = in_array($route->getName(), array_keys($this->currentRoute->getSiblings()));
+
+            if ($level != 1 && !$blnIsInTrail && !$blnIsSibling && $this->currentRoute !== $route) {
+                continue;
+            }
+
             // children
             $subitems = '';
             if ($route->hasChildren()) {
-                $subitems = $this->generateNavigation($route->getChildren(), $level);
+                $subitems = $this->generateNavigation($route->getChildren(), ($level + 1));
             }
 
             $row = array();
@@ -167,6 +174,7 @@ class Module extends \Module
             $row['title']       = specialchars($route->getTitle(), true);
             $row['pageTitle']   = specialchars($route->getTitle(), true);
             $row['link']        = $route->getTitle();
+            $row['class']       = ($blnIsInTrail) ? 'trail' : '';
             $items[]            = $row;
         }
 

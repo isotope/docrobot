@@ -17,6 +17,12 @@ class Routing
 
     public function __construct($configPath)
     {
+        // Root
+        $rootRouteConfig = new \stdClass();
+        $rootRouteConfig->type = 'regular';
+        $rootRoute = new Route('root', $rootRouteConfig, '', array());
+        $this->routes['root'] = $rootRoute;
+
         $this->loadConfig($configPath);
         $this->generateRouteMap();
     }
@@ -77,39 +83,42 @@ class Routing
         $this->config = json_decode($content);
     }
 
-    private function generateRouteMap($config=false, $relativePath='')
+    private function generateRouteMap($config=false, $relativePath='', $level=0, $trail=array('root'))
     {
         $levelRoutes = array();
         $config = ($config) ? $config : $this->getConfig();
         foreach ($config as $route => $routeConfig) {
             // route path
             $routePath = (($relativePath) ? $relativePath . '/'  : '') . $route;
-            $objRoute = new Route($route, $routeConfig, $routePath);
+            $objRoute = new Route($route, $routeConfig, $routePath, $trail);
 
-            $levelRoutes[] = $route;
+            $levelRoutes[] = $objRoute;
             $this->routes[$route]           = $objRoute;
             $this->routeAliasMap[$route]    = $objRoute->getAlias();
 
             // children
             if ($routeConfig->children) {
-                $this->generateRouteMap($routeConfig->children, $routePath);
+                $this->generateRouteMap($routeConfig->children, $routePath, ($level + 1), array_merge($trail, array($route)));
 
+                // set children
                 foreach ($routeConfig->children as $childroute => $childConfig) {
                     $objRoute->addChild($this->routes[$childroute]);
                 }
             }
+
+            // Root child?
+            if ($level == 0) {
+                $this->getRootRoute()->addChild($objRoute);
+            }
         }
 
-        // include the root
-        $rootRouteConfig = new \stdClass();
-        $rootRouteConfig->type = 'regular';
-        $rootRoute = new Route('root', $rootRouteConfig, '');
-
-        // add children of route
+        // set siblings
         foreach ($levelRoutes as $route) {
-            $rootRoute->addChild($this->routes[$route]);
+            foreach ($levelRoutes as $rr) {
+                if ($route !== $rr) {
+                    $route->addSibling($rr);
+                }
+            }
         }
-
-        $this->routes['root'] = $rootRoute;
     }
 } 

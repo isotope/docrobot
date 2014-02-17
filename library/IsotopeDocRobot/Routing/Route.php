@@ -8,18 +8,26 @@ class Route
     private $name = '';
     private $config = null;
     private $path = '';
+    private $trail = array();
     private $children = array();
+    private $siblings = array();
 
-    public function __construct($name, $config, $path)
+    public function __construct($name, $config, $path, $trail)
     {
         $this->name = $name;
         $this->config = $config;
         $this->path = $path;
+        $this->trail = $trail;
     }
 
     public function getName()
     {
         return $this->name;
+    }
+
+    public function getTrail()
+    {
+        return $this->trail;
     }
 
     public function getTitle()
@@ -42,14 +50,9 @@ class Route
         return $this->getConfig()->alias ?: $this->getName();
     }
 
-    public function addChild($child)
+    public function addChild(Route $child)
     {
-        $this->children[] = $child;
-    }
-
-    public function setChildren($children)
-    {
-        $this->children = $children;
+        $this->children[$child->getName()] = $child;
     }
 
     public function getChildren()
@@ -60,5 +63,20 @@ class Route
     public function hasChildren()
     {
         return !empty($this->children);
+    }
+
+    public function addSibling(Route $sibling)
+    {
+        $this->siblings[$sibling->getName()] = $sibling;
+    }
+
+    public function getSiblings()
+    {
+        return $this->siblings;
+    }
+
+    public function hasSiblings()
+    {
+        return !empty($this->siblings);
     }
 } 
