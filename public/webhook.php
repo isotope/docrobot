@@ -59,7 +59,14 @@ $languagesToUpdate = array_unique($languagesToUpdate);
 
 foreach ($booksToUpdate as $book) {
     foreach ($languagesToUpdate as $lang) {
-        $parser = new \IsotopeDocRobot\Service\GitHubBookParser($version, $lang, $book);
+        $routing = new \IsotopeDocRobot\Routing\Routing(
+            sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/config.json',
+                $version,
+                $lang,
+                $book)
+        );
+
+        $parser = new \IsotopeDocRobot\Service\GitHubBookParser($version, $lang, $book, $routing);
         $parser->updateFromMirror();
     }
 }

@@ -10,6 +10,7 @@
 namespace IsotopeDocRobot\Maintenance;
 
 
+use IsotopeDocRobot\Routing\Routing;
 use IsotopeDocRobot\Service\GitHubBookParser;
 use IsotopeDocRobot\Service\GitHubConnector;
 
@@ -37,11 +38,20 @@ class Update implements \executable
                 foreach (\Input::post('lang') as $lang) {
                     foreach (\Input::post('book') as $book) {
 
-                        $connector = new GitHubConnector($version, $lang, $book);
-                        $connector->purgeCache();
-                        $connector->updateAll();
+                        if (\Input::post('fetch') == 'yes') {
+                            $connector = new GitHubConnector($version, $lang, $book);
+                            $connector->purgeCache();
+                            $connector->updateAll();
+                        }
 
-                        $parser = new GitHubBookParser($version, $lang, $book);
+                        $routing = new Routing(
+                            sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/config.json',
+                                $version,
+                                $lang,
+                                $book)
+                        );
+
+                        $parser = new GitHubBookParser($version, $lang, $book, $routing);
                         $parser->updateFromMirror();
                     }
                 }
@@ -68,6 +78,7 @@ class Update implements \executable
         $arrSettings['options'] = $arrOptions;
         $versionChoice = new \CheckBox($arrSettings);
         $objTemplate->versionChoice = $versionChoice->parse();
+        unset($arrSettings);
 
         $arrOptions = array();
         foreach ($GLOBALS['ISOTOPE_DOCROBOT_LANGUAGES'] as $strLanguage) {
@@ -85,6 +96,7 @@ class Update implements \executable
         $arrSettings['options'] = $arrOptions;
         $langChoice = new \CheckBox($arrSettings);
         $objTemplate->langChoice = $langChoice->parse();
+        unset($arrSettings);
 
         $arrOptions = array();
         foreach ($GLOBALS['ISOTOPE_DOCROBOT_BOOKS'] as $strBook) {
@@ -102,6 +114,7 @@ class Update implements \executable
         $arrSettings['options'] = $arrOptions;
         $bookChoice = new \CheckBox($arrSettings);
         $objTemplate->bookChoice = $bookChoice->parse();
+        unset($arrSettings);
 
         return $objTemplate->parse();
     }

@@ -10,6 +10,8 @@
 namespace IsotopeDocRobot;
 
 
+use IsotopeDocRobot\Routing\Route;
+use IsotopeDocRobot\Routing\Routing;
 use IsotopeDocRobot\Service\GitHubBookParser;
 
 class Module extends \Module
@@ -26,6 +28,7 @@ class Module extends \Module
     protected $language = '';
     protected $book = '';
     protected $bookParser = null;
+    protected $routing = null;
     protected $currentRoute = 'root';
 
     /**
@@ -62,19 +65,21 @@ class Module extends \Module
         // Set title
         $objPage->title = ($objPage->pageTitle ?: $objPage->title) . ' (v ' . $this->currentVersion . ')';
 
-        // load book parser
-        $this->bookParser = new GitHubBookParser($this->currentVersion, $this->language, $this->book);
+        // load routing and book parser
+        $this->routing = new Routing(
+            sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/config.json',
+                $this->currentVersion,
+                $this->language,
+                $this->book)
+        );
+        $this->bookParser = new GitHubBookParser($this->currentVersion, $this->language, $this->book, $this->routing);
 
         // load current route
         if (\Input::get('r')) {
             $input = \Input::get('r');
-            $routes = $this->bookParser->getRouteMap();
-            $aliases = $this->bookParser->getRouteAliasMap();
 
-            if (in_array($input, array_keys($routes))) {
-                $this->currentRoute = $input;
-            } elseif ($k = array_search($input, $aliases)) {
-                $this->currentRoute = $k;
+            if ($route = $this->routing->getRouteForAlias($input)) {
+                $this->currentRoute = $route->getName();
             } else {
                 // 404
                 $objError = new \PageError404();
@@ -117,9 +122,7 @@ class Module extends \Module
         }
 
         $this->Template->form = $objForm;
-
-        $config = $this->bookParser->getConfig();
-        $this->Template->navigation = $this->generateNavigation($config);
+        $this->Template->navigation = $this->generateNavigation($this->routing->getRootRoute()->getChildren());
 
         // content
         $path = sprintf('%s/system/cache/isotope/docrobot/%s/%s/%s/%s.html',
@@ -139,7 +142,7 @@ class Module extends \Module
     }
 
 
-    protected function generateNavigation($config, $level=1)
+    protected function generateNavigation($routes, $level=1)
     {
         global $objPage;
         $objTemplate = new \FrontendTemplate('nav_default');
@@ -147,35 +150,22 @@ class Module extends \Module
         $objTemplate->level = 'level_' . $level++;
         $items = array();
 
-        foreach ($config as $route => $routeConfig) {
+        foreach ($routes as $route) {
 
             // children
             $subitems = '';
-            if ($routeConfig->children) {
-                $subitems = $this->generateNavigation($routeConfig->children, $level, $route);
-            }
-
-            // use the alias if there is one
-            $alias = ($routeConfig->alias) ? $routeConfig->alias : $route;
-
-            switch ($routeConfig->type) {
-                case 'redirect':
-                    $routes = $this->bookParser->getRoutes();
-                    $alias = ($routes[$routeConfig->targetRoute]->alias) ? $routes[$routeConfig->targetRoute]->alias : $routes[$routeConfig->targetRoute];
-                    // DO NOT BREAK HERE
-                case 'regular':
-                    $href = \Controller::generateFrontendUrl($objPage->row(), '/v/' . $this->currentVersion . '/r/' . $alias);
-                    break;
+            if ($route->hasChildren()) {
+                $subitems = $this->generateNavigation($route->getChildren(), $level);
             }
 
             $row = array();
-            $row['isActive'] = ($this->currentRoute == $route) ? true : false;
-            $row['subitems'] = $subitems;
-            $row['href'] = $href;
-            $row['title'] = specialchars($routeConfig->title, true);
-            $row['pageTitle'] = specialchars($routeConfig->title, true);
-            $row['link'] = $routeConfig->title;
-            $items[] = $row;
+            $row['isActive']    = ($this->currentRoute == $route->getName()) ? true : false;
+            $row['subitems']    = $subitems;
+            $row['href']        = $this->routing->getHrefForRoute($objPage, $this->currentVersion, $route);
+            $row['title']       = specialchars($route->getTitle(), true);
+            $row['pageTitle']   = specialchars($route->getTitle(), true);
+            $row['link']        = $route->getTitle();
+            $items[]            = $row;
         }
 
         // Add classes first and last
