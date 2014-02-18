@@ -10,6 +10,9 @@
 namespace IsotopeDocRobot\Maintenance;
 
 
+use IsotopeDocRobot\Markdown\Parsers\MessageParser;
+use IsotopeDocRobot\Markdown\Parsers\NewVersionParser;
+use IsotopeDocRobot\Markdown\Parsers\RootParser;
 use IsotopeDocRobot\Routing\Routing;
 use IsotopeDocRobot\Service\GitHubBookParser;
 use IsotopeDocRobot\Service\GitHubConnector;
