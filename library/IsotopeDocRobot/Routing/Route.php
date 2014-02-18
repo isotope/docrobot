@@ -65,6 +65,12 @@ class Route
         return !empty($this->children);
     }
 
+    // oooh, sweet child o' mine
+    public function isChildOfMine(Route $route)
+    {
+        return (boolean) $this->children[$route->getName()];
+    }
+
     public function addSibling(Route $sibling)
     {
         $this->siblings[$sibling->getName()] = $sibling;
@@ -78,5 +84,10 @@ class Route
     public function hasSiblings()
     {
         return !empty($this->siblings);
+    }
+
+    public function isSiblingOfMine(Route $route)
+    {
+        return (boolean) $this->siblings[$route->getName()];
     }
 } 

@@ -74,6 +74,18 @@ class Routing
         return $href;
     }
 
+    public function isSiblingOfOneInTrail(Route $route, $trail)
+    {
+        foreach ($trail as $trailRouteName) {
+            $trailRoute = $this->getRoute($trailRouteName);
+            if ($trailRoute->isSiblingOfMine($route)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private function loadConfig($configPath)
     {
         $file = new \File($configPath);

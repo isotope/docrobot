@@ -159,18 +159,23 @@ class Module extends \Module
         foreach ($routes as $route) {
 
             $blnIsInTrail               = in_array($route->getName(), $this->currentRoute->getTrail());
-            $blnIsSibling               = in_array($route->getName(), array_keys($this->currentRoute->getSiblings()));
-            $blnIsChildOfCurrentRoute   = in_array($route->getName(), array_keys($this->currentRoute->getChildren()));
 
-            // Do not show the whole navigation unless it's a sitemap
-            if (!$blnIsSitemap
-                && $level != 1
-                && !$blnIsInTrail
-                && !$blnIsSibling
-                && $this->currentRoute !== $route
-                && !$blnIsChildOfCurrentRoute
-            ) {
-                continue;
+            if (!$blnIsSitemap) {
+                // Only show route if it's one of those
+                // - the current route
+                // - a route in the trail
+                // - a sibling of any route in the trail
+                // - a sibling of the current route
+                // - a child of the current route
+                if (!(
+                    $route === $this->currentRoute
+                    || $blnIsInTrail
+                    || $this->routing->isSiblingOfOneInTrail($route, $this->currentRoute->getTrail())
+                    || $this->currentRoute->isSiblingOfMine($route)
+                    || $this->currentRoute->isChildOfMine($route)
+                )) {
+                    continue;
+                }
             }
 
             // children
