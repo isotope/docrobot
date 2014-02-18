@@ -10,6 +10,7 @@
 namespace IsotopeDocRobot\Maintenance;
 
 
+use IsotopeDocRobot\Markdown\Parsers\IncompleteParser;
 use IsotopeDocRobot\Markdown\Parsers\MessageParser;
 use IsotopeDocRobot\Markdown\Parsers\NewVersionParser;
 use IsotopeDocRobot\Markdown\Parsers\RootParser;
@@ -57,6 +58,7 @@ class Update implements \executable
 
                         $parserCollection = new ParserCollection();
                         $parserCollection->addParser(new NewVersionParser());
+                        $parserCollection->addParser(new IncompleteParser());
                         $parserCollection->addParser(new MessageParser());
                         $parserCollection->addParser(new RootParser($version));
 
