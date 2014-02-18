@@ -33,7 +33,11 @@ $booksToUpdate = array();
 $languagesToUpdate = array();
 
 // get the added and modified data (ignore deleted, we don't care really)
-$files = array_merge($data->commits[0]->added, $data->commits[0]->modified);
+$files = array();
+foreach ($data->commits as $commit) {
+    $files = array_merge($files, $commit->added, $commit->modified);
+}
+$files = array_unique($files);
 
 // update mirror
 foreach ($files as $file) {
