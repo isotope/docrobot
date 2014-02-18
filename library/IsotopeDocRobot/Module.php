@@ -1,21 +1,15 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: yanickwitschi
- * Date: 6/14/13
- * Time: 9:21 AM
- * To change this template use File | Settings | File Templates.
- */
 
 namespace IsotopeDocRobot;
 
 
+use IsotopeDocRobot\Markdown\Parsers\ImageParser;
 use IsotopeDocRobot\Markdown\Parsers\RouteParser;
 use IsotopeDocRobot\Markdown\Parsers\SitemapParser;
-use IsotopeDocRobot\Routing\Route;
 use IsotopeDocRobot\Routing\Routing;
 use IsotopeDocRobot\Service\GitHubBookParser;
 use IsotopeDocRobot\Service\ParserCollection;
+use Haste\Http\Response\Response;
 
 class Module extends \Module
 {
@@ -95,6 +89,7 @@ class Module extends \Module
         $parserCollection = new ParserCollection();
         $parserCollection->addParser(new RouteParser($this->routing, $objPage, $this->currentVersion));
         $parserCollection->addParser(new SitemapParser($this->generateNavigation($this->routing->getRootRoute()->getChildren(), 1, true)));
+        $parserCollection->addParser(new ImageParser($this->language, $this->book, $objPage, $this->currentVersion));
 
         $this->bookParser = new GitHubBookParser($this->currentVersion, $this->language, $this->book, $this->routing, $parserCollection);
 
@@ -109,6 +104,10 @@ class Module extends \Module
      */
     protected function compile()
     {
+        if ($image = $_GET['image']) {
+            $this->sendImage($image);
+        }
+
         global $objPage;
 
         // version change
@@ -206,5 +205,33 @@ class Module extends \Module
 
         $objTemplate->items = $items;
         return !empty($items) ? $objTemplate->parse() : '';
+    }
+
+    private function sendImage($image)
+    {
+        $image = base64_decode($image);
+        $imagePath = TL_ROOT . '/system/cache/isotope/docrobot-mirror/' . $this->currentVersion . '/' . $this->language . '/' . $this->book . '/' . $image;
+
+        // Make sure there are no attempts to hack the file system
+        if (preg_match('@^\.+@i', $image) || preg_match('@\.+/@i', $image) || preg_match('@(://)+@i', $image)) {
+            $objResponse = new Response('Invalid file name', 403);
+            $objResponse->send();
+        }
+
+        // Check whether the file exists
+        if (!file_exists($imagePath)) {
+            $objResponse = new Response('Not found', 404);
+            $objResponse->send();
+        }
+
+        header('Content-Type: ' . mime_content_type($imagePath));
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($imagePath));
+        ob_clean();
+        flush();
+        readfile($imagePath);
+        exit;
     }
 }
