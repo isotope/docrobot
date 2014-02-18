@@ -173,10 +173,15 @@ class Module extends \Module
                 }
             }
 
+            // CSS class
+            $strClass = ($blnIsInTrail) ? 'trail' : '';
+            $strClass .=  ' ' . $route->getConfig()->type;
+
             // children
             $subitems = '';
             if ($route->hasChildren()) {
                 $subitems = $this->generateNavigation($route->getChildren(), ($level + 1), $blnIsSitemap);
+                $strClass .= ' subnav';
             }
 
             $row = array();
@@ -186,7 +191,7 @@ class Module extends \Module
             $row['title']       = specialchars($route->getTitle(), true);
             $row['pageTitle']   = specialchars($route->getTitle(), true);
             $row['link']        = $route->getTitle();
-            $row['class']       = ($blnIsInTrail) ? 'trail' : '';
+            $row['class']       = trim($strClass);
             $items[]            = $row;
         }
 
