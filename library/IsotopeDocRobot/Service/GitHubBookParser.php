@@ -58,6 +58,10 @@ class GitHubBookParser
                 $this->book,
                 $path);
 
+            if (!is_file($path)) {
+                continue;
+            }
+
             $this->parserCollection->setData(file_get_contents($path));
             $this->cacheFile($route->getName() . '.html', $this->parserCollection->parse());
         }
