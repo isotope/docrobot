@@ -104,10 +104,6 @@ class Module extends \Module
      */
     protected function compile()
     {
-        if ($image = $_GET['image']) {
-            $this->sendImage($image);
-        }
-
         global $objPage;
 
         // version change
@@ -205,33 +201,5 @@ class Module extends \Module
 
         $objTemplate->items = $items;
         return !empty($items) ? $objTemplate->parse() : '';
-    }
-
-    private function sendImage($image)
-    {
-        $image = base64_decode($image);
-        $imagePath = TL_ROOT . '/system/cache/isotope/docrobot-mirror/' . $this->currentVersion . '/' . $this->language . '/' . $this->book . '/' . $image;
-
-        // Make sure there are no attempts to hack the file system
-        if (preg_match('@^\.+@i', $image) || preg_match('@\.+/@i', $image) || preg_match('@(://)+@i', $image)) {
-            $objResponse = new Response('Invalid file name', 403);
-            $objResponse->send();
-        }
-
-        // Check whether the file exists
-        if (!file_exists($imagePath)) {
-            $objResponse = new Response('Not found', 404);
-            $objResponse->send();
-        }
-
-        header('Content-Type: ' . mime_content_type($imagePath));
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
-        header('Pragma: public');
-        header('Content-Length: ' . filesize($imagePath));
-        ob_clean();
-        flush();
-        readfile($imagePath);
-        exit;
     }
 }

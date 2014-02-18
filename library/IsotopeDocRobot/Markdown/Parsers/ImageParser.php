@@ -34,17 +34,17 @@ class ImageParser implements AfterParserInterface
             '#<docrobot_image path="(.*)" alt="(.*)">#',
             function($matches) use ($language, $book, $pageModel, $version) {
 
-                $imagePath = TL_ROOT . '/system/cache/isotope/docrobot-mirror/' . $version . '/' . $language . '/' . $book . '/' . $matches[1];
+                $imagePath = 'system/cache/isotope/docrobot-mirror/' . $version . '/' . $language . '/' . $book . '/' . $matches[1];
+                $fileSize = @getimagesize($imagePath);
 
-                if (!is_file($imagePath)) {
+                $image = \Image::get($imagePath, $fileSize[0], $fileSize[1], '', null, true);
+
+                if (!$image) {
                     return '###Image not found, please adjust documentation on GitHub!###';
                 }
 
-                $fileSize = @getimagesize($imagePath);
-                $image = base64_encode($matches[1]);
-
                 return sprintf('<img src="%s" alt="%s" %s>',
-                    \Controller::generateFrontendUrl($pageModel->row()) . '?image=' . $image,
+                    $image,
                     $matches[2],
                     $fileSize[3]
                 );
