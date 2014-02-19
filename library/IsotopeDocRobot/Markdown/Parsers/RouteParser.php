@@ -30,9 +30,16 @@ class RouteParser implements AfterParserInterface
         return preg_replace_callback(
             '#<docrobot_route name="(.*)">(.*)</docrobot_route>#U',
             function($matches) use ($routing, $pageModel, $version) {
+
+                $route = $routing->getRoute($matches[1]);
+
+                if ($route === null) {
+                    return 'Route "' . $matches[1] . '" does not exist. Please fix the documentation on GitHub!';
+                }
+
                 return sprintf('<a href="%s">%s</a>',
                     $routing->getHrefForRoute(
-                        $routing->getRoute($matches[1]),
+                        $route,
                         $pageModel,
                         $version
                     ),
