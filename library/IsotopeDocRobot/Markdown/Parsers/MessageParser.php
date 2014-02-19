@@ -13,6 +13,6 @@ class MessageParser implements AfterParserInterface
     public function parseAfter($data)
     {
         $replacement = '<div class="notification-box notification-box-$1">$2</div>';
-        return preg_replace('#<docrobot_message type="(.*)">(.*)</docrobot_message>#', $replacement, $data);
+        return preg_replace('#<docrobot_message type="(.*)">(.*)</docrobot_message>#U', $replacement, $data);
     }
 }

@@ -28,7 +28,7 @@ class RouteParser implements AfterParserInterface
         $version = $this->version;
 
         return preg_replace_callback(
-            '#<docrobot_route name="(.*)">(.*)</docrobot_route>#',
+            '#<docrobot_route name="(.*)">(.*)</docrobot_route>#U',
             function($matches) use ($routing, $pageModel, $version) {
                 return sprintf('<a href="%s">%s</a>',
                     $routing->getHrefForRoute(

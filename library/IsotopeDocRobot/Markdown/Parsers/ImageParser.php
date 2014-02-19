@@ -31,7 +31,7 @@ class ImageParser implements AfterParserInterface
         $version = $this->version;
 
         return preg_replace_callback(
-            '#<docrobot_image path="(.*)" alt="(.*)">#',
+            '#<docrobot_image path="(.*)" alt="(.*)">#U',
             function($matches) use ($language, $book, $pageModel, $version) {
 
                 $imagePath = 'system/cache/isotope/docrobot-mirror/' . $version . '/' . $language . '/' . $book . '/' . $matches[1];
