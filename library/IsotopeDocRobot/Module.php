@@ -159,7 +159,7 @@ class Module extends \Module
 
         foreach ($routes as $route) {
 
-            $blnIsInTrail               = in_array($route->getName(), $this->currentRoute->getTrail());
+            $blnIsInTrail = in_array($route->getName(), $this->currentRoute->getTrail());
 
             if (!$blnIsSitemap) {
                 // Only show route if it's one of those
