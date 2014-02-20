@@ -8,6 +8,11 @@ $GLOBALS['FE_MOD']['miscellaneous']['isotope_docrobot'] = '\IsotopeDocRobot\Modu
 $GLOBALS['TL_MAINTENANCE'][] = '\IsotopeDocRobot\Maintenance\Update';
 
 /**
+ * Hooks
+ */
+$GLOBALS['TL_HOOKS']['dsi_searchablePages'][] = array('\IsotopeDocRobot\Search\Indexer', 'addManualPagesToDSI');
+
+/**
  * Versions, languages and books
  */
 $GLOBALS['ISOTOPE_DOCROBOT_VERSIONS']   = array('2.0');
