@@ -49,12 +49,16 @@ class Update implements \executable
                             $connector->updateAll();
                         }
 
-                        $routing = new Routing(
-                            sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/config.json',
-                                $version,
-                                $lang,
-                                $book)
-                        );
+                        try {
+                            $routing = new Routing(
+                                sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/config.json',
+                                    $version,
+                                    $lang,
+                                    $book)
+                            );
+                        } catch (\InvalidArgumentException $e) {
+                            continue;
+                        }
 
                         $parserCollection = new ParserCollection();
                         $parserCollection->addParser(new NewVersionParser());

@@ -63,12 +63,17 @@ $languagesToUpdate = array_unique($languagesToUpdate);
 
 foreach ($booksToUpdate as $book) {
     foreach ($languagesToUpdate as $lang) {
-        $routing = new \IsotopeDocRobot\Routing\Routing(
-            sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/config.json',
-                $version,
-                $lang,
-                $book)
-        );
+
+        try {
+            $routing = new \IsotopeDocRobot\Routing\Routing(
+                sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/config.json',
+                    $version,
+                    $lang,
+                    $book)
+            );
+        } catch (\InvalidArgumentException $e) {
+            continue;
+        }
 
         $parserCollection = new \IsotopeDocRobot\Service\ParserCollection();
         $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\NewVersionParser());

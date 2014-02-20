@@ -23,7 +23,10 @@ class Routing
         $rootRoute = new Route('root', $rootRouteConfig, '', array());
         $this->routes['root'] = $rootRoute;
 
-        $this->loadConfig($configPath);
+        if (!$this->loadConfig($configPath)) {
+            throw new \InvalidArgumentException('Invalid config path!');
+        }
+
         $this->generateRouteMap();
     }
 
@@ -88,11 +91,16 @@ class Routing
 
     private function loadConfig($configPath)
     {
+        if (!is_file(TL_ROOT . '/' . $configPath)) {
+            return false;
+        }
+
         $file = new \File($configPath);
         $content = $file->getContent();
         $file->close();
 
         $this->config = json_decode($content);
+        return true;
     }
 
     private function generateRouteMap($config=false, $relativePath='', $level=0, $trail=array('root'))

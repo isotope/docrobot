@@ -63,12 +63,16 @@ class Module extends \Module
         $objPage->title = ($objPage->pageTitle ?: $objPage->title) . ' (v ' . $this->currentVersion . ')';
 
         // load routing and book parser
-        $this->routing = new Routing(
-            sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/config.json',
-                $this->currentVersion,
-                $this->language,
-                $this->book)
-        );
+        try {
+            $this->routing = new Routing(
+                sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/config.json',
+                    $this->currentVersion,
+                    $this->language,
+                    $this->book)
+            );
+        } catch (\InvalidArgumentException $e) {
+            return '';
+        }
 
         // Load root route as default
         $this->currentRoute = $this->routing->getRootRoute();
