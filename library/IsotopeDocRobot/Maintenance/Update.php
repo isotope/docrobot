@@ -96,7 +96,7 @@ class Update implements \executable
         unset($arrSettings);
 
         $arrOptions = array();
-        foreach ($GLOBALS['ISOTOPE_DOCROBOT_LANGUAGES'] as $strLanguage) {
+        foreach (array_keys($GLOBALS['ISOTOPE_DOCROBOT_LANGUAGES']) as $strLanguage) {
             $arrOptions[] = array(
                 'value' => $strLanguage,
                 'label' => $strLanguage

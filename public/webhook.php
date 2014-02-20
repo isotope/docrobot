@@ -47,7 +47,7 @@ foreach ($files as $file) {
     $book = $chunks[1];
 
     // check if valid
-    if (!in_array($lang, $GLOBALS['ISOTOPE_DOCROBOT_LANGUAGES']) || !in_array($book, $GLOBALS['ISOTOPE_DOCROBOT_BOOKS'])) {
+    if (!in_array($lang, array_keys($GLOBALS['ISOTOPE_DOCROBOT_LANGUAGES'])) || !in_array($book, $GLOBALS['ISOTOPE_DOCROBOT_BOOKS'])) {
         continue;
     }
 
