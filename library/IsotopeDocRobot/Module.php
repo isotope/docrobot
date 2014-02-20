@@ -83,6 +83,8 @@ class Module extends \Module
 
             if ($route = $this->routing->getRouteForAlias($input)) {
                 $this->currentRoute = $route;
+                // update title
+                $objPage->title .= ' - ' . $this->currentRoute->getTitle();
             } else {
                 // 404
                 $objError = new \PageError404();
