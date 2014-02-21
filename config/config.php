@@ -20,6 +20,6 @@ $GLOBALS['ISOTOPE_DOCROBOT_VERSIONS']   = array('2.0');
 // language -> page id mapper (there might be languages in the future that are probably on English page)
 $GLOBALS['ISOTOPE_DOCROBOT_LANGUAGES']  = array(
     'de'    => 23,
-    'en'    => 22
+    //'en'    => 22
 );
 $GLOBALS['ISOTOPE_DOCROBOT_BOOKS']      = array('manual');
