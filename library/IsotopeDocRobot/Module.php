@@ -98,8 +98,7 @@ class Module extends \Module
         $parserCollection->addParser(new ImageParser($this->language, $this->book, $objPage, $this->currentVersion));
 
         $this->bookParser = new GitHubBookParser($this->currentVersion, $this->language, $this->book, $this->routing, $parserCollection);
-
-
+        $this->bookParser->loadLanguage();
 
         return parent::generate();
     }
@@ -146,6 +145,7 @@ class Module extends \Module
         }
 
         $this->Template->content = $strContent;
+        $this->bookParser->resetLanguage();
     }
 
 

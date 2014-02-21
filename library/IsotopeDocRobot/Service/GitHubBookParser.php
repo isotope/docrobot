@@ -1,18 +1,8 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: yanickwitschi
- * Date: 6/14/13
- * Time: 10:27 AM
- * To change this template use File | Settings | File Templates.
- */
+
 
 namespace IsotopeDocRobot\Service;
 
-use IsotopeDocRobot\Markdown\Parsers\MessageParser;
-use IsotopeDocRobot\Markdown\Parsers\NewVersionParser;
-use IsotopeDocRobot\Markdown\Parsers\RootParser;
-use IsotopeDocRobot\Markdown\Parsers\RouteParser;
 use IsotopeDocRobot\Routing\Route;
 
 class GitHubBookParser
@@ -22,6 +12,7 @@ class GitHubBookParser
     private $book = '';
     private $routing = null;
     private $parserCollection = null;
+    private $languageBackup = '';
 
     public function __construct($version, $language, $book, $routing, $parserCollection)
     {
@@ -30,8 +21,19 @@ class GitHubBookParser
         $this->book = $book;
         $this->routing = $routing;
         $this->parserCollection = $parserCollection;
+        $this->languageBackup = $GLOBALS['TL_LANGUAGE'];
 
         $this->createCacheDirIfNotExist();
+    }
+
+    public function loadLanguage()
+    {
+        \System::loadLanguageFile('default', $this->language);
+    }
+
+    public function resetLanguage()
+    {
+        \System::loadLanguageFile('default', $this->languageBackup);
     }
 
     public function updateFromMirror()

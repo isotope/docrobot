@@ -67,7 +67,9 @@ class Update implements \executable
                         $parserCollection->addParser(new RootParser($version));
 
                         $parser = new GitHubBookParser($version, $lang, $book, $routing, $parserCollection);
+                        $parser->loadLanguage();
                         $parser->updateFromMirror();
+                        $parser->resetLanguage();
                     }
                 }
             }

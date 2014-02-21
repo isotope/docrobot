@@ -82,7 +82,9 @@ foreach ($booksToUpdate as $book) {
         $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\RootParser($version));
 
         $parser = new \IsotopeDocRobot\Service\GitHubBookParser($version, $lang, $book, $routing, $parserCollection);
+        $parser->loadLanguage();
         $parser->updateFromMirror();
+        $parser->resetLanguage();
     }
 }
 
