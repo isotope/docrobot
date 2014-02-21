@@ -93,7 +93,7 @@ class Module extends \Module
         }
 
         $parserCollection = new ParserCollection();
-        $parserCollection->addParser(new RouteParser($this->routing, $objPage, $this->currentVersion));
+        $parserCollection->addParser(new RouteParser($this->routing, $objPage, $this->currentVersion, $this->language));
         $parserCollection->addParser(new SitemapParser($this->generateNavigation($this->routing->getRootRoute()->getChildren(), 1, true)));
         $parserCollection->addParser(new ImageParser($this->language, $this->book, $objPage, $this->currentVersion));
 
@@ -193,7 +193,7 @@ class Module extends \Module
             $row = array();
             $row['isActive']    = ($this->currentRoute->getName() == $route->getName()) ? true : false;
             $row['subitems']    = $subitems;
-            $row['href']        = $this->routing->getHrefForRoute($route, $objPage, $this->currentVersion);
+            $row['href']        = $this->routing->getHrefForRoute($route, $objPage, $this->currentVersion, $this->language);
             $row['title']       = specialchars($route->getTitle(), true);
             $row['pageTitle']   = specialchars($route->getTitle(), true);
             $row['link']        = $route->getTitle();

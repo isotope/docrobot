@@ -10,12 +10,14 @@ class RouteParser implements AfterParserInterface
     private $routing = null;
     private $pageModel = null;
     private $version = null;
+    private $language = null;
 
-    public function __construct($routing, $pageModel, $version)
+    public function __construct($routing, $pageModel, $version, $language)
     {
         $this->routing = $routing;
         $this->pageModel = $pageModel;
         $this->version = $version;
+        $this->language = $language;
     }
 
     /**
@@ -26,10 +28,11 @@ class RouteParser implements AfterParserInterface
         $routing = $this->routing;
         $pageModel = $this->pageModel;
         $version = $this->version;
+        $language = $this->language;
 
         return preg_replace_callback(
             '#<docrobot_route name="(.*)">(.*)</docrobot_route>#U',
-            function($matches) use ($routing, $pageModel, $version) {
+            function($matches) use ($routing, $pageModel, $version, $language) {
 
                 $route = $routing->getRoute($matches[1]);
 
@@ -41,7 +44,8 @@ class RouteParser implements AfterParserInterface
                     $routing->getHrefForRoute(
                         $route,
                         $pageModel,
-                        $version
+                        $version,
+                        $language
                     ),
                     $matches[2]
                 );

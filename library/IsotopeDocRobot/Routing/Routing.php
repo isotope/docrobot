@@ -60,7 +60,7 @@ class Routing
         return $this->getRoute(array_search($alias, $this->routeAliasMap));
     }
 
-    public function getHrefForRoute(Route $route, \PageModel $page, $version)
+    public function getHrefForRoute(Route $route, \PageModel $page, $version, $language)
     {
         // use the alias if there is one
         $alias = ($route->getConfig()->alias) ? $route->getConfig()->alias : $route->getName();
@@ -70,7 +70,7 @@ class Routing
                 $alias = ($this->getRoute($route->getConfig()->targetRoute)->getAlias()) ? $this->getRoute($route->getConfig()->targetRoute)->getAlias() : $this->getRoute($route->getConfig()->targetRoute)->getName();
             // DO NOT BREAK HERE
             case 'regular':
-                $href = \Controller::generateFrontendUrl($page->row(), '/v/' . $version . '/r/' . $alias);
+                $href = \Controller::generateFrontendUrl($page->row(), '/v/' . $version . '/r/' . $alias, $language);
                 break;
         }
 

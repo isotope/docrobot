@@ -30,7 +30,7 @@ class Indexer
                 }
 
                 foreach ($routing->getRoutes() as $route) {
-                    $arrPages[] = $domain . $routing->getHrefForRoute($route, $pageModel, $latestVersion);
+                    $arrPages[] = $domain . $routing->getHrefForRoute($route, $pageModel, $latestVersion, $language);
                 }
             }
         }
