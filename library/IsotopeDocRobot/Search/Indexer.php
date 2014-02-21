@@ -14,7 +14,7 @@ class Indexer
         foreach ($GLOBALS['ISOTOPE_DOCROBOT_LANGUAGES'] as $language => $pageId) {
 
             $pageModel = \PageModel::findWithDetails($pageId);
-            $domain = ($pageModel->rootUseSSL ? 'https://' : 'http://') . ($pageModel->domain ?: \Environment::get('host')) . TL_PATH;
+            $domain = ($pageModel->rootUseSSL ? 'https://' : 'http://') . ($pageModel->domain ?: \Environment::get('host')) . TL_PATH . '/';;
 
 
             foreach ($GLOBALS['ISOTOPE_DOCROBOT_BOOKS'] as $book) {
