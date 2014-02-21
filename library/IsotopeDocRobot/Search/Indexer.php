@@ -13,10 +13,6 @@ class Indexer
 
         foreach ($GLOBALS['ISOTOPE_DOCROBOT_LANGUAGES'] as $language => $pageId) {
 
-            // delete existing entries
-            \Database::getInstance()->prepare('DELETE FROM tl_search WHERE pid=?')->execute($pageId);
-            \Database::getInstance()->query('DELETE FROM tl_search_index WHERE pid NOT IN (SELECT id FROM tl_search)');
-
             $pageModel = \PageModel::findWithDetails($pageId);
             $domain = ($pageModel->rootUseSSL ? 'https://' : 'http://') . ($pageModel->domain ?: \Environment::get('host')) . TL_PATH;
 
