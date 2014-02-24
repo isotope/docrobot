@@ -70,7 +70,13 @@ class Routing
                 $alias = ($this->getRoute($route->getConfig()->targetRoute)->getAlias()) ? $this->getRoute($route->getConfig()->targetRoute)->getAlias() : $this->getRoute($route->getConfig()->targetRoute)->getName();
             // DO NOT BREAK HERE
             case 'regular':
-                $href = \Controller::generateFrontendUrl($page->row(), '/v/' . $version . '/r/' . $alias, $language);
+                $strParams = '/v/' . $version;
+
+                if ($alias !== 'root') {
+                    $strParams .= '/r/' . $alias;
+                }
+
+                $href = \Controller::generateFrontendUrl($page->row(), $strParams, $language);
                 break;
         }
 
