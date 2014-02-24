@@ -77,7 +77,6 @@ foreach ($booksToUpdate as $book) {
 
         $parserCollection = new \IsotopeDocRobot\Service\ParserCollection();
         $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\NewVersionParser());
-        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\IncompleteParser());
         $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\MessageParser());
         $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\RootParser($version));
 

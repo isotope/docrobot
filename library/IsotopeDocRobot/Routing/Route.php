@@ -50,6 +50,11 @@ class Route
         return $this->getConfig()->alias ?: $this->getName();
     }
 
+    public function isIncomplete()
+    {
+        return $this->getConfig()->incomplete === true;
+    }
+
     public function addChild(Route $child)
     {
         $this->children[$child->getName()] = $child;
