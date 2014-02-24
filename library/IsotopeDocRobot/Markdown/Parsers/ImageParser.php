@@ -35,18 +35,23 @@ class ImageParser implements AfterParserInterface
             function($matches) use ($language, $book, $pageModel, $version) {
 
                 $imagePath = 'system/cache/isotope/docrobot-mirror/' . $version . '/' . $language . '/' . $book . '/' . $matches[1];
-                $fileSize = @getimagesize($imagePath);
+                $imageSize = @getimagesize($imagePath);
 
-                $image = \Image::get($imagePath, $fileSize[0], $fileSize[1], '', null, true);
+                $image      = \Image::get($imagePath, $imageSize[0], $imageSize[1], 'box', null, true);
+                $thumb      = \Image::get($imagePath, 680, $imageSize[1], 'box', null, true);
+                $thumbSize  = @getimagesize($thumb);
 
                 if (!$image) {
                     return '###Image not found, please adjust documentation on GitHub!###';
                 }
 
-                return sprintf('<img src="%s" alt="%s" %s>',
+                return sprintf('<figure class="image_container"><a href="%s" data-lightbox="%s" title="%s"><span class="overlay zoom"></span><img src="%s" alt="%s" %s></a></figure>',
+                    $thumb,
+                    uniqid(),
+                    $matches[2],
                     $image,
                     $matches[2],
-                    $fileSize[3]
+                    $thumbSize[3]
                 );
             },
             $data);
