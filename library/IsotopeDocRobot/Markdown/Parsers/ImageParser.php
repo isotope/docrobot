@@ -25,35 +25,52 @@ class ImageParser implements AfterParserInterface
      */
     public function parseAfter($data)
     {
+        return preg_replace_callback(
+            '#<docrobot_image path="(.*)" alt="(.*)">#U',
+            $this->getMarkupForImageClosure(),
+            $data);
+    }
+
+    private function getMarkupForImageClosure()
+    {
         $language = $this->language;
         $book = $this->book;
         $pageModel = $this->pageModel;
         $version = $this->version;
 
-        return preg_replace_callback(
-            '#<docrobot_image path="(.*)" alt="(.*)">#U',
-            function($matches) use ($language, $book, $pageModel, $version) {
+        return function($matches) use ($language, $book, $pageModel, $version) {
 
-                $imagePath = 'system/cache/isotope/docrobot-mirror/' . $version . '/' . $language . '/' . $book . '/' . $matches[1];
-                $imageSize = @getimagesize($imagePath);
+            $imagePath = 'system/cache/isotope/docrobot-mirror/' . $version . '/' . $language . '/' . $book . '/' . $matches[1];
+            $imageSize = @getimagesize($imagePath);
 
-                $image      = \Image::get($imagePath, $imageSize[0], $imageSize[1], 'box', null, true);
-                $thumb      = \Image::get($imagePath, 680, $imageSize[1], 'box', null, true);
-                $thumbSize  = @getimagesize($thumb);
+            $image      = \Image::get($imagePath, $imageSize[0], $imageSize[1], 'box', null, true);
 
-                if (!$image) {
-                    return '###Image not found, please adjust documentation on GitHub!###';
-                }
+            // No image found
+            if (!$image) {
+                return '###Image not found, please adjust documentation on GitHub!###';
+            }
 
-                return sprintf('<figure class="image_container"><a href="%s" data-lightbox="%s" title="%s"><span class="overlay zoom"></span><img src="%s" alt="%s" %s></a></figure>',
+            // No resize necessary
+            if ($imageSize[0] <= 680) {
+                return sprintf('<img src="%s" alt="%s" %s>',
                     $image,
-                    uniqid(),
                     $matches[2],
-                    $thumb,
-                    $matches[2],
-                    $thumbSize[3]
+                    $imageSize[3]
                 );
-            },
-            $data);
+            }
+
+            // Generate thumbnail
+            $thumb      = \Image::get($imagePath, 680, $imageSize[1], 'box', null, true);
+            $thumbSize  = @getimagesize($thumb);
+
+            return sprintf('<figure class="image_container"><a href="%s" data-lightbox="%s" title="%s"><span class="overlay zoom"></span><img src="%s" alt="%s" %s></a></figure>',
+                $image,
+                uniqid(),
+                $matches[2],
+                $thumb,
+                $matches[2],
+                $thumbSize[3]
+            );
+        };
     }
 }
