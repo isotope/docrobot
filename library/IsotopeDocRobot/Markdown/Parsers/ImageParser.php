@@ -46,10 +46,10 @@ class ImageParser implements AfterParserInterface
                 }
 
                 return sprintf('<figure class="image_container"><a href="%s" data-lightbox="%s" title="%s"><span class="overlay zoom"></span><img src="%s" alt="%s" %s></a></figure>',
-                    $thumb,
+                    $image,
                     uniqid(),
                     $matches[2],
-                    $image,
+                    $thumb,
                     $matches[2],
                     $thumbSize[3]
                 );
