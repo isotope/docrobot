@@ -61,7 +61,7 @@ class Module extends \Module
         }
 
         // Set title
-        $objPage->title = ($objPage->pageTitle ?: $objPage->title) . ' (v ' . $this->currentVersion . ')';
+        $objPage->title = ($objPage->pageTitle ?: $objPage->title) . ' (V. ' . $this->currentVersion . ')';
 
         // load routing and book parser
         try {
@@ -71,6 +71,7 @@ class Module extends \Module
                     $this->language,
                     $this->book)
             );
+            $this->routing->setRootTitle($objPage->title);
         } catch (\InvalidArgumentException $e) {
             return '';
         }
@@ -139,6 +140,11 @@ class Module extends \Module
         $this->Template->navigation = $this->generateNavigation($this->routing->getRootRoute()->getChildren());
         $this->Template->isIncomplete = $this->currentRoute->isIncomplete();
 
+        // Only add book navigation on route sites
+        if (\Input::get('r')) {
+            $this->Template->bookNavigation = $this->generateBookNavigation();
+        }
+
         // content
         $strContent = $this->bookParser->getContentForRoute($this->currentRoute);
 
@@ -151,7 +157,7 @@ class Module extends \Module
     }
 
 
-    protected function generateNavigation($routes, $level=1, $blnIsSitemap=false)
+    protected function generateNavigation($routes, $level=1, $blnIsSitemap=false, $blnSkipSubpages=false)
     {
         global $objPage;
         $objTemplate = new \FrontendTemplate('nav_default');
@@ -192,7 +198,7 @@ class Module extends \Module
 
             // children
             $subitems = '';
-            if ($route->hasChildren()) {
+            if ($route->hasChildren() && !$blnSkipSubpages) {
                 $subitems = $this->generateNavigation($route->getChildren(), ($level + 1), $blnIsSitemap);
                 $strClass .= ' subnav';
             }
@@ -219,5 +225,31 @@ class Module extends \Module
 
         $objTemplate->items = $items;
         return !empty($items) ? $objTemplate->parse() : '';
+    }
+
+    protected function generateBookNavigation()
+    {
+        $objCurrent = $this->routing->getRootRoute();
+
+        $arrRoutesByIndex = array_keys($this->routing->getRoutes());
+        $intCurrent = array_search($this->currentRoute->getName(), $arrRoutesByIndex);
+        $intLast = count($arrRoutesByIndex) - 1;
+
+        if ($intCurrent === 0) {
+            $objNext = $this->routing->getRoute($arrRoutesByIndex[1]);
+            $arrRoutes = array($objCurrent, $objNext);
+            return $this->generateNavigation($arrRoutes, 1, true, true);
+        }
+
+        if ($intCurrent === $intLast) {
+            $objNext = $this->routing->getRootRoute();
+        } else {
+            $objNext = $this->routing->getRoute($arrRoutesByIndex[$intCurrent + 1]);
+        }
+
+        $objPrevious = $this->routing->getRoute($arrRoutesByIndex[$intCurrent - 1]);
+        $objCurrent = $this->routing->getRoute($arrRoutesByIndex[$intCurrent]);
+        $arrRoutes = array($objPrevious, $objCurrent, $objNext);
+        return $this->generateNavigation($arrRoutes, 1, true, true);
     }
 }

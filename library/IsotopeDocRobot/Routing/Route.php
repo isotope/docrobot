@@ -35,6 +35,11 @@ class Route
         return $this->getConfig()->title;
     }
 
+    public function setTitle($title)
+    {
+        $this->getConfig()->title = $title;
+    }
+
     public function getConfig()
     {
         return $this->config;

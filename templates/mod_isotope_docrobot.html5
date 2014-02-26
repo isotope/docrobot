@@ -22,9 +22,11 @@
 <!-- indexer::stop -->
 </div>
 
+<?php if ($this->bookNavigation): ?>
 <div class="booknavigation">
     <?php echo $this->bookNavigation; ?>
 </div>
+<?php endif; ?>
 
 </div>
 
