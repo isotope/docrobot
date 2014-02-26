@@ -4,8 +4,6 @@ namespace IsotopeDocRobot;
 
 
 use IsotopeDocRobot\Markdown\Parsers\ImageParser;
-use IsotopeDocRobot\Markdown\Parsers\IncompleteParser;
-use IsotopeDocRobot\Markdown\Parsers\MessageParser;
 use IsotopeDocRobot\Markdown\Parsers\RouteParser;
 use IsotopeDocRobot\Markdown\Parsers\SitemapParser;
 use IsotopeDocRobot\Routing\Routing;
@@ -27,6 +25,7 @@ class Module extends \Module
     protected $language = '';
     protected $book = '';
     protected $bookParser = null;
+    /* @var $routing \IsotopeDocRobot\Routing\Routing */
     protected $routing = null;
     protected $currentRoute = null;
 
@@ -98,8 +97,6 @@ class Module extends \Module
         $parserCollection->addParser(new RouteParser($this->routing, $objPage, $this->currentVersion, $this->language));
         $parserCollection->addParser(new SitemapParser($this->generateNavigation($this->routing->getRootRoute()->getChildren(), 1, true)));
         $parserCollection->addParser(new ImageParser($this->language, $this->book, $objPage, $this->currentVersion));
-        $parserCollection->addParser(new IncompleteParser());
-        $parserCollection->addParser(new MessageParser());
 
         $this->bookParser = new GitHubBookParser($this->currentVersion, $this->language, $this->book, $this->routing, $parserCollection);
         $this->bookParser->loadLanguage();
@@ -140,6 +137,7 @@ class Module extends \Module
 
         $this->Template->form = $objForm;
         $this->Template->navigation = $this->generateNavigation($this->routing->getRootRoute()->getChildren());
+        $this->Template->isIncomplete = $this->currentRoute->isIncomplete();
 
         // content
         $strContent = $this->bookParser->getContentForRoute($this->currentRoute);

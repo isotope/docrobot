@@ -11,9 +11,19 @@
 </div>
 
 <div class="content">
+    <?php if ($this->isIncomplete): ?>
+    <div class="notification-box notification-box-error">
+        <p><strong><?php echo $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['incompleteMsgTitle']; ?></strong></p>
+        <p><?php echo $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['incompleteMsgBody']; ?></p>
+    </div>
+    <?php endif; ?>
 <!-- indexer::continue -->
 <?php echo $this->content; ?>
-    <!-- indexer::stop -->
+<!-- indexer::stop -->
+</div>
+
+<div class="booknavigation">
+    <?php echo $this->bookNavigation; ?>
 </div>
 
 </div>

@@ -71,7 +71,6 @@ class GitHubBookParser
 
     public function getContentForRoute(Route $route)
     {
-        $strContent = '';
         $path = sprintf('%s/system/cache/isotope/docrobot/%s/%s/%s/%s.html',
             TL_ROOT,
             $this->version,
@@ -80,14 +79,9 @@ class GitHubBookParser
             $route->getName());
 
         if (is_file($path)) {
-
-            if ($route->isIncomplete()) {
-                $strContent .= '<docrobot_incomplete>' ."\n";
-            }
-
-            $strContent .= file_get_contents($path);
+            $strContent = file_get_contents($path);
         } else {
-            return $strContent;
+            return '';
         }
 
         $this->parserCollection->setData($strContent);
