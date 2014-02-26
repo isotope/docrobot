@@ -61,7 +61,7 @@ class Module extends \Module
         }
 
         // Set title
-        $objPage->title = ($objPage->pageTitle ?: $objPage->title) . ' (V. ' . $this->currentVersion . ')';
+        $objPage->title = ($objPage->pageTitle ?: $objPage->title) . ' (v ' . $this->currentVersion . ')';
 
         // load routing and book parser
         try {
@@ -86,7 +86,7 @@ class Module extends \Module
             if ($route = $this->routing->getRouteForAlias($input)) {
                 $this->currentRoute = $route;
                 // update title
-                $objPage->title .= '<span>' . $this->currentRoute->getTitle() . '</span>';
+                $objPage->title .= ' <span>' . $this->currentRoute->getTitle() . '</span>';
             } else {
                 // 404
                 $objError = new \PageError404();

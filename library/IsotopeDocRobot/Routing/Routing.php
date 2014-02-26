@@ -30,6 +30,11 @@ class Routing
         $this->generateRouteMap();
     }
 
+    public function setRootTitle($title)
+    {
+        return $this->getRootRoute()->setTitle($title);
+    }
+
     public function getConfig()
     {
         return $this->config;
