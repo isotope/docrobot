@@ -139,10 +139,12 @@ class Module extends \Module
         $this->Template->form = $objForm;
         $this->Template->navigation = $this->generateNavigation($this->routing->getRootRoute()->getChildren());
         $this->Template->isIncomplete = $this->currentRoute->isIncomplete();
+        $this->Template->index = false;
 
         // Only add book navigation on route sites
         if (\Input::get('r')) {
             $this->Template->bookNavigation = $this->generateBookNavigation();
+            $this->Template->index = true;
         }
 
         // content

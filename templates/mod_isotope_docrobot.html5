@@ -2,7 +2,9 @@
 <div class="<?php echo $this->class; ?> block"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
 
 <div class="versionchoice">
+    <!-- indexer::continue -->
     <?php echo $this->form->generate(); ?>
+    <!-- indexer::stop -->
 </div>
 <div class="breadcrumb"><?php echo $this->breadcrumb; ?></div>
 
@@ -17,9 +19,15 @@
         <p><?php echo $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['incompleteMsgBody']; ?></p>
     </div>
     <?php endif; ?>
+<?php if ($this->index): ?>
 <!-- indexer::continue -->
+<?php endif; ?>
+
 <?php echo $this->content; ?>
+
+<?php if ($this->index): ?>
 <!-- indexer::stop -->
+<?php endif; ?>
 </div>
 
 <?php if ($this->bookNavigation): ?>
