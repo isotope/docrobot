@@ -5,6 +5,14 @@
     <!-- indexer::continue -->
     <?php echo $this->form->generate(); ?>
     <!-- indexer::stop -->
+    <div class="autocompleter">
+    <form>
+        <div class="formbody">
+            <label for="autocomplete_<?php echo $this->id; ?>">Schnellnavigation:</label>
+            <input id="autocomplete_<?php echo $this->id; ?>">
+        </div>
+    </form>
+    </div>
 </div>
 <div class="breadcrumb"><?php echo $this->breadcrumb; ?></div>
 
@@ -43,6 +51,14 @@
         jQuery('#<?php echo $this->form->getFormId(); ?> select').change( function(e) {
             this.form.submit();
         });
+    });
+</script>
+<script>
+    jQuery("#autocomplete_<?php echo $this->id; ?>").autocomplete({
+        data: <?php echo $this->quickNavigatonData; ?>,
+        onItemSelect: function(item) {
+            window.location.href = item.data[0];
+        }
     });
 </script>
 <!-- indexer::continue -->

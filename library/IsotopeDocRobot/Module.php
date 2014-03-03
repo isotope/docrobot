@@ -111,6 +111,8 @@ class Module extends \Module
      */
     protected function compile()
     {
+        $GLOBALS['TL_CSS'][] = 'system/modules/isotope-docrobot/assets/jquery.autocomplete.css';
+        $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/isotope-docrobot/assets/jquery.autocomplete.min.js';
         global $objPage;
 
         // version change
@@ -138,6 +140,7 @@ class Module extends \Module
 
         $this->Template->form = $objForm;
         $this->Template->navigation = $this->generateNavigation($this->routing->getRootRoute()->getChildren());
+        $this->Template->quickNavigatonData = $this->getQuickNavigationData();
         $this->Template->isIncomplete = $this->currentRoute->isIncomplete();
         $this->Template->index = false;
 
@@ -253,5 +256,19 @@ class Module extends \Module
         $objCurrent = $this->routing->getRoute($arrRoutesByIndex[$intCurrent]);
         $arrRoutes = array($objPrevious, $objCurrent, $objNext);
         return $this->generateNavigation($arrRoutes, 1, true, true);
+    }
+
+    protected function getQuickNavigationData()
+    {
+        global $objPage;
+        $arrNav = array();
+        foreach ($this->routing->getRoutes() as $route) {
+            $arrNav[] = array(
+                $route->getTitle(),
+                $this->routing->getHrefForRoute($route, $objPage, $this->currentVersion, $this->language)
+            );
+        }
+
+        return json_encode($arrNav);
     }
 }
