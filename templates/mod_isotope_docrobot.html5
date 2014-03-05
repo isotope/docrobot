@@ -9,7 +9,7 @@
     <form>
         <div class="formbody">
             <label for="autocomplete_<?php echo $this->id; ?>">Schnellnavigation:</label>
-            <input id="autocomplete_<?php echo $this->id; ?>">
+            <input id="autocomplete_<?php echo $this->id; ?>" data-autocomplete="<?php echo $this->quickNavigatonData; ?>">
         </div>
     </form>
     </div>
@@ -47,18 +47,23 @@
 </div>
 
 <script>
-    jQuery(function(){
-        jQuery('#<?php echo $this->form->getFormId(); ?> select').change( function(e) {
-            this.form.submit();
-        });
+jQuery(function(){
+    jQuery('#<?php echo $this->form->getFormId(); ?> select').change( function(e) {
+        this.form.submit();
     });
+});
 </script>
 <script>
-    jQuery("#autocomplete_<?php echo $this->id; ?>").autocomplete({
-        data: <?php echo $this->quickNavigatonData; ?>,
+jQuery(function($) {
+    var ac = $("#autocomplete_<?php echo $this->id; ?>");
+    console.log(ac.data("autocomplete"));
+    ac.autocomplete({
+        data: ac.data("autocomplete"),
         onItemSelect: function(item) {
             window.location.href = item.data[0];
         }
     });
+});
 </script>
 <!-- indexer::continue -->
+

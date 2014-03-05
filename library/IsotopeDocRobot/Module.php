@@ -269,6 +269,6 @@ class Module extends \Module
             );
         }
 
-        return json_encode($arrNav);
+        return specialchars(json_encode($arrNav));
     }
 }
