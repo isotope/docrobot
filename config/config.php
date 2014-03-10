@@ -15,7 +15,7 @@ $GLOBALS['TL_HOOKS']['dsi_searchablePages'][] = array('\IsotopeDocRobot\Search\I
 /**
  * Versions, languages and books
  */
-$GLOBALS['ISOTOPE_DOCROBOT_VERSIONS']   = array('2.0');
+$GLOBALS['ISOTOPE_DOCROBOT_VERSIONS']   = array('2.1');
 
 // language -> page id mapper (there might be languages in the future that are probably on English page)
 $GLOBALS['ISOTOPE_DOCROBOT_LANGUAGES']  = array(
