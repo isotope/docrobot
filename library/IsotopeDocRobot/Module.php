@@ -57,8 +57,12 @@ class Module extends \Module
         $this->book = $this->iso_docrobot_book;
 
         // override default version
-        if (\Input::get('v')) {
-            $this->currentVersion = \Input::get('v');
+        if ($this->currentVersion = \Input::get('v')) {
+            if (!in_array($this->currentVersion, $this->versions)) {
+                // 404
+                $objError = new \PageError404();
+                $objError->generate($objPage->id);
+            }
         }
 
         // Set title
