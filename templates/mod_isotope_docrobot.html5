@@ -27,6 +27,12 @@
         <p><?php echo $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['incompleteMsgBody']; ?></p>
     </div>
     <?php endif; ?>
+    <?php if ($this->isNew): ?>
+    <div class="notification-box notification-box-new">
+        <p><strong><?php echo $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['newMsgTitle']; ?></strong></p>
+        <p><?php echo sprintf($GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['newMsgBody'], $this->newDate); ?></p>
+    </div>
+    <?php endif; ?>
 <?php if ($this->index): ?>
 <!-- indexer::continue -->
 <?php endif; ?>

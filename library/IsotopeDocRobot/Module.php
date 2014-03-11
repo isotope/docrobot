@@ -57,7 +57,8 @@ class Module extends \Module
         $this->book = $this->iso_docrobot_book;
 
         // override default version
-        if ($this->currentVersion = \Input::get('v')) {
+        if (\Input::get('v')) {
+            $this->currentVersion = \Input::get('v');
             if (!in_array($this->currentVersion, $this->versions)) {
                 // 404
                 $objError = new \PageError404();
@@ -148,6 +149,8 @@ class Module extends \Module
         $this->Template->navigation = $this->generateNavigation($this->routing->getRootRoute()->getChildren());
         $this->Template->quickNavigatonData = $this->getQuickNavigationData();
         $this->Template->isIncomplete = $this->currentRoute->isIncomplete();
+        $this->Template->isNew = $this->currentRoute->isNew();
+        $this->Template->newDate = $this->currentRoute->getNewAsDateTime()->format($GLOBALS['TL_CONFIG']['dateFormat']);
         $this->Template->index = false;
 
         // Only add book navigation on route sites
@@ -207,6 +210,10 @@ class Module extends \Module
                 $strClass .= ' incomplete';
             }
 
+            // New
+            if ($route->isNew()) {
+                $strClass .= ' new';
+            }
             // children
             $subitems = '';
             if ($route->hasChildren() && !$blnSkipSubpages) {

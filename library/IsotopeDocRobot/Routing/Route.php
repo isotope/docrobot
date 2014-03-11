@@ -60,6 +60,26 @@ class Route
         return $this->getConfig()->incomplete === true;
     }
 
+    public function isNew()
+    {
+        if ($this->getConfig()->new) {
+            $objDateNew = $this->getNewAsDateTime();
+            $objDateNow = new \DateTime();
+
+            $objDiff = $objDateNow->diff($objDateNew);
+            if ($objDiff->days <= 14) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getNewAsDateTime()
+    {
+        return new \DateTime($this->getConfig()->new);
+    }
+
     public function addChild(Route $child)
     {
         $this->children[$child->getName()] = $child;
