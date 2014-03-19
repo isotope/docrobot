@@ -22,4 +22,4 @@ $GLOBALS['ISOTOPE_DOCROBOT_LANGUAGES']  = array(
     'de'    => 23,
     //'en'    => 22
 );
-$GLOBALS['ISOTOPE_DOCROBOT_BOOKS']      = array('manual');
+$GLOBALS['ISOTOPE_DOCROBOT_BOOKS']      = array('manual', 'manual_devs');
