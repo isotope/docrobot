@@ -49,7 +49,7 @@ class Module extends \Module
             return $objTemplate->parse();
         }
         global $objPage;
-        $this->versions = $GLOBALS['ISOTOPE_DOCROBOT_VERSIONS'];
+        $this->versions = trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_versions']);
 
         // defaults
         $this->currentVersion = $this->versions[0];
@@ -129,7 +129,7 @@ class Module extends \Module
         $objForm->addFormField('version', array(
                                                'label'         => 'Version:',
                                                'inputType'     => 'select',
-                                               'options'       => $GLOBALS['ISOTOPE_DOCROBOT_VERSIONS'],
+                                               'options'       => trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_versions']),
                                                'default'       => $this->currentVersion
                                           ));
 

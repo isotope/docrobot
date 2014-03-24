@@ -10,7 +10,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['iso_docrobot_book'] = array
     'label'                   => &$GLOBALS['TL_LANG']['tl_module']['iso_docrobot_book'],
     'exclude'                 => true,
     'inputType'               => 'radio',
-    'options'                 => $GLOBALS['ISOTOPE_DOCROBOT_BOOKS'],
+    'options'                 => trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_books']),
     'eval'                    => array('mandatory'=>true),
     'sql'                     => "varchar(255) NOT NULL default ''"
 );

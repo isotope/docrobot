@@ -77,7 +77,7 @@ class Update implements \executable
         $objTemplate->headline = specialchars('Isotope DocRobot');
 
         $arrOptions = array();
-        foreach ($GLOBALS['ISOTOPE_DOCROBOT_VERSIONS'] as $strVersion) {
+        foreach (trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_versions']) as $strVersion) {
             $arrOptions[] = array(
                 'value' => $strVersion,
                 'label' => $strVersion
@@ -95,10 +95,10 @@ class Update implements \executable
         unset($arrSettings);
 
         $arrOptions = array();
-        foreach (array_keys($GLOBALS['ISOTOPE_DOCROBOT_LANGUAGES']) as $strLanguage) {
+        foreach (deserialize($GLOBALS['TL_CONFIG']['iso_docrobot_languages'], true) as $arrLanguage) {
             $arrOptions[] = array(
-                'value' => $strLanguage,
-                'label' => $strLanguage
+                'value' => $arrLanguage['language'],
+                'label' => $arrLanguage['language']
             );
         }
 
@@ -113,7 +113,7 @@ class Update implements \executable
         unset($arrSettings);
 
         $arrOptions = array();
-        foreach ($GLOBALS['ISOTOPE_DOCROBOT_BOOKS'] as $strBook) {
+        foreach (trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_books']) as $strBook) {
             $arrOptions[] = array(
                 'value' => $strBook,
                 'label' => $strBook

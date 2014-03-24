@@ -39,6 +39,13 @@ foreach ($data->commits as $commit) {
 }
 $files = array_unique($files);
 
+$arrLanguages = array();
+$arrLanguageSettings = deserialize($GLOBALS['TL_CONFIG']['iso_docrobot_languages'], true);
+foreach($arrLanguageSettings as $arrLanguage) {
+    $arrLanguages[] = $arrLanguage['language'];
+}
+$arrBooks = trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_books']);
+
 // update mirror
 foreach ($files as $file) {
     $chunks = explode('/', $file);
@@ -47,7 +54,7 @@ foreach ($files as $file) {
     $book = $chunks[1];
 
     // check if valid
-    if (!in_array($lang, array_keys($GLOBALS['ISOTOPE_DOCROBOT_LANGUAGES'])) || !in_array($book, $GLOBALS['ISOTOPE_DOCROBOT_BOOKS'])) {
+    if (!in_array($lang, $arrLanguages) || !in_array($book, $arrBooks)) {
         continue;
     }
 

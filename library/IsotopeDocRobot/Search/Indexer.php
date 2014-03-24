@@ -8,21 +8,20 @@ class Indexer
 {
     public function addManualPagesToDSI($arrPages)
     {
-        $latestVersion = $GLOBALS['ISOTOPE_DOCROBOT_VERSIONS'][0];
+        $latestVersion = trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_versions'])[0];
+        $arrLanguages = deserialize($GLOBALS['TL_CONFIG']['iso_docrobot_languages'], true);
 
-
-        foreach ($GLOBALS['ISOTOPE_DOCROBOT_LANGUAGES'] as $language => $pageId) {
-
-            $pageModel = \PageModel::findWithDetails($pageId);
+        foreach ($arrLanguages as $arrLanguage) {
+            $pageModel = \PageModel::findWithDetails($arrLanguage['page']);
             $domain = ($pageModel->rootUseSSL ? 'https://' : 'http://') . ($pageModel->domain ?: \Environment::get('host')) . TL_PATH . '/';;
 
 
-            foreach ($GLOBALS['ISOTOPE_DOCROBOT_BOOKS'] as $book) {
+            foreach (trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_books']) as $book) {
                 try {
                     $routing = new Routing(
                         sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/config.json',
                             $latestVersion,
-                            $language,
+                            $arrLanguage['language'],
                             $book)
                     );
                 } catch (\InvalidArgumentException $e) {
@@ -30,7 +29,7 @@ class Indexer
                 }
 
                 foreach ($routing->getRoutes() as $route) {
-                    $arrPages[] = $domain . $routing->getHrefForRoute($route, $pageModel, $latestVersion, $language);
+                    $arrPages[] = $domain . $routing->getHrefForRoute($route, $pageModel, $latestVersion, $arrLanguage['language']);
                 }
             }
         }
