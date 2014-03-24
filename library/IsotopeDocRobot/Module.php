@@ -28,6 +28,7 @@ class Module extends \Module
     protected $bookParser = null;
     /* @var $routing \IsotopeDocRobot\Routing\Routing */
     protected $routing = null;
+    /* @var $currentRoute \IsotopeDocRobot\Routing\Route */
     protected $currentRoute = null;
 
     /**
@@ -146,6 +147,7 @@ class Module extends \Module
         }
 
         $this->Template->form = $objForm;
+        $this->Template->feedbackForm = $this->generateFeedbackForm();
         $this->Template->navigation = $this->generateNavigation($this->routing->getRootRoute()->getChildren());
         $this->Template->quickNavigatonData = $this->getQuickNavigationData();
         $this->Template->isIncomplete = $this->currentRoute->isIncomplete();
@@ -283,5 +285,71 @@ class Module extends \Module
         }
 
         return specialchars(json_encode($arrNav));
+    }
+
+    protected function generateFeedbackForm()
+    {
+        if (!$this->iso_docrobot_form) {
+            return '';
+        }
+
+        $objForm = new \Haste\Form\Form('docrobot_comment', 'POST', function($objHaste) {
+            return \Input::post('FORM_SUBMIT') === $objHaste->getFormId();
+        });
+
+        $objForm->addFieldsFromFormGenerator($this->iso_docrobot_form);
+
+        // set temp path
+        foreach ($objForm->getWidgets() as $strName => $objWidget) {
+            if ($objWidget instanceof \uploadable) {
+                //$objWidget->path = 'system/tmp';
+            }
+        }
+
+        if ($objForm->validate()) {
+            $_SESSION['FORM_DATA'] = array();
+
+            $objEmail = new \Email();
+            $objEmail->from = $GLOBALS['TL_ADMIN_EMAIL'];
+            $objEmail->fromName = $GLOBALS['TL_ADMIN_NAME'];
+            $objEmail->subject = 'Neues Feedback auf isotopeecommerce.org';
+
+            $strText = sprintf('Folgendes Feedback für die Version %s und Route "%s" ist eingegangen:' . "\n\n",
+                $this->currentVersion,
+                $this->currentRoute->getName()
+            );
+
+            foreach ($objForm->getFormFields() as $strField => $arrDca) {
+                if ($objForm->getWidget($strField) instanceof \uploadable) {
+                    $arrFile  = $_SESSION['FILES'][$strField];
+
+                    if ($arrFile['tmp_name']) {
+                        $objEmail->attachFileFromString(file_get_contents($arrFile['tmp_name']), $arrFile['name'], $arrFile['type']);
+                    }
+                } else {
+                    if ($value = $objForm->fetch($strField)) {
+                        $strText .= $arrDca['label'] . ':' . "\n" . $value . "\n\n";
+                    }
+                }
+
+                $_SESSION['FORM_DATA'][$strField] = $value;
+            }
+
+            $objEmail->text = $strText;
+            $objEmail->sendTo($GLOBALS['TL_ADMIN_EMAIL']);
+            $_SESSION['DOCROBOT_FORM_MESSAGE'] = $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['feedbackFormMessageSuccess'];
+            $_SESSION['DOCROBOT_FORM_MESSAGETYPE'] = 'success';
+        } elseif ($objForm->isSubmitted()) {
+            $_SESSION['DOCROBOT_FORM_MESSAGE'] = $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['feedbackFormMessageError'];
+            $_SESSION['DOCROBOT_FORM_MESSAGETYPE'] = 'error';
+        } else {
+            $_SESSION['DOCROBOT_FORM_MESSAGE']  = '';
+            $_SESSION['DOCROBOT_FORM_MESSAGETYPE']  = '';
+        }
+
+        $this->Template->feedbackFormMessage = $_SESSION['DOCROBOT_FORM_MESSAGE'];
+        $this->Template->feedbackFormMessageType = $_SESSION['DOCROBOT_FORM_MESSAGETYPE'];
+
+        return $objForm->generate();
     }
 }

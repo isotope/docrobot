@@ -6,3 +6,6 @@ $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['incompleteMsgTitle'] = 'Dieser Artikel 
 $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['incompleteMsgBody'] = 'Du kannst mithelfen, ihn zu komplettieren!';
 $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['newMsgTitle'] = 'Dieser Artikel ist neu!';
 $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['newMsgBody'] = 'Er ist seit %s verfügbar. Du kannst mithelfen, ihn zu verbessern!';
+
+$GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['feedbackFormMessageSuccess'] = 'Vielen Dank für dein Feedback! Wir kümmern uns um eine baldige Rückmeldung!';
+$GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['feedbackFormMessageError'] = 'Hmm, da scheint wohl etwas nicht in Ordnung zu sein!';

@@ -42,7 +42,6 @@
 <?php if ($this->index): ?>
 <!-- indexer::stop -->
 <?php endif; ?>
-</div>
 
 <?php if ($this->bookNavigation): ?>
 <div class="booknavigation">
@@ -50,6 +49,29 @@
 </div>
 <?php endif; ?>
 
+<?php if ($this->feedbackForm): ?>
+<section class="ce_accordionStart ce_accordion block">
+    <div class="toggler">Feedback zu diesem Artikel geben</div>
+    <div class="accordion">
+        <?php if ($this->feedbackFormMessage): ?>
+        <p class="<?php echo $this->feedbackFormMessageType; ?>"><?php echo $this->feedbackFormMessage; ?></p>
+        <?php endif; ?>
+        <?php echo $this->feedbackForm; ?>
+    </div>
+</section>
+
+<?php if ($this->feedbackFormMessage): ?>
+<script>
+(function($) {
+    $(document).ready(function() {
+        setTimeout(function(){$('.ce_accordionStart .toggler').first().click()}, 500);
+    });
+})(jQuery);
+</script>
+<?php endif; ?>
+
+<?php endif; ?>
+</div>
 </div>
 
 <script>
@@ -62,7 +84,6 @@ jQuery(function(){
 <script>
 jQuery(function($) {
     var ac = $("#autocomplete_<?php echo $this->id; ?>");
-    console.log(ac.data("autocomplete"));
     ac.autocomplete({
         data: ac.data("autocomplete"),
         onItemSelect: function(item) {
