@@ -151,6 +151,12 @@ class Module extends \Module
         $this->Template->navigation = $this->generateNavigation($this->routing->getRootRoute()->getChildren());
         $this->Template->quickNavigatonData = $this->getQuickNavigationData();
         $this->Template->isIncomplete = $this->currentRoute->isIncomplete();
+
+        $this->Template->incompleteMsgBody = sprintf($GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['incompleteMsgBody'],
+            'https://github.com/isotope/docs',
+            \PageModel::findByPk($this->jumpTo)->getFrontendUrl()
+        );
+
         $this->Template->isNew = $this->currentRoute->isNew();
         $this->Template->newDate = $this->currentRoute->getNewAsDateTime()->format($GLOBALS['TL_CONFIG']['dateFormat']);
         $this->Template->index = false;

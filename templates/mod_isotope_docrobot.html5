@@ -24,7 +24,7 @@
     <?php if ($this->isIncomplete): ?>
     <div class="notification-box notification-box-incomplete">
         <p><strong><?php echo $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['incompleteMsgTitle']; ?></strong></p>
-        <p><?php echo $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['incompleteMsgBody']; ?></p>
+        <p><?php echo $this->incompleteMsgBody; ?></p>
     </div>
     <?php endif; ?>
     <?php if ($this->isNew): ?>
