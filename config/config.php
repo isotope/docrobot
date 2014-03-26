@@ -22,4 +22,4 @@ $GLOBALS['TL_MAINTENANCE'][] = '\IsotopeDocRobot\Maintenance\Update';
 /**
  * Hooks
  */
-$GLOBALS['TL_HOOKS']['dsi_searchablePages'][] = array('\IsotopeDocRobot\Search\Indexer', 'addManualPagesToDSI');
+$GLOBALS['TL_HOOKS']['getSearchablePages'][] = array('\IsotopeDocRobot\Search\Indexer', 'addManualPagesToDSI');

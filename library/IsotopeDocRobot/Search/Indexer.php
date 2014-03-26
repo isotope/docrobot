@@ -8,7 +8,8 @@ class Indexer
 {
     public function addManualPagesToDSI($arrPages)
     {
-        $latestVersion = trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_versions'])[0];
+        $versions = trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_versions']);
+        $latestVersion = $versions[0];
         $arrLanguages = deserialize($GLOBALS['TL_CONFIG']['iso_docrobot_languages'], true);
 
         foreach ($arrLanguages as $arrLanguage) {
