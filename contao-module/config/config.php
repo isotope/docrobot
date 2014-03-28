@@ -6,7 +6,7 @@
 $GLOBALS['BE_MOD']['system']['isotope_docrobot'] = array
 (
     'tables'      => array('tl_iso_docrobot_settings'),
-    'icon'        => 'system/modules/isotope-docrobot/assets/isotope.png'
+    'icon'        => 'system/modules/isotope_docrobot/assets/isotope.png'
 );
 
 /**
