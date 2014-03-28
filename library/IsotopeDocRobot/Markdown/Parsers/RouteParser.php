@@ -31,7 +31,7 @@ class RouteParser implements AfterParserInterface
         $language = $this->language;
 
         return preg_replace_callback(
-            '#<docrobot_route name="(.*)">(.*)</docrobot_route>#U',
+            '#<docrobot_route name="([^"]*)"( path="([^"]*)")?>([^<]*)</docrobot_route>#U',
             function($matches) use ($routing, $pageModel, $version, $language) {
 
                 $route = $routing->getRoute($matches[1]);
@@ -46,8 +46,8 @@ class RouteParser implements AfterParserInterface
                         $pageModel,
                         $version,
                         $language
-                    ),
-                    $matches[2]
+                    ) . (($matches[3]) ?: ''),
+                    $matches[4]
                 );
             },
             $data);
