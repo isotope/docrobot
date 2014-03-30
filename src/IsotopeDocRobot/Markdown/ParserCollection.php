@@ -3,20 +3,30 @@
 namespace IsotopeDocRobot\Markdown;
 
 use IsotopeDocRobot\Context\Context;
+use IsotopeDocRobot\Routing\Routing;
 
 class ParserCollection
 {
     private $context = null;
+    private $routing = null;
 
-    public function __construct(Context $context)
+    public function __construct(Context $context, Routing $routing)
     {
         $this->context = $context;
+        $this->routing = $routing;
     }
 
     public function addParser(ParserInterface $parser)
     {
         // set context
-        $parser->setContext($this->context);
+        if ($parser instanceof ContextAwareInterface) {
+            $parser->setContext($this->context);
+        }
+
+        // set routing
+        if ($parser instanceof RoutingAwareInterface) {
+            $parser->setRouting($this->routing);
+        }
 
         $this->parsers[] = $parser;
     }
@@ -27,12 +37,9 @@ class ParserCollection
             $data = $parser->parseMarkdown($data);
         }
 
+        // @todo get rid of this one
         $markdownParser = new \dflydev\markdown\MarkdownParser();
         $data = $markdownParser->transformMarkdown($data);
-
-        foreach ($this->parsers as $parser) {
-            $data = $parser->parseHtml($data);
-        }
 
         return $data;
     }

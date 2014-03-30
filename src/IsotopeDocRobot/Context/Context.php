@@ -5,11 +5,26 @@ namespace IsotopeDocRobot\Context;
 
 class Context
 {
-    protected $routing = null;
+    protected $type = '';
     protected $version = null;
     protected $book = null;
     protected $language = null;
-    protected $pageModel = null;
+
+    /**
+     * @param string type
+     */
+    public function __construct($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
 
     /**
      * @param null $version
@@ -25,38 +40,6 @@ class Context
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * @param \IsotopeDocRobot\Markdown\Parsers\Routing|null $routing
-     */
-    public function setRouting($routing)
-    {
-        $this->routing = $routing;
-    }
-
-    /**
-     * @return \IsotopeDocRobot\Markdown\Parsers\Routing|null
-     */
-    public function getRouting()
-    {
-        return $this->routing;
-    }
-
-    /**
-     * @param null|\PageModel $pageModel
-     */
-    public function setPageModel($pageModel)
-    {
-        $this->pageModel = $pageModel;
-    }
-
-    /**
-     * @return null|\PageModel
-     */
-    public function getPageModel()
-    {
-        return $this->pageModel;
     }
 
     /**

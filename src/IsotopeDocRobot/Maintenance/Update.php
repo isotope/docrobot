@@ -51,7 +51,7 @@ class Update implements \executable
                             $connector->updateAll();
                         }
 
-                        $context = new Context();
+                        $context = new Context('html');
                         $context->setBook($book);
                         $context->setLanguage($lang);
                         $context->setVersion($version);
@@ -62,9 +62,7 @@ class Update implements \executable
                             continue;
                         }
 
-                        $context->setRouting($routing);
-
-                        $parserCollection = new ParserCollection($context);
+                        $parserCollection = new ParserCollection($context, $routing);
                         $parserCollection->addParser(new RouteParser());
                         $parserCollection->addParser(new NewVersionParser());
                         $parserCollection->addParser(new MessageParser());

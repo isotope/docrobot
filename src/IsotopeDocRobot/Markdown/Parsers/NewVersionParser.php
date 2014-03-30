@@ -2,14 +2,14 @@
 
 namespace IsotopeDocRobot\Markdown\Parsers;
 
-use IsotopeDocRobot\Markdown\BeforeParserInterface;
+use IsotopeDocRobot\Markdown\ParserInterface;
 
-class NewVersionParser extends AbstractParser implements BeforeParserInterface
+class NewVersionParser implements ParserInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function parseBefore($data)
+    public function parseMarkdown($data)
     {
         return preg_replace_callback(
             '#<docrobot_new_in_version version="(.*)">(.*)</docrobot_new_in_version>#U',

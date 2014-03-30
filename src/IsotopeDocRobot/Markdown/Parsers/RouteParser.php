@@ -3,19 +3,50 @@
 namespace IsotopeDocRobot\Markdown\Parsers;
 
 
-use IsotopeDocRobot\Markdown\AfterParserInterface;
+use IsotopeDocRobot\Context\Context;
+use IsotopeDocRobot\Markdown\ParserInterface;
+use IsotopeDocRobot\Markdown\RoutingAwareInterface;
+use IsotopeDocRobot\Routing\Routing;
 
-class RouteParser extends AbstractParser implements AfterParserInterface
+class RouteParser implements ParserInterface, ContextAwareInterface, RoutingAwareInterface
 {
+    /**
+     * @var Context
+     */
+    private $context = null;
+
+    /**
+     * @var Routing
+     */
+    private $routing = null;
+
     /**
      * {@inheritdoc}
      */
-    public function parseAfter($data)
+    public function setContext(Context $context)
+    {
+        $this->context = $context;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRouting(Routing $routing)
+    {
+        $this->routing = $routing;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function parseMarkdown($data)
     {
         $routing = $this->routing;
+        $version = $this->context->getVersion();
+        $language = $this->context->getLanguage();
+
+        // @todo find out how to pass this one
         $pageModel = $this->pageModel;
-        $version = $this->version;
-        $language = $this->language;
 
         return preg_replace_callback(
             '#<docrobot_route name="([^"]*)"( path="([^"]*)")?>([^<]*)</docrobot_route>#U',

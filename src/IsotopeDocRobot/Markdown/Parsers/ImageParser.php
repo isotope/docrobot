@@ -3,37 +3,49 @@
 namespace IsotopeDocRobot\Markdown\Parsers;
 
 
+use IsotopeDocRobot\Context\Context;
+use IsotopeDocRobot\Markdown\ContextAwareInterface;
 use IsotopeDocRobot\Markdown\ParserInterface;
 
-class ImageParser extends AbstractParser implements ParserInterface
+class ImageParser implements ParserInterface, ContextAwareInterface
 {
+    /**
+     * @var Context
+     */
+    private $context = null;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContext(Context $context)
+    {
+        $this->context = $context;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function parseMarkdown($data)
     {
-        return $data;
-    }
+        if ($this->context->getType() === 'html') {
+            $closure = $this->getMarkupForImageClosure();
+        } else {
+            // @todo define closure for other types
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function parseHtml($data)
-    {
         return preg_replace_callback(
             '#<docrobot_image path="(.*)" alt="(.*)">#U',
-            $this->getMarkupForImageClosure(),
+            $closure,
             $data);
     }
 
     private function getMarkupForImageClosure()
     {
-        $language = $this->language;
-        $book = $this->book;
-        $pageModel = $this->pageModel;
-        $version = $this->version;
+        $language = $this->context->getLanguage();
+        $book = $this->context->getBook();
+        $version = $this->context->getVersion();
 
-        return function($matches) use ($language, $book, $pageModel, $version) {
+        return function($matches) use ($language, $book, $version) {
 
             $imagePath = 'system/cache/isotope/docrobot-mirror/' . $version . '/' . $language . '/' . $book . '/' . $matches[1];
             $imageSize = @getimagesize($imagePath);

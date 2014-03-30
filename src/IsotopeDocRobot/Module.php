@@ -47,11 +47,10 @@ class Module extends \Module
         $this->versions = trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_versions']);
 
         // defaults
-        $this->context = new Context();
+        $this->context = new Context('html');
         $this->context->setVersion($this->versions[0]);
         $this->context->setLanguage($objPage->rootLanguage);
         $this->context->setBook($this->iso_docrobot_book);
-        $this->context->setPageModel($objPage);
 
         // override default version
         if (\Input::get('v')) {
@@ -96,6 +95,7 @@ class Module extends \Module
         }
 
         $parserCollection = new ParserCollection($this->context);
+        $parserCollection->addParser()
         // @todo outsource
         $parserCollection->addParser(new SitemapParser($this->generateNavigation($this->context->getRouting()->getRootRoute()->getChildren(), 1, true)));
 

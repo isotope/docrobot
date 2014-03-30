@@ -4,7 +4,7 @@ namespace IsotopeDocRobot\Markdown\Parsers;
 
 use IsotopeDocRobot\Markdown\ParserInterface;
 
-class CurrentVersionParser extends AbstractParser implements ParserInterface
+class CurrentVersionParser implements ParserInterface
 {
     /**
      * {@inheritdoc}
