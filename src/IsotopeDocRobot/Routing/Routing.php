@@ -128,6 +128,12 @@ class Routing
         $levelRoutes = array();
         $config = ($config) ? $config : $this->getConfig();
         foreach ($config as $route => $routeConfig) {
+
+            // check duplicates
+            if (isset($this->routes[$route])) {
+                throw new \RuntimeException('Route "'. $route . '" is defined multiple times. Routes have to be unique!');
+            }
+
             // route path
             $routePath = (($relativePath) ? $relativePath . '/'  : '') . $route;
             $objRoute = new Route($route, $routeConfig, $routePath, $trail);
