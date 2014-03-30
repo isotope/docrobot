@@ -51,7 +51,7 @@
 
 <?php if ($this->feedbackForm): ?>
 <section class="ce_accordionStart ce_accordion block">
-    <div class="toggler">Feedback zu diesem Artikel geben</div>
+    <div class="toggler"><?php echo $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['feedbackLabel']; ?></div>
     <div class="accordion">
         <?php if ($this->feedbackFormMessage): ?>
         <p class="<?php echo $this->feedbackFormMessageType; ?>"><?php echo $this->feedbackFormMessage; ?></p>
