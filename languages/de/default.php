@@ -9,3 +9,4 @@ $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['newMsgBody'] = 'Er ist seit %s verfügb
 
 $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['feedbackFormMessageSuccess'] = 'Vielen Dank für dein Feedback! Wir kümmern uns um eine baldige Rückmeldung!';
 $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['feedbackFormMessageError'] = 'Hmm, da scheint wohl etwas nicht in Ordnung zu sein!';
+$GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['quickNavigationLabel'] = 'Schnellnavigation';

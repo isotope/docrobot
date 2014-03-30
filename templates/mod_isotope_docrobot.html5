@@ -8,7 +8,7 @@
     <div class="autocompleter">
     <form>
         <div class="formbody">
-            <label for="autocomplete_<?php echo $this->id; ?>">Schnellnavigation:</label>
+            <label for="autocomplete_<?php echo $this->id; ?>"><?php echo $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['quickNavigationLabel']; ?>:</label>
             <input id="autocomplete_<?php echo $this->id; ?>" data-autocomplete="<?php echo $this->quickNavigatonData; ?>">
         </div>
     </form>
