@@ -8,6 +8,7 @@ use IsotopeDocRobot\Markdown\Parsers\SitemapParser;
 use IsotopeDocRobot\Routing\Routing;
 use IsotopeDocRobot\Service\GitHubBookParser;
 use Haste\Http\Response\Response;
+use IsotopeDocRobot\Service\GitHubChachedBookParser;
 
 class Module extends \Module
 {
@@ -19,11 +20,15 @@ class Module extends \Module
     protected $strTemplate = 'mod_isotope_docrobot';
 
     protected $versions = array();
+
+    /* @var $currentRoute \IsotopeDocRobot\Service\GitHubCachedBookParser */
     protected $bookParser = null;
     /* @var $currentRoute \IsotopeDocRobot\Routing\Route */
     protected $currentRoute = null;
     /* @var $currentRoute \IsotopeDocRobot\Context\Context */
     protected $context = null;
+    /* @var $routing \IsotopeDocRobot\Routing\Routing */
+    protected $routing = null;
 
     /**
      * Display back end wildcard
@@ -69,21 +74,20 @@ class Module extends \Module
 
         // load routing and book parser
         try {
-            $routing = new Routing($this->context);
-            $routing->setRootTitle($objPage->title);
-            $this->context->setRouting($routing);
+            $this->routing = new Routing($this->context);
+            $this->routing->setRootTitle($objPage->title);
         } catch (\InvalidArgumentException $e) {
             return '';
         }
 
         // Load root route as default
-        $this->currentRoute = $this->context->getRouting()->getRootRoute();
+        $this->currentRoute = $this->routing->getRootRoute();
 
         // load current route
         if (\Input::get('r')) {
             $input = \Input::get('r');
 
-            if ($route = $this->context->getRouting()->getRouteForAlias($input)) {
+            if ($route = $this->routing->getRouteForAlias($input)) {
                 $this->currentRoute = $route;
                 // update title
                 $objPage->title .= ' <span>' . $this->currentRoute->getTitle() . '</span>';
@@ -94,13 +98,24 @@ class Module extends \Module
             }
         }
 
-        $parserCollection = new ParserCollection($this->context);
-        $parserCollection->addParser()
-        // @todo outsource
-        $parserCollection->addParser(new SitemapParser($this->generateNavigation($this->context->getRouting()->getRootRoute()->getChildren(), 1, true)));
+        $parserCollection = new ParserCollection($this->context, $this->routing);
+        $parserCollection->addParser(new SitemapParser(
+            $this->generateNavigation(
+                $this->routing->getRootRoute()->getChildren()
+                ,
+                1,
+                true
+            )
+        ));
 
-        $this->bookParser = new GitHubBookParser('', $parserCollection);
-        $this->bookParser->loadLanguage();
+        $this->bookParser = new GitHubChachedBookParser(
+            'system/cache/isotope/docrobot',
+            $this->context,
+            new GitHubBookParser(
+                $this->context,
+                $parserCollection
+            )
+        );
 
         return parent::generate();
     }
@@ -160,14 +175,13 @@ class Module extends \Module
         }
 
         // content
-        $strContent = $this->bookParser->getContentForRoute($this->currentRoute);
+        $strContent = $this->bookParser->parseRoute($this->currentRoute);
 
         if ($strContent === '') {
             $strContent = '<p>' . sprintf($GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['noContentMsg'], 'https://github.com/isotope/docs') . '</p>';
         }
 
         $this->Template->content = $strContent;
-        $this->bookParser->resetLanguage();
     }
 
 

@@ -121,8 +121,13 @@ class Route
         return (boolean) $this->siblings[$route->getName()];
     }
 
-    public function getContent($version, $book, $language)
+    public function getMirrorContent($version, $book, $language)
     {
+        // only regular routes have content
+        if ($this->getConfig()->type != 'regular') {
+            return '';
+        }
+
         // for now only supporting the "index.md" file
         $path = $this->getPath();
         $path .= (($path !== '') ? '/' : '') . 'index.md';

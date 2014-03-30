@@ -13,6 +13,11 @@
             <input type="checkbox" name="fetch" id="opt_fetch_0" class="tl_checkbox" value="yes">
             <label for="opt_fetch_0">Daten auch von GitHub holen (ansonsten nur vom Cache)</label>
         </fieldset>
+        <fieldset id="ctrl_updatePdf" class="tl_checkbox_container">
+            <legend>Update PDF</legend>
+            <input type="checkbox" name="updatePdf" id="opt_updatePdf_0" class="tl_checkbox" value="yes">
+            <label for="opt_updatePdf_0">PDF generieren</label>
+        </fieldset>
         <input style="margin:20px 0px;" type="submit" name="update" class="tl_submit" value="Daten aktualisieren (und evtl. von GitHub holen)">
     </div>
 </form>

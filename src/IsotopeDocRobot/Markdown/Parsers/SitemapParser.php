@@ -2,22 +2,21 @@
 
 namespace IsotopeDocRobot\Markdown\Parsers;
 
-use IsotopeDocRobot\Markdown\BeforeParserInterface;
+use IsotopeDocRobot\Markdown\ParserInterface;
 
-class SitemapParser implements BeforeParserInterface
+class SitemapParser implements ParserInterface
 {
     private $sitemap = '';
 
     public function __construct($sitemap)
     {
-        // @todo implement this
         $this->sitemap = $sitemap;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function parseBefore($data)
+    public function parseMarkdown($data)
     {
         return str_replace('<docrobot_sitemap>', $this->sitemap, $data);
     }

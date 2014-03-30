@@ -19,6 +19,7 @@ use IsotopeDocRobot\Markdown\Parsers\RootParser;
 use IsotopeDocRobot\Markdown\Parsers\RouteParser;
 use IsotopeDocRobot\Routing\Routing;
 use IsotopeDocRobot\Service\GitHubBookParser;
+use IsotopeDocRobot\Service\GitHubCachedBookParser;
 use IsotopeDocRobot\Service\GitHubConnector;
 
 class Update implements \executable
@@ -63,15 +64,18 @@ class Update implements \executable
                         }
 
                         $parserCollection = new ParserCollection($context, $routing);
-                        $parserCollection->addParser(new RouteParser());
-                        $parserCollection->addParser(new NewVersionParser());
-                        $parserCollection->addParser(new MessageParser());
-                        $parserCollection->addParser(new RootParser());
-                        $parserCollection->addParser(new ImageParser());
-                        $parserCollection->addParser(new CurrentVersionParser());
 
-                        $parser = new GitHubBookParser('', $parserCollection);
-                        $parser->updateFromMirror();
+                        $bookParser = new GitHubCachedBookParser(
+                            'system/cache/isotope/docrobot',
+                            $context,
+                            new GitHubBookParser(
+                                $context,
+                                $parserCollection
+                            )
+                        );
+
+                        $bookParser->purgeCache();
+                        $bookParser->parseAllRoutes($routing);
                     }
                 }
             }

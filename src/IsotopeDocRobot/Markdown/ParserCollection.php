@@ -9,6 +9,7 @@ class ParserCollection
 {
     private $context = null;
     private $routing = null;
+    private $parsers = array();
 
     public function __construct(Context $context, Routing $routing)
     {
@@ -31,16 +32,21 @@ class ParserCollection
         $this->parsers[] = $parser;
     }
 
-    public function parse($data)
+    /**
+     * @param array $parsers
+     */
+    public function setParsers($parsers)
     {
-        foreach ($this->parsers as $parser) {
-            $data = $parser->parseMarkdown($data);
+        foreach ($parsers as $parser) {
+            $this->addParser($parser);
         }
+    }
 
-        // @todo get rid of this one
-        $markdownParser = new \dflydev\markdown\MarkdownParser();
-        $data = $markdownParser->transformMarkdown($data);
-
-        return $data;
+    /**
+     * @return array
+     */
+    public function getParsers()
+    {
+        return $this->parsers;
     }
 }
