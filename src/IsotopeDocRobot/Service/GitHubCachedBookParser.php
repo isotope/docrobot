@@ -22,7 +22,8 @@ class GitHubCachedBookParser
         $this->context = $context;
         $this->bookParser = $bookParser;
 
-        $this->bookPath = sprintf($cacheRoot . '/%s/%s/%s',
+        $this->bookPath = sprintf($cacheRoot . '/%s/%s/%s/%s',
+            $this->context->getType(),
             $this->context->getVersion(),
             $this->context->getLanguage(),
             $this->context->getBook()

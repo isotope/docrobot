@@ -42,40 +42,42 @@ class Update implements \executable
     public function run()
     {
         if (\Input::post('FORM_SUBMIT') == 'isotope-docrobot-update') {
-            foreach (\Input::post('version') as $version) {
-                foreach (\Input::post('lang') as $lang) {
-                    foreach (\Input::post('book') as $book) {
+            foreach (\Input::post('contextType') as $contextType) {
+                foreach (\Input::post('version') as $version) {
+                    foreach (\Input::post('lang') as $lang) {
+                        foreach (\Input::post('book') as $book) {
 
-                        if (\Input::post('fetch') == 'yes') {
-                            $connector = new GitHubConnector($version, $lang, $book);
-                            $connector->purgeCache();
-                            $connector->updateAll();
-                        }
+                            if (\Input::post('fetch') == 'yes') {
+                                $connector = new GitHubConnector($version, $lang, $book);
+                                $connector->purgeCache();
+                                $connector->updateAll();
+                            }
 
-                        $context = new Context('html');
-                        $context->setBook($book);
-                        $context->setLanguage($lang);
-                        $context->setVersion($version);
+                            $context = new Context($contextType);
+                            $context->setBook($book);
+                            $context->setLanguage($lang);
+                            $context->setVersion($version);
 
-                        try {
-                            $routing = new Routing($context);
-                        } catch (\InvalidArgumentException $e) {
-                            continue;
-                        }
+                            try {
+                                $routing = new Routing($context);
+                            } catch (\InvalidArgumentException $e) {
+                                continue;
+                            }
 
-                        $parserCollection = new ParserCollection($context, $routing);
+                            $parserCollection = new ParserCollection($context, $routing);
 
-                        $bookParser = new GitHubCachedBookParser(
-                            'system/cache/isotope/docrobot',
-                            $context,
-                            new GitHubBookParser(
+                            $bookParser = new GitHubCachedBookParser(
+                                'system/cache/isotope/docrobot',
                                 $context,
-                                $parserCollection
-                            )
-                        );
+                                new GitHubBookParser(
+                                    $context,
+                                    $parserCollection
+                                )
+                            );
 
-                        $bookParser->purgeCache();
-                        $bookParser->parseAllRoutes($routing);
+                            $bookParser->purgeCache();
+                            $bookParser->parseAllRoutes($routing);
+                        }
                     }
                 }
             }
@@ -84,6 +86,24 @@ class Update implements \executable
         $objTemplate = new \BackendTemplate('be_isotope_docrobot_maintenance');
         $objTemplate->action = ampersand(\Environment::get('request'));
         $objTemplate->headline = specialchars('Isotope DocRobot');
+
+        $arrOptions = array();
+        foreach (array('html', 'pdf') as $strContext) {
+            $arrOptions[] = array(
+                'value' => $strContext,
+                'label' => $strContext
+            );
+        }
+
+        $arrSettings['id'] = 'contextType';
+        $arrSettings['name'] = 'contextType';
+        $arrSettings['label'] = 'Kontext-Typ';
+        $arrSettings['mandatory'] = true;
+        $arrSettings['multiple'] = true;
+        $arrSettings['options'] = $arrOptions;
+        $contextChoice = new \CheckBox($arrSettings);
+        $objTemplate->contextChoice = $contextChoice->parse();
+        unset($arrSettings);
 
         $arrOptions = array();
         foreach (trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_versions']) as $strVersion) {
