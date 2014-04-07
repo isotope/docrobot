@@ -16,7 +16,7 @@ $GLOBALS['TL_DCA']['tl_iso_docrobot_settings'] = array
     // Palettes
     'palettes' => array
     (
-        'default'                     => '{iso_docrobot_legend},iso_docrobot_versions,iso_docrobot_books,iso_docrobot_languages',
+        'default'                     => '{iso_docrobot_legend},iso_docrobot_versions,iso_docrobot_books,iso_docrobot_languages,iso_github_client_id,iso_github_client_secret',
     ),
 
     // Fields
@@ -57,6 +57,18 @@ $GLOBALS['TL_DCA']['tl_iso_docrobot_settings'] = array
                 ),
                 'tl_class'  => 'clr'
             )
-        )
+        ),
+        'iso_github_client_id' => array
+        (
+            'label'         => &$GLOBALS['TL_LANG']['tl_iso_docrobot_settings']['iso_github_client_id'],
+            'inputType'     => 'text',
+            'eval'          => array('tl_class'=>'w50')
+        ),
+        'iso_github_client_secret' => array
+        (
+            'label'         => &$GLOBALS['TL_LANG']['tl_iso_docrobot_settings']['iso_github_client_secret'],
+            'inputType'     => 'text',
+            'eval'          => array('tl_class'=>'w50')
+        ),
     )
 );

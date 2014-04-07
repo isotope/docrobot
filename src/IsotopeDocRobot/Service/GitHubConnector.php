@@ -9,30 +9,31 @@
 
 namespace IsotopeDocRobot\Service;
 
+use IsotopeDocRobot\Context\Context;
+
 class GitHubConnector
 {
     const githubUri = 'https://raw.github.com/isotope/docs/{version}/{language}/{book}/';
 
-    private $version = '';
-    private $language = '';
-    private $book = '';
+    private $context = null;
     private $github = null;
 
-    public function __construct($version, $language, $book)
+    public function __construct(Context $context)
     {
-        $this->version = $version;
-        $this->language = $language;
-        $this->book = $book;
+        $this->context = $context;
 
-        $helper = new \IsotopeGithubHelper();
-        $this->github = $helper->getClient();
+        $this->github = new Github\Client(
+            new Github\HttpClient\CachedHttpClient(array('cache_dir' => TL_ROOT . '/system/cache/isotope/github-api-cache'))
+        );
+
+        $this->github->authenticate($GLOBALS['TL_CONFIG']['iso_github_client_id'], $GLOBALS['TL_CONFIG']['iso_github_client_secret'], Github\Client::AUTH_URL_CLIENT_ID);
 
         $this->createCacheDirIfNotExist();
     }
 
     public function updateAll()
     {
-        $branch = $this->github->getHttpClient()->get('repos/isotope/docs/branches/' . $this->version)->getContent();
+        $branch = $this->github->getHttpClient()->get('repos/isotope/docs/branches/' . $this->context->getVersion())->getContent();
         $headRef = $branch['commit']['sha'];
 
         $tree = $this->github->getHttpClient()->get('repos/isotope/docs/git/trees/' . $headRef . '?recursive=1')->getContent();
@@ -46,7 +47,7 @@ class GitHubConnector
 
     public function updateFile($path)
     {
-        $bookPath = $this->language . '/' . $this->book;
+        $bookPath = $this->context->getLanguage() . '/' . $this->context->getBook();
 
         if (strpos($path, $bookPath) !== false) {
             $path = str_replace($bookPath, '', $path);
@@ -58,7 +59,11 @@ class GitHubConnector
     public function purgeCache()
     {
         // delete the cache
-        $folder = new \Folder(sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s', $this->version, $this->language, $this->book));
+        $folder = new \Folder(sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s',
+            $this->context->getVersion(),
+            $this->context->getLanguage(),
+            $this->context->getBook())
+        );
         $folder->delete();
     }
 
@@ -69,9 +74,9 @@ class GitHubConnector
             '{language}',
             '{book}'
         ), array(
-            $this->version,
-            $this->language,
-            $this->book
+            $this->context->getVersion(),
+            $this->context->getLanguage(),
+            $this->context->getBook()
         ), self::githubUri) . $versionRelativeUri;
 
         $req = new \Request();
@@ -87,13 +92,21 @@ class GitHubConnector
 
     private function cacheMirrorFile($relativePath, $data)
     {
-        $file = new \File(sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/', $this->version, $this->language, $this->book) . $relativePath);
+        $file = new \File(sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/',
+            $this->context->getVersion(),
+            $this->context->getLanguage(),
+            $this->context->getBook()
+        ) . $relativePath);
         $file->write($data);
         $file->close();
     }
 
     private function createCacheDirIfNotExist()
     {
-        new \Folder(sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s', $this->version, $this->language, $this->book));
+        new \Folder(sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s',
+            $this->context->getVersion(),
+            $this->context->getLanguage(),
+            $this->context->getBook()
+        ));
     }
 }

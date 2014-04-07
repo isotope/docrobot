@@ -47,16 +47,17 @@ class Update implements \executable
                     foreach (\Input::post('lang') as $lang) {
                         foreach (\Input::post('book') as $book) {
 
-                            if (\Input::post('fetch') == 'yes') {
-                                $connector = new GitHubConnector($version, $lang, $book);
-                                $connector->purgeCache();
-                                $connector->updateAll();
-                            }
 
                             $context = new Context($contextType);
                             $context->setBook($book);
                             $context->setLanguage($lang);
                             $context->setVersion($version);
+
+                            if (\Input::post('fetch') == 'yes') {
+                                $connector = new GitHubConnector($context);
+                                $connector->purgeCache();
+                                $connector->updateAll();
+                            }
 
                             try {
                                 $routing = new Routing($context);
