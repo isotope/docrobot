@@ -16,7 +16,8 @@
         "contao-community-alliance/composer": "*",
         "jalle19/php-whitelist-check": "dev-master",
         "menatwork/contao-multicolumnwizard": "3.2.*",
-        "guzzle/guzzle": "3.8.*"
+        "guzzle/guzzle": "3.8.*",
+        "knplabs/github-api": "1.3.*@dev"
     },
     "autoload": {
         "psr-0": {
