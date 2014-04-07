@@ -10,6 +10,8 @@
 namespace IsotopeDocRobot\Service;
 
 use IsotopeDocRobot\Context\Context;
+use Github\Client;
+use Github\HttpClient\CachedHttpClient;
 
 class GitHubConnector
 {
@@ -22,21 +24,21 @@ class GitHubConnector
     {
         $this->context = $context;
 
-        $this->github = new Github\Client(
-            new Github\HttpClient\CachedHttpClient(array('cache_dir' => TL_ROOT . '/system/cache/isotope/github-api-cache'))
+        $this->github = new Client(
+            new CachedHttpClient(array('cache_dir' => TL_ROOT . '/system/cache/isotope/github-api-cache'))
         );
 
-        $this->github->authenticate($GLOBALS['TL_CONFIG']['iso_github_client_id'], $GLOBALS['TL_CONFIG']['iso_github_client_secret'], Github\Client::AUTH_URL_CLIENT_ID);
+        $this->github->authenticate($GLOBALS['TL_CONFIG']['iso_github_client_id'], $GLOBALS['TL_CONFIG']['iso_github_client_secret'], Client::AUTH_URL_CLIENT_ID);
 
         $this->createCacheDirIfNotExist();
     }
 
     public function updateAll()
     {
-        $branch = $this->github->getHttpClient()->get('repos/isotope/docs/branches/' . $this->context->getVersion())->getContent();
+        $branch = $this->github->getHttpClient()->get('repos/isotope/docs/branches/' . $this->context->getVersion())->getBody();
         $headRef = $branch['commit']['sha'];
 
-        $tree = $this->github->getHttpClient()->get('repos/isotope/docs/git/trees/' . $headRef . '?recursive=1')->getContent();
+        $tree = $this->github->getHttpClient()->get('repos/isotope/docs/git/trees/' . $headRef . '?recursive=1')->getBody();
 
         foreach ((array) $tree['tree'] as $treeEntry) {
             if ($treeEntry['type'] == 'blob') {
