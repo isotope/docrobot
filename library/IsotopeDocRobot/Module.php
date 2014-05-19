@@ -335,6 +335,10 @@ class Module extends \Module
                 } else {
                     if ($value = $objForm->fetch($strField)) {
                         $strText .= $arrDca['label'] . ':' . "\n" . $value . "\n\n";
+
+                        if ($strField == 'email') {
+                            $objEmail->replyTo($value);
+                        }
                     }
                 }
 
