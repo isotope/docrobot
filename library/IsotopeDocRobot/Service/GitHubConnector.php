@@ -11,7 +11,7 @@ namespace IsotopeDocRobot\Service;
 
 class GitHubConnector
 {
-    const githubUri = 'https://raw.github.com/isotope/docs/{version}/{language}/{book}/';
+    const githubUri = 'https://raw.githubusercontent.com/isotope/docs/{version}/{language}/{book}/';
 
     private $version = '';
     private $language = '';
@@ -46,7 +46,7 @@ class GitHubConnector
 
     public function updateFile($path)
     {
-        $bookPath = $this->language . '/' . $this->book;
+        $bookPath = $this->language . '/' . $this->book . '/';
 
         if (strpos($path, $bookPath) !== false) {
             $path = str_replace($bookPath, '', $path);
@@ -75,6 +75,7 @@ class GitHubConnector
         ), self::githubUri) . $versionRelativeUri;
 
         $req = new \Request();
+        $req->redirect = true;
         $req->send($url);
 
         if (!$req->hasError()) {
