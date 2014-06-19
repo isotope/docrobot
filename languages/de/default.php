@@ -11,3 +11,4 @@ $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['feedbackFormMessageSuccess'] = 'Vielen 
 $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['feedbackFormMessageError'] = 'Hmm, da scheint wohl etwas nicht in Ordnung zu sein!';
 $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['quickNavigationLabel'] = 'Schnellnavigation';
 $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['feedbackLabel'] = 'Feedback zu diesem Artikel geben';
+$GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['deeplinkLabel'] = 'Link zu diesem Absatz';

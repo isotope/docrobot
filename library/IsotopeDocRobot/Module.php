@@ -4,6 +4,7 @@ namespace IsotopeDocRobot;
 
 
 use IsotopeDocRobot\Markdown\Parsers\CurrentVersionParser;
+use IsotopeDocRobot\Markdown\Parsers\HeadingParser;
 use IsotopeDocRobot\Markdown\Parsers\ImageParser;
 use IsotopeDocRobot\Markdown\Parsers\RouteParser;
 use IsotopeDocRobot\Markdown\Parsers\SitemapParser;
@@ -106,6 +107,7 @@ class Module extends \Module
         $parserCollection->addParser(new SitemapParser($this->generateNavigation($this->routing->getRootRoute()->getChildren(), 1, true)));
         $parserCollection->addParser(new ImageParser($this->language, $this->book, $objPage, $this->currentVersion));
         $parserCollection->addParser(new CurrentVersionParser($this->currentVersion));
+        $parserCollection->addParser(new HeadingParser());
 
         $this->bookParser = new GitHubBookParser($this->currentVersion, $this->language, $this->book, $this->routing, $parserCollection);
         $this->bookParser->loadLanguage();
