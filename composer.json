@@ -14,6 +14,7 @@
     ],
     "require": {
         "contao-community-alliance/composer-plugin": "2.*",
+        "contao-legacy/haste": "4.*",
         "jalle19/php-whitelist-check": "dev-master",
         "menatwork/contao-multicolumnwizard": "3.2.*",
         "guzzle/guzzle": "3.8.*",
