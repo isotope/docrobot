@@ -35,10 +35,10 @@ class GitHubConnector
 
     public function updateAll()
     {
-        $branch = $this->github->getHttpClient()->get('repos/isotope/docs/branches/' . $this->context->getVersion())->getBody();
+        $branch = $this->github->getHttpClient()->get('repos/isotope/docs/branches/' . $this->context->getVersion())->json();
         $headRef = $branch['commit']['sha'];
 
-        $tree = $this->github->getHttpClient()->get('repos/isotope/docs/git/trees/' . $headRef . '?recursive=1')->getBody();
+        $tree = $this->github->getHttpClient()->get('repos/isotope/docs/git/trees/' . $headRef . '?recursive=1')->json();
 
         foreach ((array) $tree['tree'] as $treeEntry) {
             if ($treeEntry['type'] == 'blob') {
