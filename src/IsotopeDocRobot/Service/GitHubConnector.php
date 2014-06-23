@@ -15,8 +15,6 @@ use Github\HttpClient\CachedHttpClient;
 
 class GitHubConnector
 {
-    const githubUri = 'https://raw.githubusercontent.com/isotope/docs/{version}/{language}/{book}/';
-
     private $context = null;
     private $github = null;
 
@@ -40,66 +38,69 @@ class GitHubConnector
 
         $tree = $this->github->getHttpClient()->get('repos/isotope/docs/git/trees/' . $headRef . '?recursive=1')->json();
 
+        $validPath = $this->context->getLanguage() . '/' . $this->context->getBook() . '/';
+        $validPathLength = strlen($validPath);
+
         foreach ((array) $tree['tree'] as $treeEntry) {
-            if ($treeEntry['type'] == 'blob') {
-                $this->updateFile($treeEntry['path']);
+            // Only update blobs and if in current path
+            $bookPath = substr($treeEntry['path'], 0, $validPathLength);
+            $relativePath = substr($treeEntry['path'], $validPathLength);
+
+            if ($treeEntry['type'] == 'blob' && $bookPath === $validPath) {
+                $this->updateFile($relativePath);
             }
         }
     }
 
+    /**
+     * Updates a certain file. Path must be relative to version, language and book!
+     * @param $path
+     */
     public function updateFile($path)
     {
-        $bookPath = $this->context->getLanguage() . '/' . $this->context->getBook();
-
-        if (strpos($path, $bookPath) !== false) {
-            $path = str_replace($bookPath, '', $path);
-            $data = $this->getFile($path);
-            $this->cacheMirrorFile($path, $data);
-        }
+        $data = $this->getFile($path);
+        $this->cacheMirrorFile($path, $data);
     }
 
     public function purgeCache()
     {
         // delete the cache
         $folder = new \Folder(sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s',
-            $this->context->getVersion(),
-            $this->context->getLanguage(),
-            $this->context->getBook())
+                $this->context->getVersion(),
+                $this->context->getLanguage(),
+                $this->context->getBook())
         );
         $folder->delete();
     }
 
-    private function getFile($versionRelativeUri)
+    private function getFile($path)
     {
-        $url = str_replace(array (
-            '{version}',
-            '{language}',
-            '{book}'
-        ), array(
-            $this->context->getVersion(),
+        $url = sprintf('repos/isotope/docs/contents/%s/%s/%s?ref=%s',
             $this->context->getLanguage(),
-            $this->context->getBook()
-        ), self::githubUri) . $versionRelativeUri;
+            $this->context->getBook(),
+            $path,
+            $this->context->getVersion() // branch as ref
+        );
 
-        $req = new \Request();
-        $req->redirect = true;
-        $req->send($url);
-
-        if (!$req->hasError()) {
-
-            return $req->response;
+        try {
+            $json = $this->github->getHttpClient()->get($url)->json();
+            if ($json['encoding'] == 'base64') {
+                return base64_decode($json['content']);
+            } else {
+                return '';
+            }
+        } catch (\Exception $e) {
+            return '';
         }
-
-        return false;
     }
 
-    private function cacheMirrorFile($relativePath, $data)
+    private function cacheMirrorFile($path, $data)
     {
         $file = new \File(sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/',
-            $this->context->getVersion(),
-            $this->context->getLanguage(),
-            $this->context->getBook()
-        ) . $relativePath);
+                $this->context->getVersion(),
+                $this->context->getLanguage(),
+                $this->context->getBook()
+            ) . $path);
         $file->write($data);
         $file->close();
     }
