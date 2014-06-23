@@ -156,7 +156,7 @@ class Module extends \Module
 
         $this->Template->form = $objForm;
         $this->Template->feedbackForm = $this->generateFeedbackForm();
-        $this->Template->navigation = $this->generateNavigation($this->context->getRouting()->getRootRoute()->getChildren());
+        $this->Template->navigation = $this->generateNavigation($this->routing->getRootRoute()->getChildren());
         $this->Template->quickNavigatonData = $this->getQuickNavigationData();
         $this->Template->isIncomplete = $this->currentRoute->isIncomplete();
 
