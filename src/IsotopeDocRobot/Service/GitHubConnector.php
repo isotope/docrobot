@@ -15,7 +15,7 @@ use Github\HttpClient\CachedHttpClient;
 
 class GitHubConnector
 {
-    const githubUri = 'https://raw.github.com/isotope/docs/{version}/{language}/{book}/';
+    const githubUri = 'https://raw.githubusercontent.com/isotope/docs/{version}/{language}/{book}/';
 
     private $context = null;
     private $github = null;
@@ -82,6 +82,7 @@ class GitHubConnector
         ), self::githubUri) . $versionRelativeUri;
 
         $req = new \Request();
+        $req->redirect = true;
         $req->send($url);
 
         if (!$req->hasError()) {

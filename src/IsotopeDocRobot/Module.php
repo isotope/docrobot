@@ -7,8 +7,7 @@ use IsotopeDocRobot\Markdown\ParserCollection;
 use IsotopeDocRobot\Markdown\Parsers\SitemapParser;
 use IsotopeDocRobot\Routing\Routing;
 use IsotopeDocRobot\Service\GitHubBookParser;
-use Haste\Http\Response\Response;
-use IsotopeDocRobot\Service\GitHubChachedBookParser;
+use IsotopeDocRobot\Service\GitHubCachedBookParser;
 
 class Module extends \Module
 {
@@ -108,7 +107,7 @@ class Module extends \Module
             )
         ));
 
-        $this->bookParser = new GitHubChachedBookParser(
+        $this->bookParser = new GitHubCachedBookParser(
             'system/cache/isotope/docrobot',
             $this->context,
             new GitHubBookParser(
@@ -334,6 +333,10 @@ class Module extends \Module
                 } else {
                     if ($value = $objForm->fetch($strField)) {
                         $strText .= $arrDca['label'] . ':' . "\n" . $value . "\n\n";
+
+                        if ($strField == 'email') {
+                            $objEmail->replyTo($value);
+                        }
                     }
                 }
 
