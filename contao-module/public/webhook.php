@@ -71,21 +71,24 @@ $languagesToUpdate = array_unique($languagesToUpdate);
 foreach ($booksToUpdate as $book) {
     foreach ($languagesToUpdate as $lang) {
 
+        $context = new \IsotopeDocRobot\Context\Context('html');
+        $context->setBook($book);
+        $context->setLanguage($lang);
+        $context->setVersion($version);
+
         try {
-            $routing = new \IsotopeDocRobot\Routing\Routing(
-                sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/config.json',
-                    $version,
-                    $lang,
-                    $book)
-            );
+            $routing = new \IsotopeDocRobot\Routing\Routing($context);
         } catch (\InvalidArgumentException $e) {
             continue;
         }
 
-        $parserCollection = new \IsotopeDocRobot\Markdown\ParserCollection();
-        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\NewVersionParser());
+        $parserCollection = new \IsotopeDocRobot\Markdown\ParserCollection($context, $routing);
+        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\CurrentVersionParser());
+        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\ImageParser());
         $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\MessageParser());
-        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\RootParser($version));
+        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\NewVersionParser());
+        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\RootParser());
+        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\RouteParser());
 
         $parser = new \IsotopeDocRobot\Service\GitHubBookParser($version, $lang, $book, $routing, $parserCollection);
         $parser->loadLanguage();

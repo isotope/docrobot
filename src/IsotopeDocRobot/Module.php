@@ -4,6 +4,7 @@ namespace IsotopeDocRobot;
 
 use IsotopeDocRobot\Context\Context;
 use IsotopeDocRobot\Markdown\ParserCollection;
+use IsotopeDocRobot\Markdown\Parsers\HeadingParser;
 use IsotopeDocRobot\Markdown\Parsers\SitemapParser;
 use IsotopeDocRobot\Routing\Routing;
 use IsotopeDocRobot\Service\GitHubBookParser;
@@ -106,6 +107,7 @@ class Module extends \Module
                 true
             )
         ));
+        $parserCollection->addParser(new HeadingParser());
 
         $this->bookParser = new GitHubCachedBookParser(
             'system/cache/isotope/docrobot',
