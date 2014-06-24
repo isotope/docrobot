@@ -129,8 +129,11 @@ class Routing
 
     public function generateSitemap()
     {
+        $currentRoute = $this->getCurrentRoute();
         $this->setCurrentRoute($this->getRootRoute());
-        return $this->generateNavigation(false, 1, true);
+        $sitemap = $this->generateNavigation(false, 1, true);
+        $this->setCurrentRoute($currentRoute);
+        return $sitemap;
     }
 
     public function generateNavigation($routes=false, $level=1, $blnIsSitemap=false, $blnSkipSubpages=false)
