@@ -99,17 +99,14 @@ class Module extends \Module
             }
         }
 
+        $sitemap = $this->generateNavigation($this->routing->getRootRoute()->getChildren(), 1, true);
+
         $parserCollection = new ParserCollection($this->context, $this->routing);
-        $parserCollection->addParser(new SitemapParser(
-            $this->generateNavigation(
-                $this->routing->getRootRoute()->getChildren()
-                ,
-                1,
-                true
-            )
+        $parserCollection->setParsers(array(
+            new HeadingParser(),
+            new RouteParser($objPage),
+            new SitemapParser($sitemap)
         ));
-        $parserCollection->addParser(new HeadingParser());
-        $parserCollection->addParser(new RouteParser($objPage));
 
         $this->bookParser = new GitHubCachedBookParser(
             'system/cache/isotope/docrobot',
