@@ -17,8 +17,7 @@ class Routing
     private $routeAliasMap = array();
     private $routes = array();
     private $config = array();
-    /* @var $currentRoute \IsotopeDocRobot\Routing\Route */
-    protected $currentRoute = null;
+    private $currentRoute = null;
 
     public function __construct(Context $context)
     {
@@ -77,7 +76,7 @@ class Routing
         return $this->getRoute('root');
     }
 
-    public function setCurrentRoute($currentRoute)
+    public function setCurrentRoute(Route $currentRoute)
     {
         $this->currentRoute = $currentRoute;
     }
