@@ -65,6 +65,7 @@ class GitHubBookParser
      */
     public function parseRoute(Route $route)
     {
+        $this->routing->setCurrentRoute($route);
         return $this->parse($route->getContent($this->context));
     }
 
