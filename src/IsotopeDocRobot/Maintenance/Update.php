@@ -66,6 +66,13 @@ class Update implements \executable
                             }
 
                             $parserCollection = new ParserCollection($context, $routing);
+                            $parserCollection->setParsers(array(
+                                new CurrentVersionParser(),
+                                new ImageParser(),
+                                new MessageParser(),
+                                new NewVersionParser(),
+                                new RootParser()
+                            ));
 
                             $bookParser = new GitHubCachedBookParser(
                                 'system/cache/isotope/docrobot',
