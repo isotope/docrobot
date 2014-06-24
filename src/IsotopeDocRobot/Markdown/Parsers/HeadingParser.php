@@ -4,10 +4,25 @@ namespace IsotopeDocRobot\Markdown\Parsers;
 
 
 use IsotopeDocRobot\Markdown\ParserInterface;
+use IsotopeDocRobot\Markdown\RoutingAwareInterface;
+use IsotopeDocRobot\Routing\Routing;
 use IsotopeDocRobot\Service\GitHubBookParser;
 
-class HeadingParser implements ParserInterface
+class HeadingParser implements ParserInterface, RoutingAwareInterface
 {
+    /**
+     * @var Routing
+     */
+    private $routing = null;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRouting(Routing $routing)
+    {
+        $this->routing = $routing;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -21,9 +36,11 @@ class HeadingParser implements ParserInterface
      */
     public function parseHtml($data)
     {
+        $url = $this->routing->getHrefForRoute($this->routing->getCurrentRoute());
+
         return preg_replace_callback(
             '/<h([1-6])>(.*)<\\/h[1-6]>/u',
-            function($matches) {
+            function($matches) use ($url) {
                 $level = $matches[1];
                 $content = $matches[2];
                 $id = 'deeplink-' . standardize($content);
@@ -32,7 +49,7 @@ class HeadingParser implements ParserInterface
                     $level,
                     $id,
                     $content,
-                    \Environment::get('request') . '#' . $id,
+                    $url . '#' . $id,
                     $GLOBALS['TL_LANG']['ISOTOPE_DOCROBOT']['deeplinkLabel'],
                     $level
                 );
