@@ -17,6 +17,8 @@ class Routing
     private $routeAliasMap = array();
     private $routes = array();
     private $config = array();
+    /* @var $currentRoute \IsotopeDocRobot\Routing\Route */
+    protected $currentRoute = null;
 
     public function __construct(Context $context)
     {
@@ -67,9 +69,22 @@ class Routing
         return $this->routeAliasMap;
     }
 
+    /**
+     * @return Route
+     */
     public function getRootRoute()
     {
         return $this->getRoute('root');
+    }
+
+    public function setCurrentRoute($currentRoute)
+    {
+        $this->currentRoute = $currentRoute;
+    }
+
+    public function getCurrentRoute()
+    {
+        return $this->currentRoute;
     }
 
     public function getRouteForAlias($alias)
@@ -77,7 +92,7 @@ class Routing
         return $this->getRoute(array_search($alias, $this->routeAliasMap));
     }
 
-    public function getHrefForRoute(Route $route, \PageModel $page)
+    public function getHrefForRoute(Route $route)
     {
         // use the alias if there is one
         $alias = ($route->getConfig()->alias) ? $route->getConfig()->alias : $route->getName();
@@ -93,7 +108,7 @@ class Routing
                     $strParams .= '/r/' . $alias;
                 }
 
-                $href = \Controller::generateFrontendUrl($page->row(), $strParams, $this->context->getLanguage());
+                $href = \Controller::generateFrontendUrl($this->context->getJumpToPageForLanguage()->row(), $strParams, $this->context->getLanguage());
                 break;
         }
 
@@ -110,6 +125,118 @@ class Routing
         }
 
         return false;
+    }
+
+    public function generateSitemap()
+    {
+        $this->setCurrentRoute($this->getRootRoute());
+        return $this->generateNavigation(false, 1, true);
+    }
+
+    public function generateNavigation($routes=false, $level=1, $blnIsSitemap=false, $blnSkipSubpages=false)
+    {
+        if ($routes === false) {
+            $routes = $this->getRootRoute()->getChildren();
+        }
+
+        $objTemplate = new \FrontendTemplate('nav_default');
+        $objTemplate->type = get_class($this);
+        $objTemplate->level = 'level_' . $level;
+        $items = array();
+
+        /**
+         * @var $route Route
+         */
+        foreach ($routes as $route) {
+
+            $blnIsInTrail = in_array($route->getName(), $this->getCurrentRoute()->getTrail());
+
+            if (!$blnIsSitemap) {
+                // Only show route if it's one of those
+                // - the current route
+                // - a route in the trail
+                // - a sibling of any route in the trail
+                // - a sibling of the current route
+                // - a child of the current route
+                if (!(
+                    $route === $this->getCurrentRoute()
+                    || $blnIsInTrail
+                    || $this->isSiblingOfOneInTrail($route, $this->getCurrentRoute()->getTrail())
+                    || $this->getCurrentRoute()->isSiblingOfMine($route)
+                    || $this->getCurrentRoute()->isChildOfMine($route)
+                )) {
+                    continue;
+                }
+            }
+
+            // CSS class
+            $strClass = ($blnIsInTrail) ? 'trail' : '';
+            $strClass .=  ' ' . $route->getConfig()->type;
+
+            // Incomplete
+            if ($route->isIncomplete()) {
+                $strClass .= ' incomplete';
+            }
+
+            // New
+            if ($route->isNew()) {
+                $strClass .= ' new';
+            }
+            // children
+            $subitems = '';
+            if ($route->hasChildren() && !$blnSkipSubpages) {
+                $subitems = $this->generateNavigation($route->getChildren(), ($level + 1), $blnIsSitemap);
+                $strClass .= ' subnav';
+            }
+
+            $row = array();
+            $row['isActive']    = ($this->getCurrentRoute()->getName() == $route->getName()) ? true : false;
+            $row['subitems']    = $subitems;
+            $row['href']        = $this->getHrefForRoute($route);
+            $row['title']       = specialchars($route->getTitle(), true);
+            $row['pageTitle']   = specialchars($route->getTitle(), true);
+            $row['link']        = $route->getTitle();
+            $row['class']       = trim($strClass);
+            $items[]            = $row;
+        }
+
+        // Add classes first and last
+        if (!empty($items))
+        {
+            $last = count($items) - 1;
+
+            $items[0]['class'] = trim($items[0]['class'] . ' first');
+            $items[$last]['class'] = trim($items[$last]['class'] . ' last');
+        }
+
+        $objTemplate->items = $items;
+        return !empty($items) ? $objTemplate->parse() : '';
+    }
+
+    public function generateBookNavigation()
+    {
+        $objCurrent = $this->getRootRoute();
+
+        $arrRoutesByIndex = array_keys($this->getRoutes());
+        $intCurrent = array_search($this->getCurrentRoute()->getName(), $arrRoutesByIndex);
+        $intLast = count($arrRoutesByIndex) - 1;
+
+        if ($intCurrent === 0) {
+            $objNext = $this->getRoute($arrRoutesByIndex[1]);
+            $arrRoutes = array($objCurrent, $objNext);
+            return $this->generateNavigation($arrRoutes, 1, true, true);
+        }
+
+        if ($intCurrent === $intLast) {
+            $objNext = $this->getRootRoute();
+        } else {
+            $objNext = $this->getRoute($arrRoutesByIndex[$intCurrent + 1]);
+        }
+
+        $objPrevious = $this->getRoute($arrRoutesByIndex[$intCurrent - 1]);
+        $objCurrent = $this->getRoute($arrRoutesByIndex[$intCurrent]);
+        $arrRoutes = array($objPrevious, $objCurrent, $objNext);
+        return $this->generateNavigation($arrRoutes, 1, true, true);
     }
 
     private function loadConfig($configPath)

@@ -27,7 +27,7 @@ class Context
     }
 
     /**
-     * @param null $version
+     * @param string $version
      */
     public function setVersion($version)
     {
@@ -35,7 +35,7 @@ class Context
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getVersion()
     {
@@ -43,7 +43,7 @@ class Context
     }
 
     /**
-     * @param null $language
+     * @param string $language
      */
     public function setLanguage($language)
     {
@@ -51,7 +51,7 @@ class Context
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getLanguage()
     {
@@ -59,7 +59,22 @@ class Context
     }
 
     /**
-     * @param null $book
+     * @return \PageModel
+     */
+    public function getJumpToPageForLanguage()
+    {
+        $arrLanguageSettings = deserialize($GLOBALS['TL_CONFIG']['iso_docrobot_languages'], true);
+        foreach($arrLanguageSettings as $arrLanguage) {
+            if ($arrLanguage['language'] == $this->getLanguage()) {
+                return \PageModel::findByPk($arrLanguage['page']);
+            }
+        }
+
+        throw new \BadMethodCallException('No page found for this language!');
+    }
+
+    /**
+     * @param string
      */
     public function setBook($book)
     {
@@ -67,7 +82,7 @@ class Context
     }
 
     /**
-     * @return null
+     * @return string
      */
     public function getBook()
     {

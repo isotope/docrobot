@@ -3,14 +3,31 @@
 namespace IsotopeDocRobot\Markdown\Parsers;
 
 use IsotopeDocRobot\Markdown\ParserInterface;
+use IsotopeDocRobot\Markdown\RoutingAwareInterface;
+use IsotopeDocRobot\Routing\Routing;
+use IsotopeDocRobot\Service\GitHubBookParser;
 
-class SitemapParser implements ParserInterface
+class SitemapParser implements ParserInterface, RoutingAwareInterface
 {
-    private $sitemap = '';
+    /**
+     * @var Routing
+     */
+    private $routing = null;
 
-    public function __construct($sitemap)
+    /**
+     * {@inheritdoc}
+     */
+    public function setRouting(Routing $routing)
     {
-        $this->sitemap = $sitemap;
+        $this->routing = $routing;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function register(GitHubBookParser $bookParser)
+    {
+        $bookParser->register($this, 'before', 'parseMarkdown');
     }
 
     /**
@@ -18,6 +35,6 @@ class SitemapParser implements ParserInterface
      */
     public function parseMarkdown($data)
     {
-        return str_replace('<docrobot_sitemap>', $this->sitemap, $data);
+        return str_replace('<docrobot_sitemap>', $this->routing->generateSitemap(), $data);
     }
 }

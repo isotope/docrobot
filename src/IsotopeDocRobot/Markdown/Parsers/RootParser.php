@@ -6,6 +6,7 @@ namespace IsotopeDocRobot\Markdown\Parsers;
 use IsotopeDocRobot\Context\Context;
 use IsotopeDocRobot\Markdown\ContextAwareInterface;
 use IsotopeDocRobot\Markdown\ParserInterface;
+use IsotopeDocRobot\Service\GitHubBookParser;
 
 class RootParser implements ParserInterface, ContextAwareInterface
 {
@@ -20,6 +21,13 @@ class RootParser implements ParserInterface, ContextAwareInterface
     public function setContext(Context $context)
     {
         $this->context = $context;
+    }
+    /**
+     * {@inheritdoc}
+     */
+    public function register(GitHubBookParser $bookParser)
+    {
+        $bookParser->register($this, 'before', 'parseMarkdown');
     }
 
     /**

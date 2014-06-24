@@ -23,3 +23,17 @@ $GLOBALS['TL_MAINTENANCE'][] = '\IsotopeDocRobot\Maintenance\Update';
  * Hooks
  */
 $GLOBALS['TL_HOOKS']['getSearchablePages'][] = array('\IsotopeDocRobot\Search\Indexer', 'addManualPagesToDSI');
+
+/**
+ * Parsers
+ */
+$GLOBALS['ISOTOPE_DOCROBOT']['parsers'] = array(
+    new \IsotopeDocRobot\Markdown\Parsers\CurrentVersionParser(),
+    new \IsotopeDocRobot\Markdown\Parsers\HeadingParser(),
+    new \IsotopeDocRobot\Markdown\Parsers\ImageParser(),
+    new \IsotopeDocRobot\Markdown\Parsers\MessageParser(),
+    new \IsotopeDocRobot\Markdown\Parsers\NewVersionParser(),
+    new \IsotopeDocRobot\Markdown\Parsers\RootParser(),
+    new \IsotopeDocRobot\Markdown\Parsers\RouteParser(),
+    new \IsotopeDocRobot\Markdown\Parsers\SitemapParser()
+);

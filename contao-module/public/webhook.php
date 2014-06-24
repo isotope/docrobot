@@ -71,6 +71,7 @@ $languagesToUpdate = array_unique($languagesToUpdate);
 foreach ($booksToUpdate as $book) {
     foreach ($languagesToUpdate as $lang) {
 
+        // Only works for HTML for now
         $context = new \IsotopeDocRobot\Context\Context('html');
         $context->setBook($book);
         $context->setLanguage($lang);
@@ -82,18 +83,17 @@ foreach ($booksToUpdate as $book) {
             continue;
         }
 
-        $parserCollection = new \IsotopeDocRobot\Markdown\ParserCollection($context, $routing);
-        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\CurrentVersionParser());
-        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\ImageParser());
-        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\MessageParser());
-        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\NewVersionParser());
-        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\RootParser());
-        $parserCollection->addParser(new \IsotopeDocRobot\Markdown\Parsers\RouteParser());
+        $bookParser = new \IsotopeDocRobot\Service\GitHubCachedBookParser(
+            'system/cache/isotope/docrobot',
+            new \IsotopeDocRobot\Service\GitHubBookParser(
+                $context,
+                $routing
+            )
+        );
 
-        $parser = new \IsotopeDocRobot\Service\GitHubBookParser($version, $lang, $book, $routing, $parserCollection);
-        $parser->loadLanguage();
-        $parser->updateFromMirror();
-        $parser->resetLanguage();
+        // We could optimize this by purging only affected routes
+        $bookParser->purgeCache();
+        $bookParser->parseAllRoutes();
     }
 }
 

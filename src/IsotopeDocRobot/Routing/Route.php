@@ -3,6 +3,8 @@
 namespace IsotopeDocRobot\Routing;
 
 
+use IsotopeDocRobot\Context\Context;
+
 class Route
 {
     private $name = '';
@@ -121,7 +123,7 @@ class Route
         return (boolean) $this->siblings[$route->getName()];
     }
 
-    public function getMirrorContent($version, $book, $language)
+    public function getContent(Context $context)
     {
         // only regular routes have content
         if ($this->getConfig()->type != 'regular') {
@@ -134,9 +136,9 @@ class Route
 
         $path = sprintf('%s/system/cache/isotope/docrobot-mirror/%s/%s/%s/%s',
             TL_ROOT,
-            $version,
-            $language,
-            $book,
+            $context->getVersion(),
+            $context->getLanguage(),
+            $context->getBook(),
             $path);
 
         if (!is_file($path)) {

@@ -11,22 +11,20 @@ use IsotopeDocRobot\Routing\Routing;
 class GitHubCachedBookParser
 {
     private $cacheRoot = '';
-    private $context = null;
     /* @var GitHubBookParser */
     private $bookParser = null;
     private $bookPath = '';
 
-    public function __construct($cacheRoot, Context $context, $bookParser)
+    public function __construct($cacheRoot, GitHubBookParser $bookParser)
     {
         $this->cacheRoot = $cacheRoot;
-        $this->context = $context;
         $this->bookParser = $bookParser;
 
         $this->bookPath = sprintf($cacheRoot . '/%s/%s/%s/%s',
-            $this->context->getType(),
-            $this->context->getVersion(),
-            $this->context->getLanguage(),
-            $this->context->getBook()
+            $this->bookParser->getContext()->getType(),
+            $this->bookParser->getContext()->getVersion(),
+            $this->bookParser->getContext()->getLanguage(),
+            $this->bookParser->getContext()->getBook()
         );
 
         // Create a cache dir if not exists
@@ -36,10 +34,10 @@ class GitHubCachedBookParser
     /**
      * @return string
      */
-    public function parseAllRoutes(Routing $routing)
+    public function parseAllRoutes()
     {
         $data = '';
-        foreach ($routing->getRoutes() as $route) {
+        foreach ($this->bookParser->getRouting()->getRoutes() as $route) {
             $this->parseRoute($route);
         }
 

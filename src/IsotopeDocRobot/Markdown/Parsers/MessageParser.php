@@ -5,6 +5,7 @@ namespace IsotopeDocRobot\Markdown\Parsers;
 use IsotopeDocRobot\Context\Context;
 use IsotopeDocRobot\Markdown\ContextAwareInterface;
 use IsotopeDocRobot\Markdown\ParserInterface;
+use IsotopeDocRobot\Service\GitHubBookParser;
 
 class MessageParser implements ParserInterface, ContextAwareInterface
 {
@@ -24,14 +25,19 @@ class MessageParser implements ParserInterface, ContextAwareInterface
     /**
      * {@inheritdoc}
      */
-    public function parseMarkdown($data)
+    public function register(GitHubBookParser $bookParser)
     {
         if ($this->context->getType() === 'html') {
-            $replacement = '<div class="notification-box notification-box-$1">$2</div>';
-        } else {
-            // @todo define replacement for other types
+            $bookParser->register($this, 'before', 'parseMarkdown');
         }
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function parseMarkdown($data)
+    {
+        $replacement = '<div class="notification-box notification-box-$1">$2</div>';
         return preg_replace('#<docrobot_message type="(.*)">(.*)</docrobot_message>#U', $replacement, $data);
     }
 }

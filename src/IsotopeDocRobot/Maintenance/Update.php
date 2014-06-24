@@ -10,13 +10,6 @@
 namespace IsotopeDocRobot\Maintenance;
 
 use IsotopeDocRobot\Context\Context;
-use IsotopeDocRobot\Markdown\ParserCollection;
-use IsotopeDocRobot\Markdown\Parsers\CurrentVersionParser;
-use IsotopeDocRobot\Markdown\Parsers\ImageParser;
-use IsotopeDocRobot\Markdown\Parsers\MessageParser;
-use IsotopeDocRobot\Markdown\Parsers\NewVersionParser;
-use IsotopeDocRobot\Markdown\Parsers\RootParser;
-use IsotopeDocRobot\Markdown\Parsers\RouteParser;
 use IsotopeDocRobot\Routing\Routing;
 use IsotopeDocRobot\Service\GitHubBookParser;
 use IsotopeDocRobot\Service\GitHubCachedBookParser;
@@ -65,26 +58,16 @@ class Update implements \executable
                                 continue;
                             }
 
-                            $parserCollection = new ParserCollection($context, $routing);
-                            $parserCollection->setParsers(array(
-                                new CurrentVersionParser(),
-                                new ImageParser(),
-                                new MessageParser(),
-                                new NewVersionParser(),
-                                new RootParser()
-                            ));
-
                             $bookParser = new GitHubCachedBookParser(
                                 'system/cache/isotope/docrobot',
-                                $context,
                                 new GitHubBookParser(
                                     $context,
-                                    $parserCollection
+                                    $routing
                                 )
                             );
 
                             $bookParser->purgeCache();
-                            $bookParser->parseAllRoutes($routing);
+                            $bookParser->parseAllRoutes();
                         }
                     }
                 }

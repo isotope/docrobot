@@ -8,6 +8,7 @@ use IsotopeDocRobot\Markdown\ContextAwareInterface;
 use IsotopeDocRobot\Markdown\ParserInterface;
 use IsotopeDocRobot\Markdown\RoutingAwareInterface;
 use IsotopeDocRobot\Routing\Routing;
+use IsotopeDocRobot\Service\GitHubBookParser;
 
 class RouteParser implements ParserInterface, ContextAwareInterface, RoutingAwareInterface
 {
@@ -20,19 +21,6 @@ class RouteParser implements ParserInterface, ContextAwareInterface, RoutingAwar
      * @var Routing
      */
     private $routing = null;
-
-    /**
-     * @var \PageModel
-     */
-    private $pageModel = null;
-
-    /**
-     * @param \PageModel $pageModel
-     */
-    function __construct(\PageModel $pageModel)
-    {
-        $this->pageModel = $pageModel;
-    }
 
     /**
      * {@inheritdoc}
@@ -53,14 +41,21 @@ class RouteParser implements ParserInterface, ContextAwareInterface, RoutingAwar
     /**
      * {@inheritdoc}
      */
+    public function register(GitHubBookParser $bookParser)
+    {
+        $bookParser->register($this, 'before', 'parseMarkdown');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function parseMarkdown($data)
     {
         $routing = $this->routing;
-        $pageModel = $this->pageModel;
 
         return preg_replace_callback(
             '#<docrobot_route name="([^"]*)"( path="([^"]*)")?>([^<]*)</docrobot_route>#U',
-            function($matches) use ($routing, $pageModel) {
+            function($matches) use ($routing) {
 
                 $route = $routing->getRoute($matches[1]);
 
@@ -69,10 +64,7 @@ class RouteParser implements ParserInterface, ContextAwareInterface, RoutingAwar
                 }
 
                 return sprintf('<a href="%s">%s</a>',
-                    $routing->getHrefForRoute(
-                        $route,
-                        $pageModel
-                    ) . (($matches[3]) ?: ''),
+                    $routing->getHrefForRoute($route) . (($matches[3]) ?: ''),
                     $matches[4]
                 );
             },

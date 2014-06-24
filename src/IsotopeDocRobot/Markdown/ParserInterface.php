@@ -2,12 +2,14 @@
 
 namespace IsotopeDocRobot\Markdown;
 
+use IsotopeDocRobot\Service\GitHubBookParser;
+
 interface ParserInterface
 {
     /**
-     * Parses the data when it's Markdown
-     * @param   string
-     * @return  string
+     * Method to register a parser
+     * @param GitHubBookParser $bookParser
+     * @return mixed
      */
-    public function parseMarkdown($data);
+    public function register(GitHubBookParser $bookParser);
 }

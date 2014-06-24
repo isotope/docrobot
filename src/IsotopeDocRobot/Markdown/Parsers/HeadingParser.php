@@ -4,13 +4,22 @@ namespace IsotopeDocRobot\Markdown\Parsers;
 
 
 use IsotopeDocRobot\Markdown\ParserInterface;
+use IsotopeDocRobot\Service\GitHubBookParser;
 
 class HeadingParser implements ParserInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function parseMarkdown($data)
+    public function register(GitHubBookParser $bookParser)
+    {
+        $bookParser->register($this, 'after', 'parseHtml');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function parseHtml($data)
     {
         return preg_replace_callback(
             '/<h([1-6])>(.*)<\\/h[1-6]>/u',

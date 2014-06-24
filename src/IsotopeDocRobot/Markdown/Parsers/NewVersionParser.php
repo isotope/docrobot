@@ -3,9 +3,18 @@
 namespace IsotopeDocRobot\Markdown\Parsers;
 
 use IsotopeDocRobot\Markdown\ParserInterface;
+use IsotopeDocRobot\Service\GitHubBookParser;
 
 class NewVersionParser implements ParserInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function register(GitHubBookParser $bookParser)
+    {
+        $bookParser->register($this, 'before', 'parseMarkdown');
+    }
+
     /**
      * {@inheritdoc}
      */
