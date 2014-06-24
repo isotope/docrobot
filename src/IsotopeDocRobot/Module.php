@@ -239,7 +239,7 @@ class Module extends \Module
             $row = array();
             $row['isActive']    = ($this->currentRoute->getName() == $route->getName()) ? true : false;
             $row['subitems']    = $subitems;
-            $row['href']        = $this->routing->getHrefForRoute($route, $objPage, $this->currentVersion, $this->language);
+            $row['href']        = $this->routing->getHrefForRoute($route, $objPage);
             $row['title']       = specialchars($route->getTitle(), true);
             $row['pageTitle']   = specialchars($route->getTitle(), true);
             $row['link']        = $route->getTitle();
@@ -293,7 +293,7 @@ class Module extends \Module
         foreach ($this->routing->getRoutes() as $route) {
             $arrNav[] = array(
                 $route->getTitle(),
-                $this->routing->getHrefForRoute($route, $objPage, $this->currentVersion, $this->language)
+                $this->routing->getHrefForRoute($route, $objPage)
             );
         }
 

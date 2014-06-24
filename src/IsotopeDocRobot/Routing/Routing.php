@@ -13,17 +13,20 @@ use IsotopeDocRobot\Context\Context;
 
 class Routing
 {
+    private $context = null;
     private $routeAliasMap = array();
     private $routes = array();
     private $config = array();
 
     public function __construct(Context $context)
     {
+        $this->context = $context;
+
         // set path
         $configPath = sprintf('system/cache/isotope/docrobot-mirror/%s/%s/%s/config.json',
-            $context->getVersion(),
-            $context->getLanguage(),
-            $context->getBook()
+            $this->context->getVersion(),
+            $this->context->getLanguage(),
+            $this->context->getBook()
         );
 
         // Root
@@ -74,7 +77,7 @@ class Routing
         return $this->getRoute(array_search($alias, $this->routeAliasMap));
     }
 
-    public function getHrefForRoute(Route $route, \PageModel $page, $version, $language)
+    public function getHrefForRoute(Route $route, \PageModel $page)
     {
         // use the alias if there is one
         $alias = ($route->getConfig()->alias) ? $route->getConfig()->alias : $route->getName();
@@ -84,13 +87,13 @@ class Routing
                 $alias = ($this->getRoute($route->getConfig()->targetRoute)->getAlias()) ? $this->getRoute($route->getConfig()->targetRoute)->getAlias() : $this->getRoute($route->getConfig()->targetRoute)->getName();
             // DO NOT BREAK HERE
             case 'regular':
-                $strParams = '/v/' . $version;
+                $strParams = '/v/' . $this->context->getVersion();
 
                 if ($alias !== 'root') {
                     $strParams .= '/r/' . $alias;
                 }
 
-                $href = \Controller::generateFrontendUrl($page->row(), $strParams, $language);
+                $href = \Controller::generateFrontendUrl($page->row(), $strParams, $this->context->getLanguage());
                 break;
         }
 
