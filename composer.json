@@ -18,7 +18,8 @@
         "jalle19/php-whitelist-check": "dev-master",
         "menatwork/contao-multicolumnwizard": "3.2.*",
         "guzzle/guzzle": "3.8.*",
-        "knplabs/github-api": "1.3.*@dev"
+        "knplabs/github-api": "1.3.*@dev",
+        "kzykhys/ciconia": "1.*"
     },
     "autoload": {
         "psr-0": {
