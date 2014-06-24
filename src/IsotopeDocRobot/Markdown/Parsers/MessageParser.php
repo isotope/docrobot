@@ -3,6 +3,7 @@
 namespace IsotopeDocRobot\Markdown\Parsers;
 
 use IsotopeDocRobot\Context\Context;
+use IsotopeDocRobot\Markdown\ContextAwareInterface;
 use IsotopeDocRobot\Markdown\ParserInterface;
 
 class MessageParser implements ParserInterface, ContextAwareInterface
