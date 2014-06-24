@@ -4,6 +4,7 @@ namespace IsotopeDocRobot\Markdown\Parsers;
 
 
 use IsotopeDocRobot\Context\Context;
+use IsotopeDocRobot\Markdown\ContextAwareInterface;
 use IsotopeDocRobot\Markdown\ParserInterface;
 use IsotopeDocRobot\Markdown\RoutingAwareInterface;
 use IsotopeDocRobot\Routing\Routing;
@@ -19,6 +20,19 @@ class RouteParser implements ParserInterface, ContextAwareInterface, RoutingAwar
      * @var Routing
      */
     private $routing = null;
+
+    /**
+     * @var \PageModel
+     */
+    private $pageModel = null;
+
+    /**
+     * @param \PageModel $pageModel
+     */
+    function __construct(\PageModel $pageModel)
+    {
+        $this->pageModel = $pageModel;
+    }
 
     /**
      * {@inheritdoc}
@@ -42,15 +56,11 @@ class RouteParser implements ParserInterface, ContextAwareInterface, RoutingAwar
     public function parseMarkdown($data)
     {
         $routing = $this->routing;
-        $version = $this->context->getVersion();
-        $language = $this->context->getLanguage();
-
-        // @todo find out how to pass this one
         $pageModel = $this->pageModel;
 
         return preg_replace_callback(
             '#<docrobot_route name="([^"]*)"( path="([^"]*)")?>([^<]*)</docrobot_route>#U',
-            function($matches) use ($routing, $pageModel, $version, $language) {
+            function($matches) use ($routing, $pageModel) {
 
                 $route = $routing->getRoute($matches[1]);
 
@@ -61,9 +71,7 @@ class RouteParser implements ParserInterface, ContextAwareInterface, RoutingAwar
                 return sprintf('<a href="%s">%s</a>',
                     $routing->getHrefForRoute(
                         $route,
-                        $pageModel,
-                        $version,
-                        $language
+                        $pageModel
                     ) . (($matches[3]) ?: ''),
                     $matches[4]
                 );
