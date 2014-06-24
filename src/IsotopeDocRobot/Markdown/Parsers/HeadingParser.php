@@ -13,7 +13,7 @@ class HeadingParser implements ParserInterface
     public function parseMarkdown($data)
     {
         return preg_replace_callback(
-            '#<h(\d)>([^</h(\d)]*)</h\d>#U',
+            '/<h([1-6])>(.*)<\\/h[1-6]>/u',
             function($matches) {
                 $level = $matches[1];
                 $content = $matches[2];
