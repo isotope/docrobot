@@ -9,7 +9,6 @@ use IsotopeDocRobot\Markdown\ParserInterface;
 use IsotopeDocRobot\Markdown\RoutingAwareInterface;
 use IsotopeDocRobot\Routing\Route;
 use IsotopeDocRobot\Routing\Routing;
-use Ciconia\Ciconia;
 
 class GitHubBookParser
 {
@@ -93,9 +92,11 @@ class GitHubBookParser
             $data = call_user_func_array(array($parserArray[0], $parserArray[1]), array($data));
         }
 
-        // main markdown parsing
-        $ciconia = new Ciconia();
-        $data = $ciconia->render($data);
+        // main parsers
+
+        foreach ((array) $this->registeredParsers['main'] as $parserArray) {
+            $data = call_user_func_array(array($parserArray[0], $parserArray[1]), array($data));
+        }
 
         // after parsers
         foreach ((array) $this->registeredParsers['after'] as $parserArray) {
@@ -113,7 +114,6 @@ class GitHubBookParser
      */
     private function registerParsers()
     {
-        $i = 0;
         foreach ($this->parsers as $parser) {
             if (!$parser instanceof ParserInterface) {
                 throw new \InvalidArgumentException('Every parser must implement the ParserInterface');

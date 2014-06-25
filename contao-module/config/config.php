@@ -35,5 +35,6 @@ $GLOBALS['ISOTOPE_DOCROBOT']['parsers'] = array(
     new \IsotopeDocRobot\Markdown\Parsers\NewVersionParser(),
     new \IsotopeDocRobot\Markdown\Parsers\RootParser(),
     new \IsotopeDocRobot\Markdown\Parsers\RouteParser(),
-    new \IsotopeDocRobot\Markdown\Parsers\SitemapParser()
+    new \IsotopeDocRobot\Markdown\Parsers\SitemapParser(),
+    new \IsotopeDocRobot\Markdown\Parsers\CiconiaParser()
 );
