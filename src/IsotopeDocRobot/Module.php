@@ -107,8 +107,8 @@ class Module extends \Module
      */
     protected function compile()
     {
-        $GLOBALS['TL_CSS'][] = 'system/modules/isotope-docrobot/assets/jquery.autocomplete.css';
-        $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/isotope-docrobot/assets/jquery.autocomplete.min.js';
+        $GLOBALS['TL_CSS'][] = 'system/modules/isotope_docrobot/assets/jquery.autocomplete.css';
+        $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/isotope_docrobot/assets/jquery.autocomplete.min.js';
         global $objPage;
 
         // version change
