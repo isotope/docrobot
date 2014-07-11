@@ -1,0 +1,86 @@
+\documentclass[10pt,a4paper]{article}
+
+% Used for frontpage pdf include
+\usepackage{wallpaper}
+
+% Used for UTF-8 encoding
+\usepackage[utf8]{inputenc}
+
+ % Used for dummy text
+\usepackage{lipsum}
+
+ % Set margins
+\usepackage{geometry}
+    \geometry{
+    a4paper,
+    total={210mm,297mm},
+    left=20mm,
+    right=20mm,
+    top=20mm,
+    bottom=20mm,
+}
+
+% Used for copyright sign
+\usepackage{textcomp}
+
+% Use OpenSans
+\usepackage[default]{opensans}
+\usepackage[T1]{fontenc}
+
+%-----------------------------------------------------
+% End of packages
+%-----------------------------------------------------
+
+%-----------------------------------------------------
+% General variables
+%-----------------------------------------------------
+
+\definecolor{isotopeColor}{RGB}{24,153,173}
+
+%-----------------------------------------------------
+% Dynamic variables
+%-----------------------------------------------------
+
+\newcommand{\isotopeManualTitle}{Handbuch für Version 2.1}
+\newcommand{\isotopeManualGeneratedOn}{Generiert am 25. Juni 2014 um 11:42 Uhr}
+\newcommand{\isotopeCopyright}{\textcopyright 2014 terminal42 gmbh und die Isotope eCommerce Community}
+
+
+%-----------------------------------------------------
+% Begin of document
+%-----------------------------------------------------
+
+\begin{document}
+
+
+%-----------------------------------------------------
+% Begin of title page
+%-----------------------------------------------------
+
+\begin{titlepage}
+\ThisULCornerWallPaper{1}{frontpage.pdf}
+
+\vspace*{16cm}\par
+
+\noindent
+\textcolor{isotopeColor}{\huge\isotopeManualTitle{}}
+
+\vspace*{0.3cm}\par
+
+\noindent
+\small\isotopeManualGeneratedOn{}
+
+\vspace*{7cm}\par
+
+\noindent
+\footnotesize\isotopeCopyright{}
+
+\end{titlepage}
+
+%-----------------------------------------------------
+% Begin of regular content
+%-----------------------------------------------------
+
+\lipsum[1-9]
+
+\end{document}

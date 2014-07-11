@@ -9,6 +9,7 @@
 
 namespace IsotopeDocRobot\Maintenance;
 
+use IsotopeDocRobot\Book\BookCreator;
 use IsotopeDocRobot\Context\Context;
 use IsotopeDocRobot\Routing\Routing;
 use IsotopeDocRobot\Service\GitHubBookParser;
@@ -27,7 +28,6 @@ class Update implements \executable
         return false;
     }
 
-
     /**
      * Generate the module
      * @return string
@@ -35,39 +35,43 @@ class Update implements \executable
     public function run()
     {
         if (\Input::post('FORM_SUBMIT') == 'isotope-docrobot-update') {
-            foreach (\Input::post('contextType') as $contextType) {
-                foreach (\Input::post('version') as $version) {
-                    foreach (\Input::post('lang') as $lang) {
-                        foreach (\Input::post('book') as $book) {
+            foreach (\Input::post('version') as $version) {
+                foreach (\Input::post('lang') as $lang) {
+                    foreach (\Input::post('book') as $book) {
 
+                        $contextType = \Input::post('contextType');
 
-                            $context = new Context($contextType);
-                            $context->setBook($book);
-                            $context->setLanguage($lang);
-                            $context->setVersion($version);
+                        $context = new Context($contextType);
+                        $context->setBook($book);
+                        $context->setLanguage($lang);
+                        $context->setVersion($version);
 
-                            if (\Input::post('fetch') == 'yes') {
-                                $connector = new GitHubConnector($context);
-                                $connector->purgeCache();
-                                $connector->updateAll();
-                            }
+                        if (\Input::post('fetchGitHub') == 'yes') {
+                            $connector = new GitHubConnector($context);
+                            $connector->purgeCache();
+                            $connector->updateAll();
+                        }
 
-                            try {
-                                $routing = new Routing($context);
-                            } catch (\InvalidArgumentException $e) {
-                                continue;
-                            }
+                        try {
+                            $routing = new Routing($context);
+                        } catch (\InvalidArgumentException $e) {
+                            continue;
+                        }
 
-                            $bookParser = new GitHubCachedBookParser(
-                                'system/cache/isotope/docrobot',
-                                new GitHubBookParser(
-                                    $context,
-                                    $routing
-                                )
-                            );
+                        $bookParser = new GitHubCachedBookParser(
+                            'system/cache/isotope/docrobot',
+                            new GitHubBookParser(
+                                $context,
+                                $routing
+                            )
+                        );
 
-                            $bookParser->purgeCache();
-                            $bookParser->parseAllRoutes();
+                        $bookParser->purgeCache();
+                        $bookParser->parseAllRoutes();
+
+                        if ($contextType == 'pdf') {
+                            $bookCreator = new BookCreator($context);
+                            $bookCreator->create();
                         }
                     }
                 }
@@ -90,9 +94,8 @@ class Update implements \executable
         $arrSettings['name'] = 'contextType';
         $arrSettings['label'] = 'Kontext-Typ';
         $arrSettings['mandatory'] = true;
-        $arrSettings['multiple'] = true;
         $arrSettings['options'] = $arrOptions;
-        $contextChoice = new \CheckBox($arrSettings);
+        $contextChoice = new \SelectMenu($arrSettings);
         $objTemplate->contextChoice = $contextChoice->parse();
         unset($arrSettings);
 

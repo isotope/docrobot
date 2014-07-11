@@ -1,0 +1,12 @@
+# Versandart "Pauschalversand"
+
+Die Versandart "Pauschalversand" ist die standardmässige Versandart. Diese Versandart kann für jegliche Anwendungszwecke und vor allem auch als Basis für die <a href="index.php/handbuch/v/2.1/r/zahlungsart-gruppierung.html">Versandgruppierung</a> verwendet werden. Verwendet werden kann sie für Dinge wie:
+
+* Pauschalversand für € xx.xx
+* Versand auf Basis des Gewichts im Warenkorb
+* Versand in bestimmte Regionen oder sogar Postleitzahlen-Kreise
+* etc.
+
+## Versandart-spezifische Konfiguration
+
+Da diese Versandart die Basis bildet, gibt es abgesehen von den <a href="index.php/handbuch/v/2.1/r/versandarten.html">allgemeinen Einstellungen</a> keine weiteren Einstellungsmöglichkeiten.

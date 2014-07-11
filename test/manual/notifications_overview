@@ -1,0 +1,19 @@
+# Benachrichtigungen (Übersicht)
+
+<docrobot_image path="backend-configuration/store-configuration/general-settings/notifications_overview/navigation.png" alt="Navigation des Benachrichtigungszentrums">
+
+<docrobot_message type="info"><p><strong>Neu seit Isotope eCommerce 2.0:</strong></p><p>Die Isotope eCommerce-eigenen E-Mail-Benachrichtigungen wurden in das `Benachrichtigungszentrum` ausgelagert. Du wirst feststellen, dass du bei Klick auf `Benachrichtigungen` zum entsprechenden Menüpunkt weitergeleitet wirst. Dies wurde eingebaut, um den Einstieg für Isotope 1.4-Kenner zu erleichtern.</p></docrobot_message>
+
+Stellst du dir das `Benachrichtigungszentrum` losgelöst von Isotope eCommerce vor, so sollte einiges von Beginn weg klarer erscheinen. Es wurde unabhängig entwickelt und hat sich zum Ziel gesetzt, als zentrale Komponente für beliebige andere Erweiterungen und deren Benachrichtigungen zu fungieren. Die Anforderungen für Benachrichtigungen lassen sich nämlich gemeinsam festhalten:
+
+* Eine Benachrichtigung hat immer einen Auslöser und da bei diesem Auslöser potenziell mehrere verschiedene Nachrichten ausgelöst werden sollen, besteht eine Benachrichtigung aus einer oder mehreren Nachrichten.
+
+\begin{tcolorbox}[colback=red!5!white,colframe=red!75!black]Merke dir die unterschiedliche Verwendung von `Benachrichtigung` und einer einzelnen `Nachricht`. Eine `Benachrichtigung` ist ein Gefäss von einer oder mehreren `Nachrichten`.\end{tcolorbox}
+
+* Eine Nachricht muss potenziell in verschiedene Sprachen übersetzbar sein.
+* Eine Nachricht definiert sich nicht durch das Wort "E-Mail". Es ist folglich für eine Nachricht irrelevant wohin oder mit welchem Hilfsmittel (Gateway) sie verschickt wird.
+* Eine Nachricht besteht nicht zwingend aus menschenlesbarem Text. Ein Austausch von Maschine zu Maschine kann ebenso als "Nachricht" bezeichnet werden.
+
+Es ergibt sich folgendes Verhalten:
+
+Zu einer einzelnen <a href="index.php/handbuch/v/2.1/r/benachrichtigungen.html">Benachrichtigung</a> gehören eine oder mehrere <a href="index.php/handbuch/v/2.1/r/benachrichtigungen-nachrichten.html">Nachrichten</a>, welche in verschiedenen <a href="index.php/handbuch/v/2.1/r/benachrichtigungen-sprachen.html">Sprachen</a> über ein beliebiges <a href="index.php/handbuch/v/2.1/r/benachrichtigungen-gateways.html">Gateway</a> versendet werden.

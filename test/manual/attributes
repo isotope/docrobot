@@ -1,0 +1,81 @@
+# Attribute
+
+In der Grundinstallation verfügt Isotope eCommerce bereits über die wichtigsten Attribute, welche für den Betrieb eines Shops normalerweise benötigt werden. Sollte dir dennoch Attribute für dein Projekt fehlen, kannst du sie unter `Attribute` anlegen und im <a href="index.php/handbuch/v/2.1/r/produkttypen.html">Produkttyp</a> konfigurieren.
+
+Attribute sind zusätzliche Datenfelder, welche im Backend bei der Einpflege der Produkte zur Verfügung gestellt und danach im Frontend an gewünschter Stelle ausgegeben werden können. So kann zum Beispiel ein Farbauswahl-Select-Menü erstellt werden, in dem der Kunde im Frontend eine Farbe auswählen muss, bevor er das Produkt in den Warenkorb legen kann.
+
+Nach klick auf `Neues Attribut` hast du folgende Einstellungsmöglichkeiten:
+
+## Attribut-Name & -Typ
+
+<table>
+    <thead>
+        <tr>
+            <th>Einstellung</th>
+            <th>Standardeinstellung</th>
+            <th>Beschreibung</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Name</td>
+            <td>-</td>
+            <td>Hier gibst du dem Attribut einen aussagekräftigen Namen, dieser wird nur im Backend verwendet.</td>
+        </tr>
+        <tr>
+            <td>Interner Name</td>
+            <td>-</td>
+            <td>Hier bestimmst du den Namen für das Datenbankfeld in der Datenbanktabelle <code>tl_iso_attribute</code>, dieser Wert muss einzigartig sein.
+</td>
+        </tr>
+        <tr>
+            <td>Typ</td>
+            <td>-</td>
+            <td>Hier kannst du den gewünschten Feldtyp für ein Attribut auswählen, Isotope eCommerce stellt dir folgende Typen zur Verfügung:
+            <ul>
+            <li>Textfeld</li>
+            <li>Textarea</li>
+            <li>Select-Menü</li>
+            <li>Radio-Button-Menü</li>
+            <li>Checkbox-Menü</li>
+            <li>Medienverwaltung</li>
+            <li>Dateibaum</li>
+            <li>Downloads</li>
+            <li>Datei-Upload</li>
+            </ul>
+</td>
+        </tr>
+        <tr>
+            <td>Feldgruppe</td>
+            <td>-</td>
+            <td>Hier wird die Gruppierung für die Ausgabe im Backend beim Anlegen eines Produktes festgelegt. Du kannst dem Attribut folgenden Feldgruppen zuweisen:
+            <ul>
+            <li>Allgemeine Einstellungen</li>
+            <li>Meta-Angaben</li>
+            <li>Preis-Einstellungen</li>
+            <li>Inventar-Einstellungen</li>
+            <li>Versand-Einstellungen</li>
+            <li>Produktoptionen-Einstellungen</li>
+            <li>Dateiverwaltung</li>
+            <li>Experten-Einstellungen</li>
+            <li>Veröffentlichung</li>
+            </ul>
+            <docrobot_image path="images/feldgruppen.png" alt="Feldgruppen beim Anlegen eines neuen Produktes">
+            </td>
+        </tr>        
+    </tbody>
+</table>
+
+Auf die Konfiguration der einzelnen Feldtypen wird in den Unterpunkten eingegangen.
+
+- <a href="index.php/handbuch/v/2.1/r/textfeld.html">Textfeld</a>
+- <a href="index.php/handbuch/v/2.1/r/textarea.html">Textarea</a>
+- <a href="index.php/handbuch/v/2.1/r/select-menue.html">Select-Menü</a>
+- <a href="index.php/handbuch/v/2.1/r/radio-button-menue.html">Radio-Button-Menü</a>
+- <a href="index.php/handbuch/v/2.1/r/checkbox-menue.html">Checkbox-Menü</a>
+- <a href="index.php/handbuch/v/2.1/r/medienverwaltung.html">Medienverwaltung</a>
+- <a href="index.php/handbuch/v/2.1/r/dateibaum.html">Dateibaum</a>
+- <a href="index.php/handbuch/v/2.1/r/downloads.html">Downloads</a>
+- <a href="index.php/handbuch/v/2.1/r/datei-upload.html">Datei-Upload</a>
+
+

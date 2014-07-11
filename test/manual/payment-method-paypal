@@ -1,0 +1,41 @@
+# Zahlungsart "PayPal"
+
+\begin{tcolorbox}[colback=red!5!white,colframe=red!75!black]Hier fehlt ein genereller Beschrieb.\end{tcolorbox}
+
+## Konfiguration des Zahlungsanbieters
+
+<table>
+	<thead>
+		<tr>
+			<th>Einstellung</th>
+			<th>Standardeinstellung</th>
+			<th>Beschreibung</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>PayPal-Konto</td>
+			<td>-</td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>
+
+## Freigabe
+
+<table>
+	<thead>
+		<tr>
+			<th>Einstellung</th>
+			<th>Standardeinstellung</th>
+			<th>Beschreibung</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Testsystem verwenden</td>
+			<td>-</td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>

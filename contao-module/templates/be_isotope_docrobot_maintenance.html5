@@ -4,16 +4,16 @@
     <input type="hidden" name="FORM_SUBMIT" value="isotope-docrobot-update">
     <input type="hidden" name="REQUEST_TOKEN" value="<?php echo REQUEST_TOKEN; ?>">
 
-    <div class="tl_formbody_edit" style="padding:0px 25px;">
+    <div class="tl_formbody_edit tl_box" style="padding:0px 25px;border:none;">
         <?php echo $this->contextChoice; ?>
         <?php echo $this->versionChoice; ?>
         <?php echo $this->langChoice; ?>
         <?php echo $this->bookChoice; ?>
-        <fieldset id="ctrl_fetch" class="tl_checkbox_container">
+        <fieldset id="ctrl_fetchGitHub" class="tl_checkbox_container">
             <legend>GitHub</legend>
-            <input type="checkbox" name="fetch" id="opt_fetch_0" class="tl_checkbox" value="yes">
-            <label for="opt_fetch_0">Daten auch von GitHub holen (ansonsten nur vom Cache)</label>
+            <input type="checkbox" name="fetchGitHub" id="opt_fetchGitHub_0" class="tl_checkbox" value="yes">
+            <label for="opt_fetchGitHub_0">Daten auch von GitHub holen (ansonsten nur vom Cache)</label>
         </fieldset>
-        <input style="margin:20px 0px;" type="submit" name="update" class="tl_submit" value="Daten aktualisieren (und evtl. von GitHub holen)">
+        <input style="margin:20px 0px;" type="submit" name="update" class="tl_submit" value="Daten aktualisieren">
     </div>
 </form>

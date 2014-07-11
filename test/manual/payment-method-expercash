@@ -1,0 +1,56 @@
+# Zahlungsart "ExperCash"
+
+\begin{tcolorbox}[colback=red!5!white,colframe=red!75!black]Hier fehlt ein genereller Beschrieb.\end{tcolorbox}
+
+## Konfiguration des Zahlungsanbieters
+
+<table>
+	<thead>
+		<tr>
+			<th>Einstellung</th>
+			<th>Standardeinstellung</th>
+			<th>Beschreibung</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>ExperCash Popup-ID</td>
+			<td>-</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>ExperCash Profil</td>
+			<td>-</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>ExperCash Popup-Schlüssel</td>
+			<td>-</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>Transaktionsart</td>
+			<td>-</td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>
+
+## Template
+
+<table>
+	<thead>
+		<tr>
+			<th>Einstellung</th>
+			<th>Standardeinstellung</th>
+			<th>Beschreibung</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>CSS-Vorlage</td>
+			<td>-</td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>

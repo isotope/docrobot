@@ -1,0 +1,131 @@
+# Isotope eCommerce
+
+## Benutzerhandbuch für die Version 2.1
+
+
+<ul class="level_1">
+            <li class="redirect first"><a href="index.php/handbuch/v/2.1.html" title="Index" class="redirect first">Index</a></li>
+                <li class="redirect subnav"><a href="index.php/handbuch/v/2.1/r/systemvoraussetzungen.html" title="Installation" class="redirect subnav">Installation</a>
+<ul class="level_2">
+            <li class="regular first"><a href="index.php/handbuch/v/2.1/r/systemvoraussetzungen.html" title="Systemvoraussetzungen" class="regular first">Systemvoraussetzungen</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/erweiterungsverwaltung.html" title="via Erweiterungsverwaltung" class="regular">via Erweiterungsverwaltung</a></li>
+                <li class="regular last"><a href="index.php/handbuch/v/2.1/r/composer.html" title="via Composer" class="regular last">via Composer</a></li>
+      </ul>
+</li>
+                <li class="redirect subnav"><a href="index.php/handbuch/v/2.1/r/anlegen-der-seitenstruktur.html" title="Backend-Konfiguration" class="redirect subnav">Backend-Konfiguration</a>
+<ul class="level_2">
+            <li class="regular first"><a href="index.php/handbuch/v/2.1/r/anlegen-der-seitenstruktur.html" title="Anlegen der Seitenstruktur" class="regular first">Anlegen der Seitenstruktur</a></li>
+                <li class="regular subnav"><a href="index.php/handbuch/v/2.1/r/shop-konfiguration.html" title="Shop-Konfiguration" class="regular subnav">Shop-Konfiguration</a>
+<ul class="level_3">
+            <li class="redirect subnav first"><a href="index.php/handbuch/v/2.1/r/galerien.html" title="Allgemeine Einstellungen" class="redirect subnav first">Allgemeine Einstellungen</a>
+<ul class="level_4">
+            <li class="regular subnav first"><a href="index.php/handbuch/v/2.1/r/galerien.html" title="Galerien" class="regular subnav first">Galerien</a>
+<ul class="level_5">
+            <li class="regular first"><a href="index.php/handbuch/v/2.1/r/standard-galerie.html" title="Standard Galerie" class="regular first">Standard Galerie</a></li>
+                <li class="regular last"><a href="index.php/handbuch/v/2.1/r/inline-galerie.html" title="Inline Galerie" class="regular last">Inline Galerie</a></li>
+      </ul>
+</li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/dokumente.html" title="Dokumente" class="regular">Dokumente</a></li>
+                <li class="regular subnav"><a href="index.php/handbuch/v/2.1/r/benachrichtigszentrum.html" title="Benachrichtigungszentrum" class="regular subnav">Benachrichtigungszentrum</a>
+<ul class="level_5">
+            <li class="regular first"><a href="index.php/handbuch/v/2.1/r/benachrichtigungen-gateways.html" title="Gateways" class="regular first">Gateways</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/benachrichtigungen.html" title="Benachrichtigungen" class="regular">Benachrichtigungen</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/benachrichtigungen-nachrichten.html" title="Nachrichten" class="regular">Nachrichten</a></li>
+                <li class="regular last"><a href="index.php/handbuch/v/2.1/r/benachrichtigungen-sprachen.html" title="Sprachen" class="regular last">Sprachen</a></li>
+      </ul>
+</li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/bestellstatus.html" title="Bestellstatus" class="regular">Bestellstatus</a></li>
+                <li class="regular last"><a href="index.php/handbuch/v/2.1/r/konfiguration.html" title="Konfiguration" class="regular last">Konfiguration</a></li>
+      </ul>
+</li>
+                <li class="redirect subnav"><a href="index.php/handbuch/v/2.1/r/steuersaetze.html" title="Bestellablauf" class="redirect subnav">Bestellablauf</a>
+<ul class="level_4">
+            <li class="regular incomplete first"><a href="index.php/handbuch/v/2.1/r/steuersaetze.html" title="Steuersätze" class="regular incomplete first">Steuersätze</a></li>
+                <li class="regular incomplete"><a href="index.php/handbuch/v/2.1/r/steuerklassen.html" title="Steuerklassen" class="regular incomplete">Steuerklassen</a></li>
+                <li class="regular subnav"><a href="index.php/handbuch/v/2.1/r/versandarten.html" title="Versandarten" class="regular subnav">Versandarten</a>
+<ul class="level_5">
+            <li class="regular first"><a href="index.php/handbuch/v/2.1/r/versandart-pauschal.html" title="Pauschalversand" class="regular first">Pauschalversand</a></li>
+                <li class="regular last"><a href="index.php/handbuch/v/2.1/r/zahlungsart-gruppierung.html" title="Versandgruppierung" class="regular last">Versandgruppierung</a></li>
+      </ul>
+</li>
+                <li class="regular subnav last"><a href="index.php/handbuch/v/2.1/r/zahlungsarten.html" title="Zahlungsarten" class="regular subnav last">Zahlungsarten</a>
+<ul class="level_5">
+            <li class="regular first"><a href="index.php/handbuch/v/2.1/r/zahlungsart-bar.html" title="Bar" class="regular first">Bar</a></li>
+                <li class="regular incomplete"><a href="index.php/handbuch/v/2.1/r/zahlungsart-datatrans.html" title="Datatrans" class="regular incomplete">Datatrans</a></li>
+                <li class="regular incomplete"><a href="index.php/handbuch/v/2.1/r/zahlungsart-expercash.html" title="ExperCash" class="regular incomplete">ExperCash</a></li>
+                <li class="regular incomplete"><a href="index.php/handbuch/v/2.1/r/zahlungsart-payone.html" title="PayOne" class="regular incomplete">PayOne</a></li>
+                <li class="regular incomplete"><a href="index.php/handbuch/v/2.1/r/zahlungsart-paypal.html" title="PayPal" class="regular incomplete">PayPal</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/zahlungsart-postfinance.html" title="PostFinance" class="regular">PostFinance</a></li>
+                <li class="regular incomplete"><a href="index.php/handbuch/v/2.1/r/zahlungsart-viveum.html" title="VIVEUM" class="regular incomplete">VIVEUM</a></li>
+                <li class="regular incomplete"><a href="index.php/handbuch/v/2.1/r/zahlungsart-saferpay.html" title="Saferpay" class="regular incomplete">Saferpay</a></li>
+                <li class="regular incomplete"><a href="index.php/handbuch/v/2.1/r/zahlungsart-sparkasse.html" title="Sparkasse" class="regular incomplete">Sparkasse</a></li>
+                <li class="regular new"><a href="index.php/handbuch/v/2.1/r/zahlungsart-sofortueberweisung.html" title="sofortüberweisung.de" class="regular new">sofortüberweisung.de</a></li>
+                <li class="regular incomplete last"><a href="index.php/handbuch/v/2.1/r/zahlungsart-worldpay.html" title="WorldPay" class="regular incomplete last">WorldPay</a></li>
+      </ul>
+</li>
+      </ul>
+</li>
+                <li class="redirect subnav"><a href="index.php/handbuch/v/2.1/r/grundpreis.html" title="Produkte" class="redirect subnav">Produkte</a>
+<ul class="level_4">
+            <li class="regular first"><a href="index.php/handbuch/v/2.1/r/grundpreis.html" title="Grundpreis" class="regular first">Grundpreis</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/verknuepfte-kategorien.html" title="Verknüpfte Kategorien" class="regular">Verknüpfte Kategorien</a></li>
+                <li class="regular subnav"><a href="index.php/handbuch/v/2.1/r/attribute.html" title="Attribute" class="regular subnav">Attribute</a>
+<ul class="level_5">
+            <li class="regular first"><a href="index.php/handbuch/v/2.1/r/textfeld.html" title="Textfeld" class="regular first">Textfeld</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/textarea.html" title="Textarea" class="regular">Textarea</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/select-menue.html" title="Select-Menü" class="regular">Select-Menü</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/radio-button-menue.html" title="Radio-Button-Menü" class="regular">Radio-Button-Menü</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/checkbox-menue.html" title="Checkbox-Menü" class="regular">Checkbox-Menü</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/medienverwaltung.html" title="Medienverwaltung" class="regular">Medienverwaltung</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/dateibaum.html" title="Dateibaum" class="regular">Dateibaum</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/downloads.html" title="Downloads" class="regular">Downloads</a></li>
+                <li class="regular last"><a href="index.php/handbuch/v/2.1/r/datei-upload.html" title="Datei-Upload" class="regular last">Datei-Upload</a></li>
+      </ul>
+</li>
+                <li class="regular last"><a href="index.php/handbuch/v/2.1/r/produkttypen.html" title="Produkttypen" class="regular last">Produkttypen</a></li>
+      </ul>
+</li>
+                <li class="redirect subnav last"><a href="index.php/handbuch/v/2.1/r/uebersetzungen.html" title="Verschiedenes" class="redirect subnav last">Verschiedenes</a>
+<ul class="level_4">
+            <li class="regular first last"><a href="index.php/handbuch/v/2.1/r/uebersetzungen.html" title="Übersetzungen" class="regular first last">Übersetzungen</a></li>
+      </ul>
+</li>
+      </ul>
+</li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/auswertungen-und-statistik.html" title="Auswertungen &amp; Statistik" class="regular">Auswertungen & Statistik</a></li>
+                <li class="redirect subnav"><a href="index.php/handbuch/v/2.1/r/regeln_produkt.html" title="Regeln &amp; Gutscheine" class="redirect subnav">Regeln & Gutscheine</a>
+<ul class="level_3">
+            <li class="regular first"><a href="index.php/handbuch/v/2.1/r/regeln_produkt.html" title="Produkt" class="regular first">Produkt</a></li>
+                <li class="regular last"><a href="index.php/handbuch/v/2.1/r/regeln_warenkorb.html" title="Warenkorb" class="regular last">Warenkorb</a></li>
+      </ul>
+</li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/bestellungen.html" title="Bestellungen" class="regular">Bestellungen</a></li>
+                <li class="regular last"><a href="index.php/handbuch/v/2.1/r/produktepflege.html" title="Produkte" class="regular last">Produkte</a></li>
+      </ul>
+</li>
+                <li class="redirect subnav"><a href="index.php/handbuch/v/2.1/r/produktliste.html" title="Frontend-Konfiguration" class="redirect subnav">Frontend-Konfiguration</a>
+<ul class="level_2">
+            <li class="redirect subnav first"><a href="index.php/handbuch/v/2.1/r/produktliste.html" title="Module" class="redirect subnav first">Module</a>
+<ul class="level_3">
+            <li class="regular first"><a href="index.php/handbuch/v/2.1/r/produktliste.html" title="Produktliste" class="regular first">Produktliste</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/produktvarianten-liste.html" title="Produktvarianten-Liste" class="regular">Produktvarianten-Liste</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/produktleser.html" title="Produktleser" class="regular">Produktleser</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/warenkorb.html" title="Warenkorb" class="regular">Warenkorb</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/kasse.html" title="Kasse" class="regular">Kasse</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/produkt-filter.html" title="Produkt-Filter" class="regular">Produkt-Filter</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/einschraenkender-filter.html" title="Einschränkender Filter" class="regular">Einschränkender Filter</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/vergangene-bestellungen.html" title="Vergangene Bestellungen" class="regular">Vergangene Bestellungen</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/bestellungsdetails.html" title="Bestellungsdetails" class="regular">Bestellungsdetails</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/shopkonfigurations-wechsler.html" title="Shopkonfigurations-Wechsler" class="regular">Shopkonfigurations-Wechsler</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/adressbuch.html" title="Adressbuch" class="regular">Adressbuch</a></li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/aehnliche-produkte.html" title="Ähnliche Produkte" class="regular">Ähnliche Produkte</a></li>
+                <li class="regular last"><a href="index.php/handbuch/v/2.1/r/nachrichten.html" title="Nachrichten" class="regular last">Nachrichten</a></li>
+      </ul>
+</li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/templates.html" title="Templates" class="regular">Templates</a></li>
+                <li class="regular last"><a href="index.php/handbuch/v/2.1/r/inserttags.html" title="Inserttags" class="regular last">Inserttags</a></li>
+      </ul>
+</li>
+                <li class="regular"><a href="index.php/handbuch/v/2.1/r/simple-tokens.html" title="Simple Tokens" class="regular">Simple Tokens</a></li>
+                <li class="regular last"><a href="index.php/handbuch/v/2.1/r/performance.html" title="Performance" class="regular last">Performance</a></li>
+      </ul>
