@@ -9,17 +9,21 @@ class Indexer
 {
     public function addManualPagesToDSI($arrPages)
     {
-        $versions = trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_versions']);
-        $latestVersion = $versions[0];
+        $arrVersions = trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_versions']);
+        $strLatestVersion = $arrVersions[0];
         $arrLanguages = deserialize($GLOBALS['TL_CONFIG']['iso_docrobot_languages'], true);
+        $arrBooks = trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_books']);
 
         foreach ($arrLanguages as $arrLanguage) {
-            foreach (trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_books']) as $book) {
+            foreach ($arrBooks as $strBook) {
+
+                $pageModel = \PageModel::findWithDetails($arrLanguage['page']);
+                $domain = ($pageModel->rootUseSSL ? 'https://' : 'http://') . ($pageModel->domain ?: \Environment::get('host')) . TL_PATH . '/';;
 
                 $context = new Context('html');
-                $context->setBook($book);
+                $context->setBook($strBook);
                 $context->setLanguage($arrLanguage['language']);
-                $context->setVersion($latestVersion);
+                $context->setVersion($strLatestVersion);
 
                 try {
                     $routing = new Routing($context);
@@ -28,7 +32,7 @@ class Indexer
                 }
 
                 foreach ($routing->getRoutes() as $route) {
-                    $arrPages[] = 'https://' . $routing->getHrefForRoute($route);
+                    $arrPages[] = $domain . $routing->getHrefForRoute($route);
                 }
             }
         }
