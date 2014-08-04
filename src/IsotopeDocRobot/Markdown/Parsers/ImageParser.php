@@ -38,13 +38,14 @@ class ImageParser implements ParserInterface, ContextAwareInterface
      */
     public function parseMarkdown($data)
     {
+        $type = $this->context->getType();
         $language = $this->context->getLanguage();
         $book = $this->context->getBook();
         $version = $this->context->getVersion();
 
         return preg_replace_callback(
             '#<docrobot_image path="(.*)" alt="(.*)">#U',
-            function($matches) use ($language, $book, $version) {
+            function($matches) use ($type, $language, $book, $version) {
                 $objFile = new \File('system/cache/isotope/docrobot-mirror/' . $version . '/' . $language . '/' . $book . '/' . $matches[1], true);
 
                 // No image found
@@ -52,10 +53,13 @@ class ImageParser implements ParserInterface, ContextAwareInterface
                     return '###Image not found, please adjust documentation on GitHub!###';
                 }
 
+                $bookImagesPath = 'system/cache/isotope/docrobot/' . $type . '/' . $version . '/' . $language . '/' . $book . '/images';
+                $this->ensureImagesFolder($bookImagesPath);
+
                 $mode = 'box';
                 $strCacheKey = substr(md5('-w' . $objFile->width . '-h' . $objFile->height . '-' . $objFile->path . '-' . $mode . '-' . $objFile->mtime), 0, 8);
-                $strCacheName = 'assets/images/' . substr($strCacheKey, -1) . '/' . $objFile->filename . '-' . $strCacheKey . '.' . $objFile->extension;
-                $image      = \Image::get($objFile->path, $objFile->width, $objFile->height, $mode, $strCacheName);
+                $strCacheName = $bookImagesPath . '/' . $objFile->filename . '-' . $strCacheKey . '.' . $objFile->extension;
+                $image = \Image::get($objFile->path, $objFile->width, $objFile->height, $mode, $strCacheName);
 
                 // No resize necessary
                 if ($objFile->width <= 680) {
@@ -81,5 +85,17 @@ class ImageParser implements ParserInterface, ContextAwareInterface
                 );
             },
             $data);
+    }
+
+    private function ensureImagesFolder($bookImagesPath)
+    {
+        new \Folder($bookImagesPath);
+        $objFile = new \File($bookImagesPath . '/.htaccess', true);
+        if ($objFile->exists()) {
+            return;
+        }
+
+        $objFile->write("<IfModule !mod_authz_core.c>\n  Order allow,deny\n  Allow from all\n</IfModule>\n<IfModule mod_authz_core.c>\n  Require all granted\n</IfModule>");
+        $objFile->close();
     }
 }
