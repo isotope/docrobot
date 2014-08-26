@@ -48,18 +48,25 @@ $arrBooks = trimsplit(',', $GLOBALS['TL_CONFIG']['iso_docrobot_books']);
 
 // update mirror
 foreach ($files as $file) {
-    $chunks = explode('/', $file);
+    $chunks = explode('/', $file, 3);
 
     $lang = $chunks[0];
     $book = $chunks[1];
+    $path = $chunks[2];
 
     // check if valid
     if (!in_array($lang, $arrLanguages) || !in_array($book, $arrBooks)) {
         continue;
     }
 
-    $connector = new \IsotopeDocRobot\Service\GitHubConnector($version, $lang, $book);
-    $connector->updateFile($file);
+    // Only works for HTML for now
+    $context = new \IsotopeDocRobot\Context\Context('html');
+    $context->setBook($book);
+    $context->setLanguage($lang);
+    $context->setVersion($version);
+
+    $connector = new \IsotopeDocRobot\Service\GitHubConnector($context);
+    $connector->updateFile($path);
 
     $booksToUpdate[] = $book;
     $languagesToUpdate[] = $lang;
