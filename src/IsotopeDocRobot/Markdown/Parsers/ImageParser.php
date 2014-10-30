@@ -61,13 +61,18 @@ class ImageParser implements ParserInterface, ContextAwareInterface
                 $strCacheName = $bookImagesPath . '/' . $objFile->filename . '-' . $strCacheKey . '.' . $objFile->extension;
                 $image = \Image::get($objFile->path, $objFile->width, $objFile->height, $mode, $strCacheName);
 
+                $blockStart = "\n<div>";
+                $blockEnd = "</div>\n";
+
                 // No resize necessary
                 if ($objFile->width <= 680) {
-                    return sprintf('<img src="%s" alt="%s" width="%s" height="%s">',
+                    return sprintf('%s<img src="%s" alt="%s" width="%s" height="%s">%s',
+                        $blockStart,
                         $image,
                         $matches[2],
                         $objFile->width,
-                        $objFile->height
+                        $objFile->height,
+                        $blockEnd
                     );
                 }
 
@@ -75,13 +80,15 @@ class ImageParser implements ParserInterface, ContextAwareInterface
                 $thumb      = \Image::get($objFile->path, 680, $objFile->height, $mode, null, true);
                 $thumbSize  = @getimagesize($thumb);
 
-                return sprintf('<figure class="image_container"><a href="%s" data-lightbox="%s" title="%s"><span class="overlay zoom"></span><img src="%s" alt="%s" %s></a></figure>',
+                return sprintf('%s<figure class="image_container"><a href="%s" data-lightbox="%s" title="%s"><span class="overlay zoom"></span><img src="%s" alt="%s" %s></a></figure>%s',
+                    $blockStart,
                     $image,
                     uniqid(),
                     $matches[2],
                     $thumb,
                     $matches[2],
-                    $thumbSize[3]
+                    $thumbSize[3],
+                    $blockEnd
                 );
             },
             $data);
