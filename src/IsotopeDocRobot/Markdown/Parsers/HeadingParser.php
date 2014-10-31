@@ -62,7 +62,7 @@ class HeadingParser implements ParserInterface, ContextAwareInterface, RoutingAw
                 $content = $matches[2];
                 $id = 'deeplink-' . standardize($content);
 
-                return sprintf('<h%s id="%s">%s <a href="%s" title="%s" class="sub_permalink">#</a></h%s>',
+                return sprintf('<h%s id="%s">%s <a data-scroll href="%s" title="%s" class="sub_permalink">#</a></h%s>',
                     $level,
                     $id,
                     $content,
