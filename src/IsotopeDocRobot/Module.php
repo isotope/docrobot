@@ -131,7 +131,7 @@ class Module extends \Module
                 $strParams .= '/r/' . \Input::get('r');
             }
 
-            \System::redirect($objPage->getFrontendUrl($strParams));
+            \Controller::redirect($objPage->getFrontendUrl($strParams));
         }
 
         $this->Template->form = $objForm;
