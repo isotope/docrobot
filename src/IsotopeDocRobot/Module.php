@@ -109,6 +109,8 @@ class Module extends \Module
     {
         $GLOBALS['TL_CSS'][] = 'system/modules/isotope_docrobot/assets/jquery.autocomplete.css';
         $GLOBALS['TL_JAVASCRIPT'][] = 'system/modules/isotope_docrobot/assets/jquery.autocomplete.min.js';
+        $GLOBALS['TL_BODY'][] = '<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>';
+
         global $objPage;
 
         // version change
