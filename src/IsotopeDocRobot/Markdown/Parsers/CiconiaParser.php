@@ -2,6 +2,7 @@
 
 namespace IsotopeDocRobot\Markdown\Parsers;
 
+use Ciconia\Extension\Gfm\FencedCodeBlockExtension;
 use IsotopeDocRobot\Context\Context;
 use IsotopeDocRobot\Markdown\ContextAwareInterface;
 use IsotopeDocRobot\Markdown\ParserInterface;
@@ -40,6 +41,7 @@ class CiconiaParser implements ParserInterface, ContextAwareInterface
     {
         // main markdown parsing
         $ciconia = new Ciconia();
+        $ciconia->addExtension(new FencedCodeBlockExtension());
         return $ciconia->render($data);
     }
 }
