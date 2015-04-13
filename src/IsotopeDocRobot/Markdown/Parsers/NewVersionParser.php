@@ -21,7 +21,7 @@ class NewVersionParser implements ParserInterface
     public function parseMarkdown($data)
     {
         return preg_replace_callback(
-            '#<docrobot_new_in_version version="(.*)">(.*)</docrobot_new_in_version>#U',
+            '#<docrobot_new_in_version version="(.*)">(.*)</docrobot_new_in_version>#Um',
             function($matches) {
 
                 return sprintf('<docrobot_message type="info"><p><strong>%s</strong></p>%s</docrobot_message>',

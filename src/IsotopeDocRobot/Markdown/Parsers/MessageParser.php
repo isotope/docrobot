@@ -38,6 +38,6 @@ class MessageParser implements ParserInterface, ContextAwareInterface
     public function parseMarkdown($data)
     {
         $replacement = '<div class="notification-box notification-box-$1">$2</div>';
-        return preg_replace('#<docrobot_message type="(.*)">(.*)</docrobot_message>#U', $replacement, $data);
+        return preg_replace('#<docrobot_message type="(.*)">(.*)</docrobot_message>#Um', $replacement, $data);
     }
 }
