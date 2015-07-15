@@ -80,14 +80,17 @@ class ImageParser implements ParserInterface, ContextAwareInterface
                 $thumb      = \Image::get($objFile->path, 680, $objFile->height, $mode, null, true);
                 $thumbSize  = @getimagesize($thumb);
 
-                return sprintf('%s<figure class="image_container"><a href="%s" data-lightbox="%s" title="%s"><span class="overlay zoom"></span><img src="%s" alt="%s" %s></a></figure>%s',
+                // Needed because the Automator regularly deletes our thumbnails and thus we use an InsertTag here.
+                // This makes sure that we cache the InsertTag (instead of a path to assets/images) which will always
+                // get replaced.
+                $thumbInsertTag = '{{image::' . $objFile->path . '?width=680&height=' . $objFile->height .'&mode=' . $mode . '&alt=' . $matches[2] . '}}';
+
+                return sprintf('%s<figure class="image_container"><a href="%s" data-lightbox="%s" title="%s"><span class="overlay zoom"></span>%s</a></figure>%s',
                     $blockStart,
                     $image,
                     uniqid(),
                     $matches[2],
-                    $thumb,
-                    $matches[2],
-                    $thumbSize[3],
+                    $thumbInsertTag,
                     $blockEnd
                 );
             },
