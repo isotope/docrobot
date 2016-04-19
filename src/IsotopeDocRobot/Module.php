@@ -56,9 +56,10 @@ class Module extends \Module
         if (\Input::get('v')) {
             $currentVersion = \Input::get('v');
             if (!in_array($currentVersion, $this->versions)) {
-                // 404
-                $objError = new \PageError404();
-                $objError->generate($objPage->id);
+                // Try to redirect to the first version with the same route
+                $request = \Environment::get('request');
+                $new = preg_replace('@(v/)([^/]+)@', '${1}' . $this->versions[0], $request, 1);
+                \Controller::redirect($new, 301);
             }
 
             $this->context->setVersion($currentVersion);
