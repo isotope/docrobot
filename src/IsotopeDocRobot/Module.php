@@ -201,9 +201,12 @@ class Module extends \Module
             $objEmail->fromName = $GLOBALS['TL_ADMIN_NAME'];
             $objEmail->subject = 'Neues Feedback auf isotopeecommerce.org';
 
-            $strText = sprintf('Folgendes Feedback für die Version %s und Route "%s" ist eingegangen:' . "\n\n",
+            $route = $this->routing->getCurrentRoute();
+
+            $strText = sprintf('Folgendes Feedback für die Version %s und Route "%s" (%s) ist eingegangen:' . "\n\n",
                 $this->context->getVersion(),
-                $this->routing->getCurrentRoute()->getName()
+                $route->getName(),
+                $this->routing->getHrefForRoute($route)
             );
 
             foreach ($objForm->getFormFields() as $strField => $arrDca) {
