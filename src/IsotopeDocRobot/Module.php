@@ -170,12 +170,11 @@ class Module extends \Module
 
     protected function getQuickNavigationData()
     {
-        global $objPage;
         $arrNav = array();
         foreach ($this->routing->getRoutes() as $route) {
             $arrNav[] = array(
                 $route->getTitle(),
-                $this->routing->getHrefForRoute($route, $objPage)
+                $this->routing->getHrefForRoute($route)
             );
         }
 
